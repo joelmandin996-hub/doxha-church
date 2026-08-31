@@ -361,151 +361,79 @@ section { position: relative; }
   .float-card { display: none; }
 }
 
-/* ---------- Multi-device showcase (realistic laptop / tablet / phone) ---------- */
-.device-stack {
+/* ---------- Multi-device showcase (built on Devices.css, MIT — github.com/picturepan2/devices.css) ---------- */
+.device-stack-v2 {
   position: relative;
   max-width: 900px;
+  height: 460px;
   margin: 0 auto;
-  padding: 50px 0 110px;
 }
-.device-ground {
+.dv-ground {
   position: absolute;
-  left: 50%; bottom: 40px; transform: translateX(-50%);
-  width: 70%; height: 40px;
-  background: radial-gradient(ellipse, rgba(10,15,35,0.22), transparent 72%);
+  left: 50%; bottom: 24px; transform: translateX(-50%);
+  width: 60%; height: 36px;
+  background: radial-gradient(ellipse, rgba(10,15,35,0.24), transparent 72%);
   z-index: 0;
 }
-
-/* Laptop: bezel + hinge + aluminium keyboard deck, in soft perspective */
-.device-laptop {
-  position: relative;
-  z-index: 1;
-  max-width: 620px;
-  margin: 0 auto;
-  transform: perspective(1400px) rotateX(6deg);
-  transform-style: preserve-3d;
-}
-.device-laptop .lt-screen-frame {
-  background: linear-gradient(155deg, #1b2033, #05070d 60%);
-  border-radius: 16px 16px 3px 3px;
-  padding: 13px 13px 8px;
-  box-shadow: 0 36px 80px rgba(10,15,35,0.34), inset 0 0 0 1px rgba(255,255,255,0.08);
-  position: relative;
-}
-.device-laptop .lt-camera {
-  position: absolute; top: 5px; left: 50%; transform: translateX(-50%);
-  width: 5px; height: 5px; border-radius: 50%;
-  background: #000; box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
-}
-.device-laptop .mockup-screen { min-height: 300px; border-radius: 6px; }
-.device-laptop .lt-hinge {
-  height: 9px;
-  background: linear-gradient(180deg, #2a3150, #11141f 55%, #05070d);
-  border-radius: 0 0 3px 3px;
-}
-.device-laptop .lt-deck {
-  height: 20px;
-  margin: 0 -3%;
-  background: linear-gradient(180deg, #e4e7ee, #b9bfcc 45%, #9aa1b1);
-  border-radius: 0 0 12px 12px;
-  position: relative;
-  box-shadow: 0 14px 28px rgba(10,15,35,0.28);
-}
-.device-laptop .lt-deck::before {
-  content: "";
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 16%; height: 5px;
-  background: #8a91a1;
-  border-radius: 0 0 8px 8px;
-}
-
-/* Tablet: thin bezel, camera dot, no home button */
-.device-tablet {
-  position: absolute;
-  z-index: 0;
-  top: 4%;
-  left: -4%;
-  width: 232px;
-  background: linear-gradient(155deg, #23283e, #05070d 65%);
-  border-radius: 22px;
-  padding: 16px 10px;
-  box-shadow: 0 30px 64px rgba(10,15,35,0.3), inset 0 0 0 1px rgba(255,255,255,0.08);
-  transform: rotate(-8deg);
-}
-.device-tablet .d-camera {
-  position: absolute; top: 7px; left: 50%; transform: translateX(-50%);
-  width: 5px; height: 5px; border-radius: 50%;
-  background: #000; box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
-}
-.device-tablet .d-screen {
-  background: linear-gradient(165deg, #0c1226, #060810);
-  border-radius: 8px;
-  padding: 14px 12px;
-  display: flex; flex-direction: column; gap: 8px;
-  min-height: 280px;
-}
-
-/* Phone: dynamic-island notch, side buttons, home indicator */
-.device-phone {
-  position: absolute;
+.dv-laptop, .dv-tablet, .dv-phone { position: absolute; }
+.dv-laptop {
+  left: 50%; top: 48%;
+  transform: translate(-50%, -50%) scale(0.78);
+  transform-origin: center;
   z-index: 2;
-  bottom: -6%;
-  right: -3%;
-  width: 158px;
-  background: linear-gradient(155deg, #262b42, #05070d 65%);
-  border-radius: 32px;
-  padding: 8px;
-  box-shadow: 0 26px 60px rgba(10,15,35,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
-  transform: rotate(6deg);
+  filter: drop-shadow(0 34px 44px rgba(10,15,35,0.32));
 }
-.device-phone::before, .device-phone::after {
-  content: "";
-  position: absolute;
-  right: -2px;
-  width: 2px; height: 26px;
-  background: #171b2a;
-  border-radius: 2px 0 0 2px;
+.dv-tablet {
+  left: 2%; top: 2%;
+  transform: scale(0.32) rotate(-9deg);
+  transform-origin: top left;
+  z-index: 1;
+  filter: drop-shadow(0 26px 30px rgba(10,15,35,0.26));
 }
-.device-phone::before { top: 58px; }
-.device-phone::after { top: 92px; height: 40px; }
-.device-phone .d-screen {
-  position: relative;
-  background: linear-gradient(165deg, #0c1226, #060810);
-  border-radius: 24px;
-  padding: 14px 10px 16px;
-  display: flex; flex-direction: column; gap: 8px;
-  min-height: 268px;
-}
-.device-phone .d-notch {
-  width: 42%; height: 15px; margin: 0 auto 10px;
-  background: #05070d;
-  border-radius: 10px;
-}
-.device-phone .d-home {
-  position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
-  width: 34%; height: 4px; border-radius: 3px;
-  background: rgba(255,255,255,0.35);
+.dv-phone {
+  right: 4%; bottom: 4%;
+  transform: scale(0.34) rotate(7deg);
+  transform-origin: bottom right;
+  z-index: 3;
+  filter: drop-shadow(0 22px 30px rgba(10,15,35,0.3));
 }
 
-.d-screen .d-card {
+.device-screen { overflow: hidden; }
+
+/* Laptop screen content (native 600x375) */
+.device-macbook-pro .device-screen .mockup-bar { padding: 8px 10px 12px; }
+.device-macbook-pro .device-screen .mockup-screen { min-height: 0; height: 280px; padding: 14px; }
+.device-macbook-pro .device-screen .mockup-side { gap: 6px; }
+
+/* Tablet / phone screen content (native canvas, shrunk together with the frame) */
+.d-pill { height: 20px; border-radius: 10px; background: rgba(255,255,255,0.08); }
+.d-pill.active { background: linear-gradient(90deg, var(--blue-500), var(--teal-400)); height: 56px; border-radius: 18px; }
+.d-pill.short { width: 55%; }
+.d-card {
   background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 10px;
-  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 26px;
 }
-.d-screen .d-card .num { font-size: 15px; font-weight: 700; color: var(--white); }
-.d-screen .d-card .lbl { font-size: 9.5px; color: rgba(255,255,255,0.45); margin-top: 2px; }
-.d-screen .d-pill { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.08); }
-.d-screen .d-pill.active { background: linear-gradient(90deg, var(--blue-500), var(--teal-400)); height: 22px; border-radius: 7px; }
-.d-screen .d-chart { flex: 1; display: flex; align-items: flex-end; gap: 4px; }
-.d-screen .d-chart span { flex: 1; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--teal-400), var(--blue-500)); opacity: 0.85; }
+.d-card .num { font-size: 40px; font-weight: 700; color: var(--white); }
+.d-card .lbl { font-size: 24px; color: rgba(255,255,255,0.45); margin-top: 8px; }
+.d-chart { flex: 1; display: flex; align-items: flex-end; gap: 10px; min-height: 140px; }
+.d-chart span { flex: 1; border-radius: 8px 8px 0 0; background: linear-gradient(180deg, var(--teal-400), var(--blue-500)); opacity: 0.85; }
+
+.device-ipad-pro .device-screen,
+.device-iphone-14-pro .device-screen {
+  display: flex; flex-direction: column; gap: 20px;
+  padding: 30px 24px;
+}
+.device-iphone-14-pro .device-screen .d-notch { height: 30px; }
 
 .device-badges { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
 
 @media (max-width: 760px) {
-  .device-tablet { display: none; }
-  .device-phone { width: 128px; right: 2%; bottom: -4%; }
-  .device-laptop { max-width: 92%; }
+  .device-stack-v2 { height: 340px; }
+  .dv-tablet { display: none; }
+  .dv-phone { transform: scale(0.42) rotate(0deg); right: 50%; margin-right: -73px; bottom: 0; }
+  .dv-laptop { transform: translate(-50%, -50%) scale(0.56); top: 42%; }
 }
 
 /* ---------- Logo strip ---------- */
