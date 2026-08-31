@@ -119,6 +119,7 @@ section { position: relative; }
   color: var(--text-inverse);
 }
 .bg-dark .text-muted { color: rgba(255,255,255,0.6); }
+.bg-dark h1, .bg-dark h2, .bg-dark h3, .bg-dark h4 { color: var(--white); }
 .divider { height: 1px; background: var(--border); border: 0; }
 
 .grid { display: grid; gap: 28px; }
@@ -242,29 +243,58 @@ section { position: relative; }
   filter: blur(10px);
   pointer-events: none;
 }
-.hero-content { text-align: center; max-width: 780px; margin: 0 auto; }
+.hero-content { text-align: center; max-width: 780px; margin: 0 auto; position: relative; z-index: 1; }
 .hero-content .h1 { margin: 22px 0 20px; }
 .hero-content .btn-row { justify-content: center; margin-top: 32px; }
 .hero-note { margin-top: 20px; font-size: 13.5px; color: var(--text-muted); }
+
+/* ---------- Decorative gradient blobs ---------- */
+.blob-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+}
+.blob-blue { background: radial-gradient(circle, rgba(52,87,232,0.55), transparent 70%); }
+.blob-teal { background: radial-gradient(circle, rgba(47,227,196,0.45), transparent 70%); }
+.blob-gold { background: radial-gradient(circle, rgba(201,162,39,0.4), transparent 70%); }
 
 /* ---------- Mockup (product visual, CSS-built) ---------- */
 .mockup-stage {
   position: relative;
   margin: 80px auto 0;
   max-width: 980px;
-  perspective: 1600px;
+  perspective: 1800px;
+  z-index: 1;
 }
 .mockup-window {
   background: var(--navy-900);
   border-radius: var(--r-xl);
   padding: 14px;
-  box-shadow: var(--shadow-lg);
-  transform: rotateX(4deg);
+  box-shadow: 0 40px 100px rgba(10,15,35,0.35), 0 12px 30px rgba(10,15,35,0.22);
+  transform: rotateX(7deg) rotateY(-2deg);
   transform-style: preserve-3d;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
 }
-.mockup-bar { display: flex; gap: 7px; padding: 6px 10px 16px; }
+.mockup-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 10px 16px;
+}
+.mockup-dots { display: flex; gap: 7px; flex-shrink: 0; }
 .mockup-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+.mockup-url {
+  flex: 1;
+  max-width: 260px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.06);
+  border-radius: var(--r-pill);
+  padding: 5px 14px;
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  letter-spacing: 0.01em;
+}
 .mockup-screen {
   background: linear-gradient(160deg, #0c1226, #060810);
   border-radius: var(--r-lg);
