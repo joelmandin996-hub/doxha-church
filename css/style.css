@@ -30,7 +30,14 @@
   --blue-50: #f2f5fe;
   --gold-500: #c9a227;
   --gold-400: #e0bc4d;
+  --gold-50: #fbf3da;
+  --teal-600: #0d9488;
   --teal-400: #2fe3c4;
+  --teal-50: #e6faf5;
+  --purple-600: #6d4fe0;
+  --purple-50: #f0ecfe;
+  --coral-600: #d1476b;
+  --coral-50: #fdedf1;
 
   /* Semantic */
   --bg: var(--white);
@@ -458,6 +465,10 @@ section { position: relative; }
   background: var(--accent-soft);
   color: var(--accent);
 }
+.feature-icon.ic-teal { background: var(--teal-50); color: var(--teal-600); }
+.feature-icon.ic-gold { background: var(--gold-50); color: #92720f; }
+.feature-icon.ic-purple { background: var(--purple-50); color: var(--purple-600); }
+.feature-icon.ic-coral { background: var(--coral-50); color: var(--coral-600); }
 .feature-card h3 { margin-bottom: 10px; }
 .feature-card p { color: var(--text-muted); font-size: 14.8px; }
 .feature-card .tag {
