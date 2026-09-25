@@ -190,7 +190,7 @@
     <div class="scene-cam">
       <div id="sc1text" class="typewrite line-big on-light" style="min-height:86px; position:relative; z-index:3;"></div>
     </div>
-    <div id="sc1doxha" class="typewrite line-big on-light" style="position:absolute; z-index:3; left:0; right:0; top:500px; text-align:center;"></div>
+    <div id="sc1doxha" class="typewrite line-big on-light" style="position:absolute; z-index:3; left:0; right:0; top:500px; text-align:center; max-width:none;"></div>
   </section>
 
   <!-- SC3 — the connected journey: dashboard → membres → équipes → événements → communication -->
@@ -337,26 +337,6 @@
     await wait(280);
   }
   function cursorHide() { document.getElementById('liveCursor').classList.remove('show'); }
-
-  // a small colored chip that flies from one focal point to the next, sold as "a piece of data becomes the next screen"
-  async function flyChip(fromRect, toRect, color) {
-    const chip = document.createElement('div');
-    chip.style.cssText = `position:fixed; width:14px; height:14px; border-radius:50%; background:${color}; box-shadow:0 0 18px ${color}; z-index:8; pointer-events:none; opacity:0;`;
-    document.body.appendChild(chip);
-    const setPos = (r, scale) => {
-      chip.style.left = (r.left + r.width / 2 - 7) + 'px';
-      chip.style.top = (r.top + r.height / 2 - 7) + 'px';
-      chip.style.transform = `scale(${scale})`;
-    };
-    setPos(fromRect, 1.6);
-    void chip.offsetWidth;
-    requestAnimationFrame(() => { chip.style.transition = 'opacity .2s ease'; chip.style.opacity = '1'; });
-    await wait(120);
-    chip.style.transition = 'left .62s cubic-bezier(.4,0,.2,1), top .62s cubic-bezier(.4,0,.2,1), transform .62s cubic-bezier(.4,0,.2,1), opacity .3s ease .35s';
-    requestAnimationFrame(() => { setPos(toRect, .6); chip.style.opacity = '0'; });
-    await wait(650);
-    chip.remove();
-  }
 
   // ---------------- SC0: cold open — logo alone ----------------
   async function sceneLogo() {
@@ -562,108 +542,95 @@
   }
 
   const SEQ = [
-    { build: screenDashboard, text: 'Doxha.', speed: 80, hold: 1100, interact: interactDashboard, focus: '.stat-card', color: '#3457e8' },
-    { build: screenMembres, text: 'Membres.', speed: 60, hold: 1900, interact: interactMembres, focus: '.avatar', color: '#3457e8' },
-    { build: screenEquipes, text: 'Équipes.', speed: 55, hold: 1700, interact: interactEquipes, focus: '.avatar', color: '#0d9488' },
-    { build: screenEvenements, text: 'Événements.', speed: 55, hold: 1700, interact: interactEvenements, focus: '.event-date', color: '#2140c9' },
-    { build: screenCommunication, text: 'Communication.', speed: 48, hold: 1900, interact: interactCommunication, focus: '.channel-pill.on', color: '#0d9488' },
+    { build: screenDashboard, text: 'Doxha.', speed: 80, hold: 1100, interact: interactDashboard },
+    { build: screenMembres, text: 'Membres.', speed: 60, hold: 1900, interact: interactMembres },
+    { build: screenEquipes, text: 'Équipes.', speed: 55, hold: 1700, interact: interactEquipes },
+    { build: screenEvenements, text: 'Événements.', speed: 55, hold: 1700, interact: interactEvenements },
+    { build: screenCommunication, text: 'Communication.', speed: 48, hold: 1900, interact: interactCommunication },
   ];
 
-  // ---- camera transition: a restrained, overlapping crossfade — the old screen dissolves away
-  // on its own (as a detached floating clone) while the new one is already building and settling
-  // in underneath it, so the two are briefly visible together like a real cut, never a hard blur-snap ----
+  // ---- screen transition: a plain, reliable cross-dissolve — old and new both live inside
+  // #content at once (old in normal flow, new absolutely pinned on top of it, same rect), their
+  // opacity crossing over the same window. No scale, no blur, nothing that can look like a glitch. ----
   const SCREEN_FROM = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1)';
   const EASE_PRO = 'cubic-bezier(.4,0,.2,1)';
-  // blend a focal point 45% toward the true focus and 55% toward center, so the camera never
-  // whips to a raw screen corner — it always reads as one continuous, moderated push
-  function moderatedOrigin(sRect, fRect) {
-    const fx = ((fRect.left + fRect.width / 2 - sRect.left) / sRect.width) * 100;
-    const fy = ((fRect.top + fRect.height / 2 - sRect.top) / sRect.height) * 100;
-    const ox = fx * 0.45 + 50 * 0.55;
-    const oy = fy * 0.45 + 50 * 0.55;
-    return [Math.max(26, Math.min(74, ox)), Math.max(26, Math.min(74, oy))];
+  async function settleIn(fresh) {
+    fresh.style.transition = 'none';
+    fresh.style.animation = 'screenPush 3.5s cubic-bezier(.22,.08,.32,1) forwards';
   }
-  async function enterFresh(content) {
+  async function crossfadeTo(content, buildNextFn) {
+    const oldScreen = content.querySelector('.app-screen');
+    if (!oldScreen) {
+      content.innerHTML = buildNextFn();
+      const fresh = content.querySelector('.app-screen');
+      fresh.style.animation = 'none';
+      fresh.style.opacity = '0';
+      fresh.style.transition = 'none';
+      void fresh.offsetWidth;
+      fresh.style.transition = `opacity .55s ${EASE_PRO}`;
+      requestAnimationFrame(() => { fresh.style.opacity = '1'; });
+      await wait(520);
+      await settleIn(fresh);
+      return fresh;
+    }
+    // freeze the old screen's current tilt so it holds its exact look while it dissolves
+    const frozen = getComputedStyle(oldScreen).transform;
+    oldScreen.style.animation = 'none';
+    oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
+    const oldRect = oldScreen.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    content.style.height = oldRect.height + 'px';
+    content.style.width = oldRect.width + 'px';
+    oldScreen.style.position = 'absolute';
+    oldScreen.style.left = '0'; oldScreen.style.top = '0'; oldScreen.style.margin = '0'; oldScreen.style.zIndex = '1';
+
+    const wrap = document.createElement('div');
+    wrap.innerHTML = buildNextFn();
+    const fresh = wrap.firstElementChild;
+    fresh.style.animation = 'none';
+    fresh.style.position = 'absolute'; fresh.style.left = '0'; fresh.style.top = '0'; fresh.style.margin = '0'; fresh.style.zIndex = '2';
+    fresh.style.opacity = '0';
+    content.appendChild(fresh);
+
+    void oldScreen.offsetWidth;
+    oldScreen.style.transition = `opacity .6s ${EASE_PRO}`;
+    fresh.style.transition = `opacity .6s ${EASE_PRO}`;
+    requestAnimationFrame(() => {
+      oldScreen.style.opacity = '0';
+      fresh.style.opacity = '1';
+    });
+    await wait(580);
+    oldScreen.remove();
+    content.style.height = ''; content.style.width = '';
+    fresh.style.position = ''; fresh.style.left = ''; fresh.style.top = ''; fresh.style.margin = ''; fresh.style.zIndex = '';
+    await settleIn(fresh);
+    return fresh;
+  }
+  async function fadeInFresh(content) {
     const fresh = content.querySelector('.app-screen');
     fresh.style.animation = 'none';
-    fresh.style.transformOrigin = 'center center';
-    fresh.style.transform = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1.22)';
-    fresh.style.filter = 'blur(7px)';
     fresh.style.opacity = '0';
     fresh.style.transition = 'none';
     void fresh.offsetWidth;
-    fresh.style.transition = `transform .78s ${EASE_PRO}, filter .68s ${EASE_PRO}, opacity .6s ${EASE_PRO}`;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      fresh.style.transform = SCREEN_FROM;
-      fresh.style.filter = 'blur(0)';
-      fresh.style.opacity = '1';
-    }));
-    await wait(720);
-    fresh.style.transition = 'none';
-    fresh.style.animation = 'screenPush 3.5s cubic-bezier(.22,.08,.32,1) forwards';
+    fresh.style.transition = `opacity .55s ${EASE_PRO}`;
+    requestAnimationFrame(() => { fresh.style.opacity = '1'; });
+    await wait(520);
+    await settleIn(fresh);
     return fresh;
   }
-  async function zoomCutTo(content, focusSelector, buildNextFn, nextFocusSelector, chipColor) {
-    const oldScreen = content.querySelector('.app-screen');
-    let fromRect = null;
-    if (oldScreen) {
-      const frozen = getComputedStyle(oldScreen).transform;
-      const sRect = oldScreen.getBoundingClientRect();
-      let ox = 50, oy = 50;
-      const focusEl = focusSelector ? oldScreen.querySelector(focusSelector) : null;
-      if (focusEl) {
-        fromRect = focusEl.getBoundingClientRect();
-        [ox, oy] = moderatedOrigin(sRect, fromRect);
-      }
-      // detach the old screen into a floating clone, positioned exactly where it already is,
-      // so it can dissolve away on its own timeline while the new screen builds independently
-      content.removeChild(oldScreen);
-      oldScreen.style.position = 'fixed';
-      oldScreen.style.left = sRect.left + 'px'; oldScreen.style.top = sRect.top + 'px';
-      oldScreen.style.width = sRect.width + 'px'; oldScreen.style.margin = '0';
-      oldScreen.style.zIndex = '3';
-      oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
-      oldScreen.style.animation = 'none';
-      oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
-      document.body.appendChild(oldScreen);
-      void oldScreen.offsetWidth;
-      oldScreen.style.transition = `transform .6s ${EASE_PRO}, filter .56s ${EASE_PRO}, opacity .5s ${EASE_PRO} .06s`;
-      requestAnimationFrame(() => {
-        oldScreen.style.transform = oldScreen.style.transform + ' scale(1.4)';
-        oldScreen.style.filter = 'blur(6px)';
-        oldScreen.style.opacity = '0';
-      });
-      setTimeout(() => oldScreen.remove(), 640);
-      await wait(190);
-    }
-    content.innerHTML = buildNextFn();
-    if (fromRect && nextFocusSelector) {
-      const toEl = content.querySelector(nextFocusSelector);
-      if (toEl) flyChip(fromRect, toEl.getBoundingClientRect(), chipColor || '#3457e8');
-    }
-    await enterFresh(content);
-  }
-  async function exitZoom(content, focusSelector) {
+  async function exitFade(content) {
     const oldScreen = content.querySelector('.app-screen');
     if (!oldScreen) return;
+    oldScreen.style.animation = 'none';
     const frozen = getComputedStyle(oldScreen).transform;
     oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
-    oldScreen.style.animation = 'none';
-    const focusEl = focusSelector ? oldScreen.querySelector(focusSelector) : null;
-    if (focusEl) {
-      const sRect = oldScreen.getBoundingClientRect();
-      const fRect = focusEl.getBoundingClientRect();
-      const [ox, oy] = moderatedOrigin(sRect, fRect);
-      oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
-    }
     void oldScreen.offsetWidth;
-    oldScreen.style.transition = `transform .74s ${EASE_PRO}, filter .68s ${EASE_PRO}, opacity .6s ${EASE_PRO} .08s`;
+    oldScreen.style.transition = `opacity .6s ${EASE_PRO}, transform .6s ${EASE_PRO}`;
     requestAnimationFrame(() => {
-      oldScreen.style.transform = oldScreen.style.transform + ' scale(1.6)';
-      oldScreen.style.filter = 'blur(9px)';
       oldScreen.style.opacity = '0';
+      oldScreen.style.transform = oldScreen.style.transform + ' scale(.97)';
     });
-    await wait(700);
+    await wait(580);
   }
 
   // ---------------- SC3: the connected journey ----------------
@@ -672,11 +639,11 @@
     const content = document.getElementById('sc3content');
     const lineEl = document.getElementById('sc3line');
     content.innerHTML = SEQ[0].build();
-    await enterFresh(content);
+    await fadeInFresh(content);
     for (let i = 0; i < SEQ.length; i++) {
       const step = SEQ[i];
       cursorHide();
-      if (i > 0) await zoomCutTo(content, SEQ[i - 1].focus, step.build, step.focus, step.color);
+      if (i > 0) await crossfadeTo(content, step.build);
       clearEl(lineEl);
       await typewrite(lineEl, step.text, step.speed);
       const holdP = wait(step.hold);
@@ -739,7 +706,7 @@
     show('sc5');
     const content = document.getElementById('sc5content');
     content.innerHTML = screenIA();
-    await enterFresh(content);
+    await fadeInFresh(content);
     await interactIA(content);
     await wait(2400);
     cursorHide();
@@ -760,30 +727,25 @@
   }
 
   // ---------------- SC7: hero shot ----------------
+  // deliberately NOT a repeat of the connection map: no labelled module pills here — just the
+  // unified core itself, larger and alone, radiating soft rings, as the film's final image of the system
   async function sceneHero() {
     show('sc7');
     const wrap = document.getElementById('heroWrap');
     const svg = document.getElementById('heroSvg');
     wrap.innerHTML = ''; svg.innerHTML = '';
     const cx = 960, cy = 460;
-    const modules = MODULES(cx, cy);
-    const hub = el('div', 'mini-hub');
-    hub.style.left = (cx - 34) + 'px'; hub.style.top = (cy - 34) + 'px';
-    wrap.appendChild(hub);
-    modules.forEach(([name, color, x, y]) => {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x); line.setAttribute('y1', y);
-      line.setAttribute('x2', cx); line.setAttribute('y2', cy);
-      line.setAttribute('stroke', color + '55'); line.setAttribute('stroke-width', '2');
-      svg.appendChild(line);
-      const node = el('div', 'mini-module', `<span class="mm-dot" style="background:${color};"></span><span class="mm-label">${name}</span>`);
-      node.style.left = (x - 90) + 'px'; node.style.top = (y - 28) + 'px';
-      wrap.appendChild(node);
+    [340, 260, 180].forEach(r => {
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', r);
+      ring.setAttribute('fill', 'none'); ring.setAttribute('stroke', 'rgba(52,87,232,.16)'); ring.setAttribute('stroke-width', '1.5');
+      svg.appendChild(ring);
     });
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      hub.classList.add('in');
-      wrap.querySelectorAll('.mini-module').forEach((n, i) => setTimeout(() => n.classList.add('in'), i * 90));
-    }));
+    const hub = el('div', 'mini-hub');
+    hub.style.width = '120px'; hub.style.height = '120px';
+    hub.style.left = (cx - 60) + 'px'; hub.style.top = (cy - 60) + 'px';
+    wrap.appendChild(hub);
+    requestAnimationFrame(() => requestAnimationFrame(() => hub.classList.add('in')));
     const lineEl = document.getElementById('sc7line');
     await wait(900);
     await typewrite(lineEl, 'Un système. Une église alignée.', 34);
@@ -820,7 +782,7 @@
     await wait(640);
 
     await sceneJourney();
-    await exitZoom(document.getElementById('sc3content'), SEQ[SEQ.length - 1].focus);
+    await exitFade(document.getElementById('sc3content'));
     const hub = await sceneConnect();
     await sceneAI(hub);
     await sceneBreathe();
