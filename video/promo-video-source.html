@@ -65,9 +65,10 @@
   @keyframes fadeUp { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
   /* ---- shared "real product" UI kit ---- */
-  .app-screen { position:relative; width:1000px; background:rgba(255,255,255,.62); backdrop-filter:blur(24px) saturate(1.7); -webkit-backdrop-filter:blur(24px) saturate(1.7); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.55);
+  .app-screen { position:relative; grid-area:1/1; width:1000px; background:rgba(255,255,255,.62); backdrop-filter:blur(24px) saturate(1.7); -webkit-backdrop-filter:blur(24px) saturate(1.7); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.55);
     box-shadow: 0 70px 130px rgba(20,32,80,.24), 0 30px 70px rgba(52,87,232,.14), inset 0 1px 0 rgba(255,255,255,.6);
     animation: screenPush 4s cubic-bezier(.22,.08,.32,1) forwards; transform-origin:52% 46%; }
+  .screen-slot { display:grid; justify-items:center; align-items:start; }
   @keyframes screenPush {
     from { transform: perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1); }
     to   { transform: perspective(1700px) rotateX(2deg) rotateY(-1.2deg) scale(1.07); }
@@ -140,18 +141,29 @@
   .ic-label { font-size:14px; font-weight:700; color:#14171f; }
   .ic-sub { font-size:12px; color:#7d8496; font-weight:600; margin-top:2px; }
 
-  /* ---- connection map / hero shot: hub + module nodes ---- */
-  .mini-hub { position:absolute; width:68px; height:68px; border-radius:50%; background:radial-gradient(circle,#4c7bff,#2140c9); opacity:0; transform:scale(.5); }
-  .mini-hub.in { animation: hubIn .6s cubic-bezier(.2,1.4,.3,1) forwards, hubPulse 2.4s ease-in-out 1s infinite; }
-  @keyframes hubIn { to { opacity:1; transform:scale(1); } }
-  @keyframes hubPulse { 0%,100% { box-shadow:0 0 0 0 rgba(52,87,232,.35);} 50% { box-shadow:0 0 0 22px rgba(52,87,232,0);} }
-  .mini-module { position:absolute; width:180px; display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(255,255,255,.55); backdrop-filter:blur(16px) saturate(1.6); -webkit-backdrop-filter:blur(16px) saturate(1.6); border:1px solid rgba(255,255,255,.65); border-radius:12px; box-shadow:0 20px 40px rgba(20,32,80,.14); opacity:0; transform:translateY(14px) scale(.92); transition: opacity .5s cubic-bezier(.2,1,.3,1), transform .5s cubic-bezier(.2,1,.3,1); }
-  .mini-module.in { opacity:1; transform:translateY(0) scale(1); }
-  .mm-dot { width:10px; height:10px; border-radius:50%; flex:none; }
-  .mm-label { font-size:14px; font-weight:700; color:#14171f; }
+  /* ---- real iPhone 14 Pro mockup (devices.css), used for the "available on mobile" beat and the final hero shot ---- */
+  .device-iphone-14-pro .device-screen { background:#eef4ff; overflow:hidden; padding:0; }
+  .phone-rise { opacity:0; transform:translateY(40px) scale(.94); }
+  .phone-rise.in { animation: phoneRiseIn .8s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes phoneRiseIn { to { opacity:1; transform:translateY(0) scale(1); } }
+  .mobile-app { width:390px; height:830px; display:flex; flex-direction:column; padding-top:92px; font-family:'Inter',sans-serif; }
+  .mobile-header { display:flex; align-items:center; gap:10px; padding:0 24px 20px; }
+  .mobile-mark { width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,#5c7cf2,#0a0d1c 120%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:16px; flex:none; }
+  .mobile-title { font-size:19px; font-weight:800; color:#14171f; }
+  .mobile-body { padding:0 20px; flex:1; overflow:hidden; }
+  .mobile-stat-row { display:flex; gap:10px; margin-bottom:16px; }
+  .mobile-stat { flex:1; background:rgba(255,255,255,.75); border:1px solid rgba(255,255,255,.85); border-radius:14px; padding:14px; }
+  .mobile-stat .msn { font-size:20px; font-weight:800; color:#14171f; }
+  .mobile-stat .msl { font-size:11px; color:#8a92a6; font-weight:600; margin-top:2px; }
+  .mobile-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(20,32,80,.06); }
+  .mobile-row .mrn { font-size:14px; font-weight:700; color:#14171f; flex:1; }
+  .mobile-row .mrs { font-size:11px; color:#9aa1b3; font-weight:600; }
+  .mobile-navbar { display:flex; justify-content:space-around; align-items:center; padding:16px 0 30px; border-top:1px solid rgba(20,32,80,.06); background:rgba(255,255,255,.6); margin-top:auto; }
+  .mobile-nav-dot { width:22px; height:22px; border-radius:7px; background:#e3eaf9; }
+  .mobile-nav-dot.on { background:linear-gradient(135deg,#3457e8,#2fe3c4); }
 
-  #heroPan { position:absolute; inset:0; animation: heroPan 9s ease-in-out infinite alternate; }
-  @keyframes heroPan { from { transform: translateX(-16px) rotate(-.4deg); } to { transform: translateX(16px) rotate(.4deg); } }
+  .hero-pan { animation: heroPan 9s ease-in-out infinite alternate; }
+  @keyframes heroPan { from { transform: translateX(-14px) rotate(-.35deg); } to { transform: translateX(14px) rotate(.35deg); } }
 
   /* soft color blobs behind glass panels, so translucency/blur actually reads as glass */
   .glass-blobs { position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
@@ -203,19 +215,20 @@
     <div class="spot"></div>
     <div class="scene-cam">
       <div id="sc3line" class="typewrite line-mid on-light" style="margin-bottom:28px; min-height:52px;"></div>
-      <div id="sc3content" style="position:relative;"></div>
+      <div id="sc3content" class="screen-slot"></div>
     </div>
   </section>
 
-  <!-- SC4 — connection map: everything is linked -->
+  <!-- SC4 — available on mobile: a real iPhone mockup -->
   <section id="sc4" class="scene bg-sky">
     <div class="glass-blobs">
       <span style="width:440px; height:440px; left:-100px; top:-100px; background:#8fb0ff;"></span>
       <span style="width:400px; height:400px; right:-100px; bottom:-100px; background:#2fe3c4;"></span>
     </div>
-    <svg id="connectSvg" style="position:absolute; inset:0; width:100%; height:100%; z-index:1;" viewBox="0 0 1920 1080"></svg>
-    <div id="connectWrap" style="position:absolute; inset:0; z-index:2;"></div>
-    <div id="sc4line" class="typewrite line-mid on-light" style="position:absolute; z-index:3; left:0; right:0; top:860px; text-align:center;"></div>
+    <div class="scene-cam">
+      <div id="sc4phone" class="phone-rise" style="transform-origin:center top;"></div>
+      <div id="sc4line" class="typewrite line-mid on-light" style="margin-top:26px;"></div>
+    </div>
   </section>
 
   <!-- SC5 — the AI layer -->
@@ -225,7 +238,7 @@
       <span style="width:400px; height:400px; right:-110px; bottom:-110px; background:#2fe3c4;"></span>
     </div>
     <div class="scene-cam">
-      <div id="sc5content" style="position:relative;"></div>
+      <div id="sc5content" class="screen-slot"></div>
     </div>
   </section>
 
@@ -242,11 +255,13 @@
       <span style="width:460px; height:460px; left:-100px; top:-100px; background:#8fb0ff;"></span>
       <span style="width:420px; height:420px; right:-100px; bottom:-100px; background:#2fe3c4;"></span>
     </div>
-    <div id="heroPan">
-      <svg id="heroSvg" style="position:absolute; inset:0; width:100%; height:100%;" viewBox="0 0 1920 1080"></svg>
-      <div id="heroWrap" style="position:absolute; inset:0;"></div>
+    <div class="scene-cam">
+      <div id="sc7stage" class="hero-pan" style="position:relative; width:1300px; height:600px;">
+        <div id="sc7desktop" style="position:absolute; left:0; top:30px; opacity:0; transform:translateY(20px);"></div>
+        <div id="sc7phone" style="position:absolute; right:20px; top:-40px; opacity:0; transform:translateY(30px);"></div>
+      </div>
+      <div id="sc7line" class="typewrite line-mid on-light" style="margin-top:6px;"></div>
     </div>
-    <div id="sc7line" class="typewrite line-mid on-light" style="position:absolute; z-index:3; left:0; right:0; top:860px; text-align:center;"></div>
   </section>
 
   <!-- SC8 — logo return, tagline, CTA -->
@@ -573,22 +588,20 @@
       await settleIn(fresh);
       return fresh;
     }
-    // freeze the old screen's current tilt so it holds its exact look while it dissolves
+    // freeze the old screen's current tilt so it holds its exact look while it dissolves.
+    // #content is a CSS grid and every .app-screen has grid-area:1/1, so old and new simply
+    // occupy the same cell and overlap pixel-for-pixel — no manual rects, no resize, nothing to drift.
     const frozen = getComputedStyle(oldScreen).transform;
     oldScreen.style.animation = 'none';
     oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
-    const oldRect = oldScreen.getBoundingClientRect();
-    const contentRect = content.getBoundingClientRect();
-    content.style.height = oldRect.height + 'px';
-    content.style.width = oldRect.width + 'px';
-    oldScreen.style.position = 'absolute';
-    oldScreen.style.left = '0'; oldScreen.style.top = '0'; oldScreen.style.margin = '0'; oldScreen.style.zIndex = '1';
+    oldScreen.style.zIndex = '1';
 
     const wrap = document.createElement('div');
     wrap.innerHTML = buildNextFn();
     const fresh = wrap.firstElementChild;
     fresh.style.animation = 'none';
-    fresh.style.position = 'absolute'; fresh.style.left = '0'; fresh.style.top = '0'; fresh.style.margin = '0'; fresh.style.zIndex = '2';
+    fresh.style.transform = SCREEN_FROM;
+    fresh.style.zIndex = '2';
     fresh.style.opacity = '0';
     content.appendChild(fresh);
 
@@ -601,8 +614,7 @@
     });
     await wait(580);
     oldScreen.remove();
-    content.style.height = ''; content.style.width = '';
-    fresh.style.position = ''; fresh.style.left = ''; fresh.style.top = ''; fresh.style.margin = ''; fresh.style.zIndex = '';
+    fresh.style.zIndex = '';
     await settleIn(fresh);
     return fresh;
   }
@@ -653,56 +665,49 @@
     cursorHide();
   }
 
-  // ---------------- SC4: connection map ----------------
-  const MODULES = (cx, cy) => [
-    ['Membres', '#3457e8', cx - 420, cy - 160],
-    ['Équipes', '#5c7cf2', cx + 380, cy - 200],
-    ['Événements', '#2140c9', cx + 440, cy + 140],
-    ['Communication', '#0d9488', cx + 40, cy + 320],
-    ['Suivi pastoral', '#2fe3c4', cx - 440, cy + 180],
-  ];
-  async function sceneConnect() {
+  // ---------------- a real iPhone 14 Pro mockup (devices.css), shared by SC4 and SC7 ----------------
+  function screenMobileApp() {
+    return `<div class="mobile-app">
+      <div class="mobile-header"><div class="mobile-mark">D</div><div class="mobile-title">Doxha</div></div>
+      <div class="mobile-body">
+        <div class="mobile-stat-row">
+          <div class="mobile-stat"><div class="msn">3 482</div><div class="msl">Membres</div></div>
+          <div class="mobile-stat"><div class="msn">12 480 €</div><div class="msl">Dons ce mois</div></div>
+        </div>
+        <div class="mobile-row"><span class="avatar sm" style="background:#3457e8;">MD</span><span class="mrn">Marie Dubois</span><span class="mrs">Actif</span></div>
+        <div class="mobile-row"><span class="avatar sm" style="background:#5c7cf2;">JP</span><span class="mrn">Don reçu — 50 €</span><span class="mrs">1 h</span></div>
+        <div class="mobile-row"><span class="avatar sm" style="background:#0d9488;">DC</span><span class="mrn">Culte de Pâques</span><span class="mrs">Créé</span></div>
+      </div>
+      <div class="mobile-navbar"><div class="mobile-nav-dot on"></div><div class="mobile-nav-dot"></div><div class="mobile-nav-dot"></div><div class="mobile-nav-dot"></div></div>
+    </div>`;
+  }
+  function buildPhoneMockup() {
+    return `<div class="device device-iphone-14-pro">
+      <div class="device-frame"><div class="device-screen">${screenMobileApp()}</div></div>
+      <div class="device-stripe"></div>
+      <div class="device-header"></div>
+      <div class="device-sensors"></div>
+      <div class="device-btns"></div>
+      <div class="device-power"></div>
+    </div>`;
+  }
+
+  // ---------------- SC4: available on mobile ----------------
+  async function sceneMobile() {
     show('sc4');
-    const wrap = document.getElementById('connectWrap');
-    const svg = document.getElementById('connectSvg');
-    wrap.innerHTML = ''; svg.innerHTML = '';
-    const cx = 960, cy = 460;
-    const modules = MODULES(cx, cy);
-    const hub = el('div', 'mini-hub');
-    hub.style.left = (cx - 34) + 'px'; hub.style.top = (cy - 34) + 'px';
-    wrap.appendChild(hub);
-    modules.forEach(([name, color, x, y], i) => {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x); line.setAttribute('y1', y);
-      line.setAttribute('x2', cx); line.setAttribute('y2', cy);
-      line.setAttribute('stroke', color + '55'); line.setAttribute('stroke-width', '2');
-      const len = Math.hypot(cx - x, cy - y);
-      line.setAttribute('stroke-dasharray', len);
-      line.setAttribute('stroke-dashoffset', len);
-      line.style.transition = `stroke-dashoffset 1s cubic-bezier(.4,0,.2,1) ${i * 0.15}s`;
-      svg.appendChild(line);
-      requestAnimationFrame(() => requestAnimationFrame(() => line.setAttribute('stroke-dashoffset', '0')));
-      const node = el('div', 'mini-module', `<span class="mm-dot" style="background:${color};"></span><span class="mm-label">${name}</span>`);
-      node.style.left = (x - 90) + 'px'; node.style.top = (y - 28) + 'px';
-      wrap.appendChild(node);
-      setTimeout(() => node.classList.add('in'), 300 + i * 150);
-    });
-    setTimeout(() => hub.classList.add('in'), 200);
+    const host = document.getElementById('sc4phone');
+    host.innerHTML = buildPhoneMockup();
+    host.querySelector('.device-iphone-14-pro').style.transform = 'scale(.82)';
+    requestAnimationFrame(() => requestAnimationFrame(() => host.classList.add('in')));
     const lineEl = document.getElementById('sc4line');
-    await wait(1200);
-    await typewrite(lineEl, 'Rien n’est isolé. Tout se répond.', 32);
-    await wait(2000);
-    return hub;
+    await wait(750);
+    await typewrite(lineEl, 'Disponible sur mobile.', 40);
+    await wait(2100);
+    return host;
   }
 
   // ---------------- SC5: the AI layer ----------------
-  async function sceneAI(hub) {
-    if (hub) {
-      hub.style.transition = `transform .76s ${EASE_PRO}, opacity .7s ${EASE_PRO} .16s`;
-      hub.style.transform = 'scale(4.5)';
-      hub.style.opacity = '0';
-      await wait(720);
-    }
+  async function sceneAI() {
     show('sc5');
     const content = document.getElementById('sc5content');
     content.innerHTML = screenIA();
@@ -726,28 +731,26 @@
     await wait(1700);
   }
 
-  // ---------------- SC7: hero shot ----------------
-  // deliberately NOT a repeat of the connection map: no labelled module pills here — just the
-  // unified core itself, larger and alone, radiating soft rings, as the film's final image of the system
+  // ---------------- SC7: hero shot — desktop and mobile together, no abstract graphics ----------------
   async function sceneHero() {
     show('sc7');
-    const wrap = document.getElementById('heroWrap');
-    const svg = document.getElementById('heroSvg');
-    wrap.innerHTML = ''; svg.innerHTML = '';
-    const cx = 960, cy = 460;
-    [340, 260, 180].forEach(r => {
-      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', r);
-      ring.setAttribute('fill', 'none'); ring.setAttribute('stroke', 'rgba(52,87,232,.16)'); ring.setAttribute('stroke-width', '1.5');
-      svg.appendChild(ring);
-    });
-    const hub = el('div', 'mini-hub');
-    hub.style.width = '120px'; hub.style.height = '120px';
-    hub.style.left = (cx - 60) + 'px'; hub.style.top = (cy - 60) + 'px';
-    wrap.appendChild(hub);
-    requestAnimationFrame(() => requestAnimationFrame(() => hub.classList.add('in')));
+    const desktopHost = document.getElementById('sc7desktop');
+    const phoneHost = document.getElementById('sc7phone');
+    desktopHost.innerHTML = screenDashboard();
+    const desktopScreen = desktopHost.querySelector('.app-screen');
+    desktopScreen.style.animation = 'none';
+    desktopScreen.style.transformOrigin = 'left center';
+    desktopScreen.style.transform = 'scale(.6) rotateY(-6deg)';
+    phoneHost.innerHTML = buildPhoneMockup();
+    phoneHost.querySelector('.device-iphone-14-pro').style.transform = 'scale(.56) rotateY(8deg)';
+    desktopHost.style.transition = `opacity .8s ${EASE_PRO}, transform .8s ${EASE_PRO}`;
+    phoneHost.style.transition = `opacity .8s ${EASE_PRO} .15s, transform .8s ${EASE_PRO} .15s`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      desktopHost.style.opacity = '1'; desktopHost.style.transform = 'translateY(0)';
+      phoneHost.style.opacity = '1'; phoneHost.style.transform = 'translateY(0)';
+    }));
     const lineEl = document.getElementById('sc7line');
-    await wait(900);
+    await wait(1100);
     await typewrite(lineEl, 'Un système. Une église alignée.', 34);
     await wait(2300);
   }
@@ -783,8 +786,13 @@
 
     await sceneJourney();
     await exitFade(document.getElementById('sc3content'));
-    const hub = await sceneConnect();
-    await sceneAI(hub);
+    const phoneHost = await sceneMobile();
+    phoneHost.style.animation = 'none';
+    phoneHost.style.transition = `opacity .55s ${EASE_PRO}, transform .55s ${EASE_PRO}`;
+    phoneHost.style.transform = 'scale(.96)';
+    phoneHost.style.opacity = '0';
+    await wait(520);
+    await sceneAI();
     await sceneBreathe();
     await sceneHero();
     await wait(300);
