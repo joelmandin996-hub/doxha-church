@@ -18,6 +18,7 @@
   .scene.bg-navy { background: linear-gradient(165deg, #1a2350 0%, #0c1130 55%, #060814 100%); }
   .scene.bg-white { background: linear-gradient(160deg, #ffffff 0%, #f4f8ff 55%, #eaf1fe 100%); }
   .scene.bg-alt { background: linear-gradient(160deg, #f9fbff 0%, #f0f5fe 55%, #e8f0fd 100%); }
+  .scene.bg-blue-hero { background: radial-gradient(130% 110% at 30% 20%, #4c7bff 0%, #2b56ec 45%, #1638b8 100%); }
 
   .scene-cam { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; }
   .scene.active .scene-cam { animation: camBreathe 6s ease-in-out infinite alternate; }
@@ -90,10 +91,13 @@
   @keyframes riseIn3 { to { transform: translateY(10px) rotateX(6deg) rotateZ(7deg) scale(.92); opacity:1; } }
 
   /* ---- shared "real product" UI kit ---- */
-  .app-screen { position:relative; width:1040px; background:#fff; border-radius:20px; overflow:hidden; border:1px solid rgba(52,87,232,.10);
-    box-shadow: 0 70px 130px rgba(20,32,80,.22), 0 30px 70px rgba(52,87,232,.12), 0 2px 0 rgba(20,23,40,.03);
-    animation: screenDrift 4.6s ease-in-out infinite alternate; transform-origin:center; }
-  @keyframes screenDrift { from { transform: scale(1) translate(0,0); } to { transform: scale(1.018) translate(-6px,-5px); } }
+  .app-screen { position:relative; width:1040px; background:rgba(255,255,255,.66); backdrop-filter:blur(28px) saturate(1.7); -webkit-backdrop-filter:blur(28px) saturate(1.7); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.55);
+    box-shadow: 0 70px 130px rgba(20,32,80,.28), 0 30px 70px rgba(52,87,232,.16), inset 0 1px 0 rgba(255,255,255,.6);
+    animation: screenPush 4s cubic-bezier(.22,.08,.32,1) forwards; transform-origin:52% 46%; }
+  @keyframes screenPush {
+    from { transform: perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1); }
+    to   { transform: perspective(1700px) rotateX(2deg) rotateY(-1.2deg) scale(1.07); }
+  }
 
   /* fake cursor: a small moving pointer, for the sense of a live demo */
   .fake-cursor { position:absolute; width:16px; height:16px; z-index:5; opacity:0; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); transition: left 1.1s cubic-bezier(.4,0,.2,1), top 1.1s cubic-bezier(.4,0,.2,1), opacity .3s ease; }
@@ -102,7 +106,7 @@
   .click-ring { position:absolute; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%; border:2px solid #3457e8; opacity:0; pointer-events:none; z-index:4; }
   .click-ring.ping { animation: clickPing .5s ease-out forwards; }
   @keyframes clickPing { 0%{opacity:.7; transform:scale(.3);} 100%{opacity:0; transform:scale(1.6);} }
-  .app-top { padding:26px 34px 20px; border-bottom:1px solid #e3eaf9; display:flex; align-items:center; justify-content:space-between; }
+  .app-top { padding:26px 34px 20px; border-bottom:1px solid rgba(255,255,255,.5); display:flex; align-items:center; justify-content:space-between; }
   .app-title { font-size:26px; font-weight:800; color:#14171f; letter-spacing:-.01em; display:flex; align-items:center; gap:10px; }
   .app-title .sparkle { color:#2140c9; width:24px; height:24px; }
   .app-cta { background:linear-gradient(135deg,#3457e8,#2fe3c4); color:#fff; font-size:14px; font-weight:700; padding:11px 20px; border-radius:10px; white-space:nowrap; }
@@ -110,7 +114,7 @@
   .app-tabs span.active { color:#14171f; }
   .app-body { padding:26px 34px 32px; }
 
-  .search-bar { display:flex; align-items:center; gap:10px; background:#f4f7ff; border:1px solid #e3eaf9; border-radius:10px; padding:10px 14px; margin-bottom:18px; width:280px; }
+  .search-bar { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:10px; padding:10px 14px; margin-bottom:18px; width:280px; }
   .search-bar svg { width:16px; height:16px; color:#9aa1b3; flex:none; }
   .search-bar .sb-text { font-size:14px; color:#14171f; font-weight:600; min-height:1.2em; }
   .search-bar .sb-cursor { display:inline-block; width:2px; height:1em; background:#3457e8; margin-left:1px; vertical-align:-2px; animation: twBlink .9s steps(1) infinite; }
@@ -124,18 +128,18 @@
   .pill-status .dot { width:6px; height:6px; border-radius:50%; }
 
   .stat-row { display:flex; gap:16px; margin-bottom:22px; }
-  .stat-card { flex:1; background:#f4f7ff; border:1px solid #e3eaf9; border-radius:14px; padding:16px 18px; }
+  .stat-card { flex:1; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; padding:16px 18px; }
   .stat-num { font-size:26px; font-weight:800; color:#14171f; }
   .stat-lbl { font-size:13px; color:#8a92a6; font-weight:600; margin-top:3px; }
   .stat-delta { font-size:12px; font-weight:700; color:#0d9488; margin-top:4px; }
 
-  .row-list .row { display:flex; align-items:center; gap:14px; padding:13px 0; border-bottom:1px solid #e8eefb; }
+  .row-list .row { display:flex; align-items:center; gap:14px; padding:13px 0; border-bottom:1px solid rgba(255,255,255,.45); }
   .row-list .row:last-child { border-bottom:none; }
   .row-name { font-size:15px; font-weight:700; color:#14171f; flex:1; }
   .row-sub { font-size:13px; color:#9aa1b3; width:150px; }
 
-  .event-card { display:flex; gap:16px; align-items:center; padding:14px; background:#f4f7ff; border:1px solid #e3eaf9; border-radius:14px; margin-bottom:12px; }
-  .event-date { width:58px; height:58px; border-radius:12px; background:#fff; border:1px solid #e3eaf9; display:flex; flex-direction:column; align-items:center; justify-content:center; flex:none; }
+  .event-card { display:flex; gap:16px; align-items:center; padding:14px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; margin-bottom:12px; }
+  .event-date { width:58px; height:58px; border-radius:12px; background:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.6); display:flex; flex-direction:column; align-items:center; justify-content:center; flex:none; }
   .event-date .d { font-size:20px; font-weight:800; color:#14171f; line-height:1; }
   .event-date .m { font-size:10px; font-weight:700; color:#8a92a6; text-transform:uppercase; }
   .event-title { font-size:16px; font-weight:700; color:#14171f; }
@@ -144,12 +148,12 @@
   .chip-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
   .chip { font-size:12px; font-weight:700; padding:7px 13px; border-radius:999px; background:#eef1fb; color:#2140c9; }
   .channel-row { display:flex; gap:14px; margin-bottom:20px; }
-  .channel-pill { display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; background:#f4f7ff; border:1px solid #e3eaf9; font-size:13px; font-weight:700; color:#3a4152; }
+  .channel-pill { display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); font-size:13px; font-weight:700; color:#3a4152; }
   .channel-pill svg { width:16px; height:16px; }
   .channel-pill.on { background:#e9f9f5; border-color:#c7f0e6; color:#0d9488; }
-  .compose-box { background:#f4f7ff; border:1px solid #e3eaf9; border-radius:14px; padding:18px; font-size:14px; color:#5b6274; line-height:1.6; margin-bottom:18px; }
+  .compose-box { background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; padding:18px; font-size:14px; color:#5b6274; line-height:1.6; margin-bottom:18px; }
 
-  .insight-card { display:flex; gap:14px; padding:16px; background:#f4f7ff; border:1px solid #e3eaf9; border-radius:14px; margin-bottom:12px; }
+  .insight-card { display:flex; gap:14px; padding:16px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; margin-bottom:12px; }
   .insight-icon { width:38px; height:38px; border-radius:11px; background:#eef1fd; color:#2140c9; display:flex; align-items:center; justify-content:center; flex:none; }
   .insight-icon .sparkle { width:18px; height:18px; }
   .insight-text { font-size:14px; font-weight:600; color:#14171f; line-height:1.5; }
@@ -162,6 +166,18 @@
   /* ---- chaos scene: scattered fake app windows ---- */
   .chaos-window { position:absolute; width:340px; background:#fff; border-radius:14px; box-shadow:0 40px 70px rgba(10,15,35,.35); overflow:hidden; opacity:0; }
   .chaos-window.in { animation: chaosIn .55s cubic-bezier(.2,1.3,.3,1) forwards; }
+  .chaos-window.corner { filter:blur(2.5px); box-shadow:0 30px 50px rgba(10,15,35,.10); }
+  .chaos-window.corner.in { animation: cornerIn 1.2s cubic-bezier(.2,1,.3,1) forwards; }
+  @keyframes cornerIn { to { opacity:.55; transform:scale(1) rotate(var(--r,0deg)); } }
+
+  /* ---- hook headline: word-by-word blur-slide reveal (the reference's "Stop Managing tickets" beat) ---- */
+  .blurword { display:inline-block; opacity:0; filter:blur(14px); transform:translateX(18px); }
+  .blurword.in { animation: blurWordIn .6s cubic-bezier(.2,1,.3,1) forwards; }
+  @keyframes blurWordIn { to { opacity:1; filter:blur(0); transform:translateX(0); } }
+
+  .product-tag { position:absolute; top:60px; right:70px; font-size:15px; font-weight:700; color:rgba(255,255,255,.85);
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22); padding:9px 16px; border-radius:999px; opacity:0; }
+  .product-tag.in { animation: fadeUp .5s ease forwards; }
   @keyframes chaosIn { 0%{opacity:0; transform:scale(.7) rotate(var(--r,0deg));} 100%{opacity:1; transform:scale(1) rotate(var(--r,0deg));} }
   .chaos-bar { height:30px; display:flex; align-items:center; gap:5px; padding:0 12px; background:#f3f4f8; }
   .chaos-dot { width:7px; height:7px; border-radius:50%; background:#d8dbe4; }
@@ -184,30 +200,26 @@
 <body>
 <div id="stage">
 
-  <!-- SCENE 1 (0:00-0:08) — accumulation -->
-  <section id="sc1" class="scene bg-navy active">
+  <!-- SCENE 1 (0:00-0:09) — hook: repeated pain, typed & cleared, corner windows lingering -->
+  <section id="sc1" class="scene bg-white active">
     <div class="spot"></div>
+    <div id="cornerWrap" style="position:absolute; inset:0;"></div>
     <div class="scene-cam">
-      <div id="accumWrap" style="display:flex; flex-wrap:wrap; gap:18px; justify-content:center; max-width:1200px;"></div>
-      <div id="sc1line" class="typewrite line-mid on-dark" style="margin-top:44px;"></div>
+      <div id="sc1line" class="typewrite line-big on-light" style="min-height:100px;"></div>
+      <div id="sc1big" class="line-big on-light" style="margin-top:6px;"></div>
     </div>
   </section>
 
-  <!-- SCENE 2 (0:08-0:15) — chaos -->
-  <section id="sc2" class="scene bg-navy">
-    <div class="spot"></div>
+  <!-- SCENE 2 (0:09-0:18) — brand reveal + tagline + product teaser, one continuous blue backdrop -->
+  <section id="sc2" class="scene bg-blue-hero">
+    <div class="product-tag" id="sc2tag">Pensé pour les équipes pastorales</div>
     <div class="scene-cam">
-      <div id="chaosWrap" style="position:relative; width:1300px; height:560px;"></div>
-      <div id="sc2line" class="typewrite line-mid on-dark" style="margin-top:14px; max-width:1300px;"></div>
-    </div>
-  </section>
-
-  <!-- SCENE 3 (0:15-0:20) — logo reveal -->
-  <section id="sc3" class="scene bg-navy">
-    <div class="spot"></div>
-    <div class="scene-cam">
-      <div class="brand-row" id="sc3brand"><div class="brand-mark-lg pulse" id="sc3mark">D<span class="spark-badge" id="sc3spark"></span></div><div class="wordmark">Doxha Church</div></div>
-      <div id="sc3line" class="typewrite line-sub on-dark" style="margin-top:22px;"></div>
+      <div id="sc2line" class="typewrite line-big on-light" style="min-height:90px;"></div>
+      <div class="brand-row" id="sc2brand" style="margin-top:8px;"><div class="brand-mark-lg pulse" id="sc2mark">D<span class="spark-badge" id="sc2spark"></span></div><div class="wordmark" id="sc2word" style="color:#0c1130;">Doxha Church</div></div>
+      <div id="sc2tagline" class="typewrite line-sub on-light" style="margin-top:18px; color:rgba(12,17,48,.62);"></div>
+      <div class="rise-wrap" style="margin-top:38px;">
+        <div class="rise" id="sc2rise"><div id="sc2host"></div></div>
+      </div>
     </div>
   </section>
 
@@ -317,75 +329,88 @@
     currentId = id;
   }
 
-  // ---------------- SCENE 1: accumulation ----------------
-  const ACCUM_ITEMS = [
-    ['Membres', '<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.6 2.7-5.8 6-5.8s6 2.2 6 5.8M16 4.4a3.2 3.2 0 0 1 0 6.4M20 20c0-2.8-1.7-4.7-4-5.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'],
-    ['Événements', '<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'],
-    ['Dons', '<svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'],
-    ['Bénévoles', '<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-9.5-9C.8 8.6 2.6 5 6 5c2 0 3.3 1.1 4 2 1.5-1.5 3.5-2.6 5.5-2 2.6.8 3.4 4.3 1.9 7-2.4 4.5-9.4 9-9.4 9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'],
-    ['Messages', '<svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'],
-    ['Documents', '<svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6V3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'],
-  ];
-  async function scene1() {
-    show('sc1');
-    const wrap = document.getElementById('accumWrap');
-    wrap.innerHTML = '';
-    for (const [label, icon] of ACCUM_ITEMS) {
-      const b = el('div', 'accum-badge', `${icon}<span>${label}</span>`);
-      wrap.appendChild(b);
-      requestAnimationFrame(() => b.classList.add('in'));
-      await new Promise(r => setTimeout(r, 560));
-    }
-    await typewrite(document.getElementById('sc1line'), "Tout s'accumule.", 55);
-    await new Promise(r => setTimeout(r, 2400));
-  }
-
-  // ---------------- SCENE 2: chaos ----------------
-  function scene2Windows() {
-    const wrap = document.getElementById('chaosWrap');
+  // ---------------- SCENE 1: hook — repeated pain, typed & cleared, blurred corner windows ----------------
+  function paintCornerWindows() {
+    const wrap = document.getElementById('cornerWrap');
     wrap.innerHTML = '';
     const wins = [
-      { x: 0, y: 20, r: -8, bar: '#e9edf2', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:8px;">membres.xlsx</div>
+      { x: -60, y: -40, r: -6, bar: '#e9edf2', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:8px;">membres.xlsx</div>
         <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:#e3eaf9;">
-        ${Array.from({length:9}).map((_,i)=>`<div style="background:#fff; height:22px; font-size:10px; color:#c3c7d1; display:flex; align-items:center; padding:0 6px;">${i<3?'':''}</div>`).join('')}
+        ${Array.from({length:9}).map(() => `<div style="background:#fff; height:22px;"></div>`).join('')}
         </div>` },
-      { x: 460, y: 0, r: 6, bar: '#f3f4f8', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:10px;">Boîte de réception</div>
+      { x: 1640, y: -50, r: 5, bar: '#f3f4f8', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:10px;">Boîte de réception</div>
         <div style="font-size:12px; color:#3a4152; font-weight:700; margin-bottom:3px;">Re: planning culte dimanche</div>
         <div style="font-size:11px; color:#aab0bd; margin-bottom:10px;">— il y a 2h</div>
-        <div style="font-size:12px; color:#3a4152; font-weight:700; margin-bottom:3px;">Liste des bénévoles ?</div>
-        <div style="font-size:11px; color:#aab0bd;">— il y a 5h</div>` },
-      { x: 120, y: 300, r: 5, bar: '#dcf8c6', body: `<div style="font-size:11px; font-weight:700; color:#4a7d3d; margin-bottom:10px;">Groupe Diacres</div>
+        <div style="font-size:12px; color:#3a4152; font-weight:700;">Liste des bénévoles ?</div>` },
+      { x: -80, y: 760, r: 4, bar: '#dcf8c6', body: `<div style="font-size:11px; font-weight:700; color:#4a7d3d; margin-bottom:10px;">Groupe Diacres</div>
         <div style="background:#fff; border-radius:8px; padding:8px 10px; font-size:11px; color:#3a4152; margin-bottom:6px; max-width:80%;">Qui gère les dons ce mois ?</div>
         <div style="background:#dcf8c6; border-radius:8px; padding:8px 10px; font-size:11px; color:#3a4152; margin-left:20%;">Je regarde le fichier Excel</div>` },
-      { x: 620, y: 280, r: -6, bar: '#e9edf2', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:8px;">Mars</div>
+      { x: 1660, y: 720, r: -5, bar: '#e9edf2', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:8px;">Mars</div>
         <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px;">
         ${Array.from({length:21}).map((_,i)=>`<div style="height:16px; border-radius:3px; background:${[4,11,18].includes(i)?'#3457e8':'#e8eefb'};"></div>`).join('')}
         </div>` },
     ];
     wins.forEach((w, i) => {
-      const win = el('div', 'chaos-window', `<div class="chaos-bar"><span class="chaos-dot"></span><span class="chaos-dot"></span><span class="chaos-dot"></span></div><div class="chaos-body">${w.body}</div>`);
-      win.style.left = w.x + 'px'; win.style.top = w.y + 'px'; win.style.setProperty('--r', w.r + 'deg'); win.style.background = '#fff';
+      const win = el('div', 'chaos-window corner', `<div class="chaos-bar"><span class="chaos-dot"></span><span class="chaos-dot"></span><span class="chaos-dot"></span></div><div class="chaos-body">${w.body}</div>`);
+      win.style.left = w.x + 'px'; win.style.top = w.y + 'px'; win.style.setProperty('--r', w.r + 'deg');
       win.querySelector('.chaos-bar').style.background = w.bar;
       wrap.appendChild(win);
-      setTimeout(() => win.classList.add('in'), i * 260);
+      setTimeout(() => win.classList.add('in'), 150 + i * 180);
     });
   }
-  async function scene2() {
-    show('sc2');
-    scene2Windows();
-    await new Promise(r => setTimeout(r, 2200));
-    await typewrite(document.getElementById('sc2line'), "Quand tout est dispersé, rien n'avance vraiment.", 42);
-    await new Promise(r => setTimeout(r, 2000));
+  async function typeAndClear(el, text, speed, hold) {
+    await typewrite(el, text, speed);
+    await new Promise(r => setTimeout(r, hold));
+    el.style.transition = 'opacity .25s ease';
+    el.style.opacity = '0';
+    await new Promise(r => setTimeout(r, 260));
+    el.innerHTML = '';
+    el.style.transition = 'none';
+    el.style.opacity = '1';
+  }
+  async function blurStatement(container, text) {
+    container.innerHTML = '';
+    const words = text.split(' ');
+    words.forEach((w, i) => {
+      const span = el('span', 'blurword', w + (i < words.length - 1 ? '&nbsp;' : ''));
+      container.appendChild(span);
+      setTimeout(() => span.classList.add('in'), i * 160);
+    });
+    await new Promise(r => setTimeout(r, words.length * 160 + 700));
+  }
+  async function scene1() {
+    show('sc1');
+    paintCornerWindows();
+    const lineEl = document.getElementById('sc1line');
+    await new Promise(r => setTimeout(r, 600));
+    await typeAndClear(lineEl, 'Le même message.', 60, 700);
+    await typeAndClear(lineEl, 'Sur trois écrans différents.', 48, 700);
+    await typeAndClear(lineEl, 'Encore et encore.', 60, 800);
+    await blurStatement(document.getElementById('sc1big'), 'Trop d’outils. Pas assez de temps.');
+    await new Promise(r => setTimeout(r, 1400));
   }
 
-  // ---------------- SCENE 3: logo reveal ----------------
-  async function scene3() {
-    show('sc3');
-    const brand = document.getElementById('sc3brand');
-    setTimeout(() => { brand.classList.add('in'); document.getElementById('sc3mark').classList.add('burst'); document.getElementById('sc3spark').classList.add('in'); }, 100);
-    await new Promise(r => setTimeout(r, 1300));
-    await typewrite(document.getElementById('sc3line'), 'Voici Doxha.', 70);
-    await new Promise(r => setTimeout(r, 2200));
+  // ---------------- SCENE 2: brand reveal + tagline + product teaser (one continuous blue backdrop) ----------------
+  async function scene2() {
+    show('sc2');
+    const lineEl = document.getElementById('sc2line');
+    await new Promise(r => setTimeout(r, 400));
+    await typewrite(lineEl, 'Voici', 90);
+    await new Promise(r => setTimeout(r, 500));
+    lineEl.style.transition = 'opacity .3s ease'; lineEl.style.opacity = '0';
+    await new Promise(r => setTimeout(r, 320));
+    const brand = document.getElementById('sc2brand');
+    brand.classList.add('in');
+    document.getElementById('sc2mark').classList.add('burst');
+    document.getElementById('sc2spark').classList.add('in');
+    await new Promise(r => setTimeout(r, 900));
+    await typewrite(document.getElementById('sc2tagline'), 'La plateforme tout-en-un pour votre église.', 34);
+    document.getElementById('sc2tag').classList.add('in');
+    await new Promise(r => setTimeout(r, 500));
+    const host = document.getElementById('sc2host');
+    host.innerHTML = screenDashboard();
+    document.getElementById('sc2rise').classList.add('in');
+    await new Promise(r => setTimeout(r, 2600));
   }
 
   // ---------------- SCENE 4: rapid product screens ----------------
@@ -595,14 +620,11 @@
   const TOTAL_MS = 50000;
   (async () => {
     await scene1();
-    await new Promise(r => setTimeout(r, 900));
+    await new Promise(r => setTimeout(r, 500));
     await scene2();
-    await new Promise(r => setTimeout(r, 1000));
     document.getElementById('blackout').classList.add('on');
-    await new Promise(r => setTimeout(r, 700));
+    await new Promise(r => setTimeout(r, 600));
     document.getElementById('blackout').classList.remove('on');
-    await scene3();
-    await new Promise(r => setTimeout(r, 700));
     await scene4();
     await new Promise(r => setTimeout(r, 300));
     scene5();
