@@ -15,20 +15,24 @@
     opacity:0; transition: opacity .5s ease; overflow:hidden;
   }
   .scene.active { opacity:1; z-index:2; }
-  .scene.bg-navy { background: radial-gradient(140% 120% at 15% 0%, #141b40 0%, #0a0d1c 55%, #05070d 100%); }
-  .scene.bg-white { background: #ffffff; }
-  .scene.bg-alt { background: #f6f7fb; }
+  .scene.bg-navy { background: linear-gradient(165deg, #171d3e 0%, #0c0f22 55%, #07091a 100%); }
+  .scene.bg-white { background: linear-gradient(165deg, #ffffff 0%, #ffffff 55%, #f3eefb 100%); }
+  .scene.bg-alt { background: linear-gradient(165deg, #f8f8fb 0%, #f6f7fb 55%, #f0edf9 100%); }
 
   /* ---- constant subtle camera breathing on every scene — never a dead-static frame ---- */
   .scene-cam { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; }
-  .scene.active .scene-cam { animation: camBreathe 5s ease-in-out infinite alternate; }
-  @keyframes camBreathe { from { transform: scale(1) translateY(0); } to { transform: scale(1.035) translateY(-8px); } }
+  .scene.active .scene-cam { animation: camBreathe 6s ease-in-out infinite alternate; }
+  @keyframes camBreathe { from { transform: scale(1) translateY(0); } to { transform: scale(1.02) translateY(-6px); } }
 
-  /* ---- corner spotlight glow, like the reference's soft top-left light — drifts continuously ---- */
-  .spot { position:absolute; inset:-6%; z-index:0; pointer-events:none; }
-  .scene.bg-navy .spot { background: radial-gradient(760px 620px at 14% 8%, rgba(52,87,232,.30), transparent 62%), radial-gradient(680px 560px at 88% 86%, rgba(47,227,196,.16), transparent 60%); }
-  .scene.active .spot { animation: spotDrift 7s ease-in-out infinite alternate; }
-  @keyframes spotDrift { from { transform: translate(0,0); } to { transform: translate(2.5%, -2%); } }
+  /* ---- editorial thin-line arc decoration (vesica), like the reference's soft geometry ---- */
+  .spot { position:absolute; inset:-10%; z-index:0; pointer-events:none; overflow:hidden; }
+  .spot svg { position:absolute; width:100%; height:100%; }
+  .scene.active .spot { animation: spotDrift 9s ease-in-out infinite alternate; }
+  @keyframes spotDrift { from { transform: translate(0,0) scale(1); } to { transform: translate(1.2%, -1%) scale(1.015); } }
+
+  /* ---- signature sparkle accent (4-point star), the recurring Doxha brand motif ---- */
+  .sparkle { display:inline-block; width:.62em; height:.62em; vertical-align:.02em; }
+  .sparkle svg { width:100%; height:100%; }
 
   /* ---- word build-up: words appear in sequence and STAY, sentence accumulates ---- */
   .buildup { font-weight: 800; text-align:center; }
@@ -71,6 +75,11 @@
   @keyframes markBurst { 0%{opacity:.9; transform:scale(.4);} 100%{opacity:0; transform:scale(2.4);} }
   .brand-mark-lg.pulse { animation: markPulse 2.2s ease-in-out infinite; }
   @keyframes markPulse { 0%,100% { box-shadow:0 30px 70px rgba(33,64,201,.45); } 50% { box-shadow:0 30px 90px rgba(47,227,196,.55); } }
+  .spark-badge { position:absolute; top:-14px; right:-14px; width:34px; height:34px; color:#2fe3c4; filter:drop-shadow(0 4px 10px rgba(47,227,196,.5));
+    opacity:0; transform:scale(.3) rotate(-30deg); }
+  .spark-badge.in { animation: sparkIn .5s cubic-bezier(.2,1.6,.3,1) .4s forwards, sparkSpin 5s linear .9s infinite; }
+  @keyframes sparkIn { to { opacity:1; transform:scale(1) rotate(0deg); } }
+  @keyframes sparkSpin { to { transform:scale(1) rotate(360deg); } }
   .wordmark { font-size:66px; font-weight:800; letter-spacing:-.02em; color:#fff; }
   .wordmark.on-light { color:#14171f; }
   .cta-line { margin-top:26px; font-size:24px; color:rgba(255,255,255,.5); letter-spacing:.02em; opacity:0; }
@@ -83,6 +92,30 @@
   .rise.in { animation: riseIn .9s cubic-bezier(.16,1,.3,1) forwards; }
   @keyframes riseIn { to { transform: translateY(0) rotateX(7deg) scale(1); opacity:1; } }
   .rise .mockup-window { max-width:880px; }
+
+  /* ---- detailed, realistic dashboard mockup (kanban-style pastoral tracking) ---- */
+  .kanban-mock { width:1020px; background:#fff; border-radius:20px; overflow:hidden; border:1px solid rgba(20,23,40,.06);
+    box-shadow: 0 70px 130px rgba(20,23,40,.20), 0 2px 0 rgba(20,23,40,.03); }
+  .kanban-top { padding:26px 34px 0; }
+  .kanban-title-row { display:flex; align-items:center; justify-content:space-between; }
+  .kanban-title { font-size:26px; font-weight:800; color:#14171f; letter-spacing:-.01em; }
+  .kanban-add { background:linear-gradient(135deg,#3457e8,#2fe3c4); color:#fff; font-size:14px; font-weight:700; padding:11px 20px; border-radius:10px; white-space:nowrap; }
+  .kanban-tabs { display:flex; gap:26px; margin-top:16px; font-size:15px; font-weight:600; color:#9aa1b3; border-bottom:1px solid #eef0f5; padding-bottom:14px; }
+  .kanban-tabs span.active { color:#14171f; position:relative; }
+  .kanban-tabs span.active::after { content:''; position:absolute; left:0; right:0; bottom:-15px; height:2px; background:#3457e8; }
+  .kanban-cols { display:flex; gap:20px; padding:22px 34px 34px; }
+  .kanban-col { flex:1; min-width:0; }
+  .kanban-col-head { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:#3a4152; margin-bottom:14px; }
+  .kanban-dot { width:9px; height:9px; border-radius:50%; flex:none; }
+  .kanban-card { background:#f8f9fc; border:1px solid #eef0f5; border-radius:12px; padding:15px; margin-bottom:12px; opacity:0; transform:translateY(14px); }
+  .kanban-card.in { animation: kcIn .45s cubic-bezier(.2,1,.3,1) forwards; }
+  @keyframes kcIn { to { opacity:1; transform:translateY(0); } }
+  .kanban-card.mini { opacity:1; transform:none; width:280px; box-shadow:0 30px 60px rgba(20,23,40,.14); margin-bottom:0; }
+  .kanban-name { display:flex; align-items:center; gap:9px; font-size:15px; font-weight:700; color:#14171f; margin-bottom:10px; }
+  .kanban-avatar { width:24px; height:24px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#fff; flex:none; }
+  .kanban-tag { display:inline-block; font-size:11px; font-weight:700; padding:4px 9px; border-radius:6px; margin-bottom:11px; }
+  .kanban-meta { display:flex; align-items:center; gap:13px; font-size:12px; color:#9aa1b3; font-weight:600; }
+  .kanban-meta svg { width:13px; height:13px; vertical-align:-2px; margin-right:3px; }
 
   /* small tilted card trio (payoff proof) */
   .card-trio { display:flex; align-items:flex-end; gap:-10px; perspective:1400px; }
@@ -128,8 +161,8 @@
   @keyframes nodeFloat { to { transform: translateY(-10px); } }
   .link-line { stroke:rgba(255,255,255,.22); stroke-width:2; fill:none; stroke-dasharray:6 6; animation: linkFlow 1.2s linear infinite; }
   @keyframes linkFlow { to { stroke-dashoffset:-24; } }
-  .hub.in { animation: hubIn .6s cubic-bezier(.2,1.4,.3,1) forwards, hubPulse 1.8s ease-in-out 1s infinite; }
-  @keyframes hubPulse { 0%,100% { box-shadow:0 30px 70px rgba(33,64,201,.5); } 50% { box-shadow:0 30px 90px rgba(47,227,196,.6); } }
+  .hub.in { animation: hubIn .6s cubic-bezier(.2,1.4,.3,1) forwards, hubPulse 2.6s ease-in-out 1s infinite; }
+  @keyframes hubPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.035); } }
 
   #vignette { position:absolute; inset:0; z-index:5; pointer-events:none;
     background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.26) 100%); }
@@ -155,12 +188,13 @@
   <section id="m2" class="scene bg-navy">
     <div class="spot"></div>
     <div class="scene-cam">
-      <div class="brand-row" id="m2brand"><div class="brand-mark-lg pulse" id="m2mark">D</div><div class="wordmark">Doxha Church</div></div>
+      <div class="brand-row" id="m2brand"><div class="brand-mark-lg pulse" id="m2mark">D<span class="spark-badge" id="m2spark"></span></div><div class="wordmark">Doxha Church</div></div>
     </div>
   </section>
 
   <!-- MOVEMENT 3 — problem (0:09–0:16) -->
   <section id="m3" class="scene bg-alt">
+    <div class="spot"></div>
     <div class="cloud" id="cloud3"></div>
     <div class="scene-cam">
       <div style="position:relative; width:760px; height:130px;" id="pIcons">
@@ -176,17 +210,34 @@
 
   <!-- MOVEMENT 4 — the turn + product reveal (0:16–0:24) -->
   <section id="m4" class="scene bg-white">
+    <div class="spot"></div>
     <div class="scene-cam">
       <div id="m4line1" class="buildup line-big on-light"></div>
-      <div class="rise-wrap" style="margin-top:34px;">
+      <div class="rise-wrap" style="margin-top:30px;">
         <div class="rise" id="m4rise">
-          <div class="mockup-window" style="transform:none;">
-            <div class="mockup-bar"><div class="mockup-dots"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span></div><div class="mockup-url">app.doxhachurch.com</div></div>
-            <div class="mockup-screen">
-              <div class="mockup-side"><div class="mockup-pill active"></div><div class="mockup-pill"></div><div class="mockup-pill short"></div><div class="mockup-pill"></div></div>
-              <div class="mockup-main">
-                <div class="mockup-row"><div class="mockup-card"><div class="num">3 482</div><div class="lbl">Membres</div></div><div class="mockup-card"><div class="num">128 K€</div><div class="lbl">Dons</div></div><div class="mockup-card"><div class="num">96%</div><div class="lbl">Satisfaction</div></div></div>
-                <div class="mockup-chart"><span style="height:40%"></span><span style="height:65%"></span><span style="height:50%"></span><span style="height:80%"></span><span style="height:55%"></span><span style="height:90%"></span></div>
+          <div class="kanban-mock">
+            <div class="kanban-top">
+              <div class="kanban-title-row">
+                <div class="kanban-title">Suivi pastoral</div>
+                <div class="kanban-add">+ Nouveau contact</div>
+              </div>
+              <div class="kanban-tabs"><span class="active">Tous les groupes</span><span>Jeunes</span><span>Chorale</span><span>Diacres</span></div>
+            </div>
+            <div class="kanban-cols" id="kanbanCols">
+              <div class="kanban-col">
+                <div class="kanban-col-head"><span class="kanban-dot" style="background:#3457e8;"></span>Nouveaux visiteurs</div>
+                <div class="kanban-card"><div class="kanban-name"><span class="kanban-avatar" style="background:#3457e8;">MD</span>Marie Dubois</div><span class="kanban-tag" style="background:#fdedf1; color:#d1476b;">Invitée par Sarah</span><div class="kanban-meta"><span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>12 mars</span><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>2</span></div></div>
+                <div class="kanban-card"><div class="kanban-name"><span class="kanban-avatar" style="background:#c9a227;">JN</span>Jean-Paul Nguyen</div><span class="kanban-tag" style="background:#e9edfd; color:#2140c9;">Culte de Pâques</span><div class="kanban-meta"><span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>19 mars</span><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>0</span></div></div>
+              </div>
+              <div class="kanban-col">
+                <div class="kanban-col-head"><span class="kanban-dot" style="background:#c9a227;"></span>En intégration</div>
+                <div class="kanban-card"><div class="kanban-name"><span class="kanban-avatar" style="background:#6d4fe0;">LM</span>Léa Martin</div><span class="kanban-tag" style="background:#f0ecfe; color:#6d4fe0;">Groupe jeunes</span><div class="kanban-meta"><span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Depuis 3 sem.</span><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>5</span></div></div>
+                <div class="kanban-card"><div class="kanban-name"><span class="kanban-avatar" style="background:#0d9488;">DO</span>David Osei</div><span class="kanban-tag" style="background:#fbf3da; color:#92720f;">Étude biblique</span><div class="kanban-meta"><span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Depuis 1 mois</span><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>3</span></div></div>
+              </div>
+              <div class="kanban-col">
+                <div class="kanban-col-head"><span class="kanban-dot" style="background:#0d9488;"></span>Membres engagés</div>
+                <div class="kanban-card"><div class="kanban-name"><span class="kanban-avatar" style="background:#d1476b;">CR</span>Camille Rousseau</div><span class="kanban-tag" style="background:#e6faf5; color:#0d9488;">Bénévole accueil</span><div class="kanban-meta"><span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Depuis 2022</span><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>12</span></div></div>
+                <div class="kanban-card"><div class="kanban-name"><span class="kanban-avatar" style="background:#2140c9;">ET</span>Emmanuel Traoré</div><span class="kanban-tag" style="background:#fdedf1; color:#d1476b;">Chorale</span><div class="kanban-meta"><span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Depuis 2021</span><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>8</span></div></div>
               </div>
             </div>
           </div>
@@ -220,13 +271,14 @@
 
   <!-- MOVEMENT 7 — payoff (0:47–0:53) -->
   <section id="m7" class="scene bg-white">
+    <div class="spot"></div>
     <div class="scene-cam">
       <div id="m7line1" class="buildup line-big on-light"></div>
       <div id="m7line2" class="buildup line-big" style="margin-top:6px;"></div>
       <div class="card-trio" style="margin-top:44px;">
-        <div class="rise-wrap"><div class="rise"><div class="mini-card"><div class="mc-bar"></div><div class="mc-line w60"></div><div class="mc-line w80"></div><div class="mc-line w40"></div></div></div></div>
-        <div class="rise-wrap"><div class="rise"><div class="mini-card"><div class="mc-bar" style="background:linear-gradient(90deg,#c9a227,#e0bc4d);"></div><div class="mc-line w80"></div><div class="mc-line w60"></div><div class="mc-line w60"></div></div></div></div>
-        <div class="rise-wrap"><div class="rise"><div class="mini-card"><div class="mc-bar" style="background:linear-gradient(90deg,#0d9488,#2fe3c4);"></div><div class="mc-line w40"></div><div class="mc-line w80"></div><div class="mc-line w60"></div></div></div></div>
+        <div class="rise-wrap"><div class="rise"><div class="kanban-card mini" style="background:#fff;"><div class="kanban-name"><span class="kanban-avatar" style="background:#3457e8;">MD</span>Marie Dubois</div><span class="kanban-tag" style="background:#fdedf1; color:#d1476b;">Invitée par Sarah</span></div></div></div>
+        <div class="rise-wrap"><div class="rise"><div class="kanban-card mini" style="background:#fff;"><div class="kanban-name"><span class="kanban-avatar" style="background:#6d4fe0;">LM</span>Léa Martin</div><span class="kanban-tag" style="background:#f0ecfe; color:#6d4fe0;">Groupe jeunes</span></div></div></div>
+        <div class="rise-wrap"><div class="rise"><div class="kanban-card mini" style="background:#fff;"><div class="kanban-name"><span class="kanban-avatar" style="background:#0d9488;">CR</span>Camille Rousseau</div><span class="kanban-tag" style="background:#e6faf5; color:#0d9488;">Bénévole accueil</span></div></div></div>
       </div>
     </div>
   </section>
@@ -235,7 +287,7 @@
   <section id="m8" class="scene bg-navy">
     <div class="spot"></div>
     <div class="scene-cam">
-      <div class="brand-row" id="m8brand"><div class="brand-mark-lg pulse" style="width:88px; height:88px; border-radius:24px; font-size:44px;">D</div><div class="wordmark">Doxha Church</div></div>
+      <div class="brand-row" id="m8brand"><div class="brand-mark-lg pulse" style="width:88px; height:88px; border-radius:24px; font-size:44px;">D<span class="spark-badge" id="m8spark" style="width:28px; height:28px; top:-10px; right:-10px;"></span></div><div class="wordmark">Doxha Church</div></div>
       <div class="cta-line" id="m8cta">Essai gratuit — 14 jours · doxhachurch.com</div>
     </div>
   </section>
@@ -247,6 +299,20 @@
 
 <script>
   function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; }
+
+  // paint the editorial thin-arc vesica decoration into every .spot layer
+  document.querySelectorAll('.scene .spot').forEach(spot => {
+    const dark = spot.closest('.scene').classList.contains('bg-navy');
+    const c1 = dark ? 'rgba(255,255,255,.07)' : 'rgba(52,87,232,.16)';
+    const c2 = dark ? 'rgba(255,255,255,.05)' : 'rgba(47,227,196,.14)';
+    spot.innerHTML = `<svg viewBox="0 0 1920 1080" fill="none">
+      <circle cx="440" cy="540" r="640" stroke="${c1}" stroke-width="1.5"/>
+      <circle cx="1480" cy="540" r="640" stroke="${c2}" stroke-width="1.5"/>
+    </svg>`;
+  });
+
+  const SPARKLE = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2c.6 3.6 2.4 5.4 6 6-3.6.6-5.4 2.4-6 6-.6-3.6-2.4-5.4-6-6 3.6-.6 5.4-2.4 6-6Z" fill="currentColor"/></svg>';
+  document.querySelectorAll('.spark-badge').forEach(s => s.innerHTML = SPARKLE);
 
   // word build-up: appends words one by one, staying on screen
   function buildup(container, text, stepMs, accentWords) {
@@ -336,7 +402,6 @@
 
   async function movement1() {
     show('m1');
-    paintCloud('cloud1');
     await buildup(document.getElementById('m1line1'), 'Votre église grandit.', 160);
     await buildup(document.getElementById('m1line2'), "Mais votre temps, lui, n'a pas changé.", 95);
   }
@@ -344,13 +409,12 @@
   function movement2() {
     show('m2');
     const brand = document.getElementById('m2brand');
-    setTimeout(() => { brand.classList.add('in'); document.getElementById('m2mark').classList.add('burst'); }, 100);
+    setTimeout(() => { brand.classList.add('in'); document.getElementById('m2mark').classList.add('burst'); document.getElementById('m2spark').classList.add('in'); }, 100);
   }
 
   async function movement3() {
     stopCloud('cloud1');
     show('m3');
-    paintCloud('cloud3');
     document.querySelectorAll('#pIcons .p-icon').forEach((ic, i) => setTimeout(() => ic.classList.add('in'), 100 + i * 90));
     await buildup(document.getElementById('m3line1'), 'Fichiers éparpillés. Dons notés à la main.', 115);
     await buildup(document.getElementById('m3line2'), 'Des messages qui se perdent — la gestion prend le pas sur votre mission.', 75);
@@ -361,11 +425,11 @@
     show('m4');
     await buildup(document.getElementById('m4line1'), 'Et si un seul outil changeait tout ?', 120, ['tout']);
     setTimeout(() => document.getElementById('m4rise').classList.add('in'), 200);
+    document.querySelectorAll('#kanbanCols .kanban-card').forEach((c, i) => setTimeout(() => c.classList.add('in'), 650 + i * 110));
   }
 
   async function movement5() {
     show('m5');
-    paintCloud('cloud5');
     const beats = [
       { bg:'#e9edfd', icon:'<svg viewBox="0 0 24 24" fill="none"><path d="M16 11a4 4 0 1 0-4-4M9 21v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2M3 21v-1a5 5 0 0 1 5-5M6 12a3 3 0 1 0 0-6" stroke="#2140c9" stroke-width="1.4" stroke-linecap="round"/></svg>', text:'Le suivi de chaque membre, automatique.' },
       { bg:'#fbf3da', icon:'<svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18M7 15h2m4 0h4M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="#92720f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>', text:'Les dons en ligne, reçus fiscaux instantanés.' },
@@ -404,6 +468,7 @@
   function movement8() {
     show('m8');
     setTimeout(() => document.getElementById('m8brand').classList.add('in'), 150);
+    setTimeout(() => document.getElementById('m8spark').classList.add('in'), 500);
     setTimeout(() => document.getElementById('m8cta').classList.add('in'), 700);
   }
 
