@@ -160,8 +160,19 @@
   .ic-label { font-size:14px; font-weight:700; color:#141b3a; }
   .ic-sub { font-size:12px; color:#7d8496; font-weight:600; margin-top:2px; }
 
-  /* ---- real iPhone 14 Pro mockup (devices.css), used for the "available on mobile" beat and the final hero shot ---- */
-  .device-iphone-14-pro .device-screen { background:#eef4ff; overflow:hidden; padding:0; }
+  /* ---- real iPhone 14 Pro mockup (devices.css), pushed toward photoreal: soft product-shot
+     shadow (filter:drop-shadow follows the device's rounded silhouette, not a plain rectangle),
+     a diagonal glass reflection sweep on the screen, and a ground shadow beneath it ---- */
+  .device-iphone-14-pro {
+    filter: drop-shadow(0 50px 40px rgba(10,20,60,.22)) drop-shadow(0 90px 90px rgba(10,20,60,.22)) drop-shadow(0 3px 2px rgba(10,20,60,.18));
+  }
+  .device-iphone-14-pro .device-screen { background:#eef4ff; overflow:hidden; padding:0; position:relative; }
+  .device-iphone-14-pro .device-screen::after {
+    content:''; position:absolute; inset:0; z-index:6; pointer-events:none;
+    background: linear-gradient(118deg, rgba(255,255,255,.4) 0%, rgba(255,255,255,.05) 16%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 74%, rgba(255,255,255,.14) 92%, rgba(255,255,255,.3) 100%);
+  }
+  .phone-ground-shadow { position:absolute; left:50%; bottom:-26px; width:280px; height:34px; margin-left:-140px; border-radius:50%;
+    background: radial-gradient(closest-side, rgba(15,25,60,.28), rgba(15,25,60,0) 72%); filter:blur(2px); z-index:-1; }
   .phone-rise { opacity:0; transform:translateY(40px) scale(.94); }
   .phone-rise.in { animation: phoneRiseIn .8s cubic-bezier(.16,1,.3,1) forwards; }
   @keyframes phoneRiseIn { to { opacity:1; transform:translateY(0) scale(1); } }
@@ -712,6 +723,7 @@
   }
   function buildPhoneMockup() {
     return `<div class="device device-iphone-14-pro">
+      <div class="phone-ground-shadow"></div>
       <div class="device-frame"><div class="device-screen">${screenMobileApp()}</div></div>
       <div class="device-stripe"></div>
       <div class="device-header"></div>
