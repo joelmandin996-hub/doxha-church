@@ -16,9 +16,7 @@
   }
   .scene.active { opacity:1; z-index:2; }
   .scene.bg-navy { background: linear-gradient(165deg, #1a2350 0%, #0c1130 55%, #060814 100%); }
-  .scene.bg-white { background: linear-gradient(160deg, #ffffff 0%, #f4f8ff 55%, #eaf1fe 100%); }
-  .scene.bg-alt { background: linear-gradient(160deg, #f9fbff 0%, #f0f5fe 55%, #e8f0fd 100%); }
-  .scene.bg-blue-hero { background: radial-gradient(130% 110% at 30% 20%, #4c7bff 0%, #2b56ec 45%, #1638b8 100%); }
+  .scene.bg-white, .scene.bg-alt, .scene.bg-blue-hero { background: #dbe8fb; }
 
   .scene-cam { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; }
   .scene.active .scene-cam { animation: camBreathe 6s ease-in-out infinite alternate; }
@@ -164,7 +162,7 @@
   @keyframes screenIn { to { opacity:1; transform:translateY(0) scale(1); } }
 
   /* ---- chaos scene: scattered fake app windows ---- */
-  .chaos-window { position:absolute; width:340px; background:#fff; border-radius:14px; box-shadow:0 40px 70px rgba(10,15,35,.35); overflow:hidden; opacity:0; }
+  .chaos-window { position:absolute; width:340px; background:rgba(255,255,255,.5); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); border:1px solid rgba(255,255,255,.6); border-radius:14px; box-shadow:0 40px 70px rgba(10,15,35,.22); overflow:hidden; opacity:0; }
   .chaos-window.in { animation: chaosIn .55s cubic-bezier(.2,1.3,.3,1) forwards; }
   .chaos-window.corner { filter:blur(2.5px); box-shadow:0 30px 50px rgba(10,15,35,.10); }
   .chaos-window.corner.in { animation: cornerIn 1.2s cubic-bezier(.2,1,.3,1) forwards; }
@@ -179,7 +177,7 @@
     background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22); padding:9px 16px; border-radius:999px; opacity:0; }
   .product-tag.in { animation: fadeUp .5s ease forwards; }
   @keyframes chaosIn { 0%{opacity:0; transform:scale(.7) rotate(var(--r,0deg));} 100%{opacity:1; transform:scale(1) rotate(var(--r,0deg));} }
-  .chaos-bar { height:30px; display:flex; align-items:center; gap:5px; padding:0 12px; background:#f3f4f8; }
+  .chaos-bar { height:30px; display:flex; align-items:center; gap:5px; padding:0 12px; background:rgba(255,255,255,.35); border-bottom:1px solid rgba(255,255,255,.5); }
   .chaos-dot { width:7px; height:7px; border-radius:50%; background:#d8dbe4; }
   .chaos-body { padding:14px; }
 
@@ -189,6 +187,12 @@
   @keyframes fiIn { to { opacity:1; transform:scale(1); } }
   .accum-badge svg { width:24px; height:24px; color:#2fe3c4; }
   .accum-badge span { font-size:24px; font-weight:700; color:#fff; }
+
+  /* soft color blobs behind glass panels, so translucency/blur actually reads as glass */
+  .glass-blobs { position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .glass-blobs span { position:absolute; border-radius:50%; filter:blur(70px); opacity:.5; }
+  .scene.active .glass-blobs span { animation: blobDrift 10s ease-in-out infinite alternate; }
+  @keyframes blobDrift { from { transform: translate(0,0) scale(1); } to { transform: translate(2%, -1.5%) scale(1.06); } }
 
   #vignette { position:absolute; inset:0; z-index:5; pointer-events:none;
     background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 62%, rgba(6,10,30,.16) 100%); }
@@ -202,6 +206,10 @@
 
   <!-- SCENE 1 (0:00-0:09) — hook: repeated pain, typed & cleared, corner windows lingering -->
   <section id="sc1" class="scene bg-white active">
+    <div class="glass-blobs">
+      <span style="width:460px; height:460px; left:-80px; top:-120px; background:#8fb0ff;"></span>
+      <span style="width:420px; height:420px; right:-100px; bottom:-100px; background:#2fe3c4;"></span>
+    </div>
     <div class="spot"></div>
     <div id="cornerWrap" style="position:absolute; inset:0;"></div>
     <div class="scene-cam">
@@ -212,6 +220,11 @@
 
   <!-- SCENE 2 (0:09-0:18) — brand reveal + tagline + product teaser, one continuous blue backdrop -->
   <section id="sc2" class="scene bg-blue-hero">
+    <div class="glass-blobs">
+      <span style="width:520px; height:520px; left:-120px; top:-100px; background:#8fb0ff;"></span>
+      <span style="width:460px; height:460px; right:-140px; bottom:-120px; background:#2fe3c4;"></span>
+      <span style="width:380px; height:380px; right:20%; top:-160px; background:#3457e8;"></span>
+    </div>
     <div class="product-tag" id="sc2tag">Pensé pour les équipes pastorales</div>
     <div class="scene-cam">
       <div id="sc2line" class="typewrite line-big on-light" style="min-height:90px;"></div>
@@ -225,6 +238,11 @@
 
   <!-- SCENE 4 (0:20-0:45) — rapid screenshots -->
   <section id="sc4" class="scene bg-alt">
+    <div class="glass-blobs">
+      <span style="width:480px; height:480px; left:-100px; bottom:-140px; background:#3457e8;"></span>
+      <span style="width:420px; height:420px; right:-120px; top:-100px; background:#2fe3c4;"></span>
+      <span style="width:340px; height:340px; left:30%; top:-180px; background:#8fb0ff;"></span>
+    </div>
     <div class="spot"></div>
     <div class="scene-cam">
       <div id="sc4line" class="typewrite line-mid on-light" style="margin-bottom:30px; min-height:56px;"></div>
@@ -383,11 +401,16 @@
     paintCornerWindows();
     const lineEl = document.getElementById('sc1line');
     await new Promise(r => setTimeout(r, 600));
-    await typeAndClear(lineEl, 'Le même message.', 60, 700);
-    await typeAndClear(lineEl, 'Sur trois écrans différents.', 48, 700);
-    await typeAndClear(lineEl, 'Encore et encore.', 60, 800);
-    await blurStatement(document.getElementById('sc1big'), 'Trop d’outils. Pas assez de temps.');
-    await new Promise(r => setTimeout(r, 1400));
+    await typeAndClear(lineEl, 'Le même message.', 60, 650);
+    await typeAndClear(lineEl, 'Trois écrans.', 60, 650);
+    await typeAndClear(lineEl, 'Encore et encore.', 60, 750);
+    await blurStatement(document.getElementById('sc1big'), 'Trop d’outils.');
+    await new Promise(r => setTimeout(r, 500));
+    document.getElementById('sc1big').style.transition = 'opacity .25s ease'; document.getElementById('sc1big').style.opacity = '0';
+    await new Promise(r => setTimeout(r, 280));
+    document.getElementById('sc1big').style.transition = 'none'; document.getElementById('sc1big').style.opacity = '1';
+    await blurStatement(document.getElementById('sc1big'), 'Pas assez de temps.');
+    await new Promise(r => setTimeout(r, 900));
   }
 
   // ---------------- SCENE 2: brand reveal + tagline + product teaser (one continuous blue backdrop) ----------------
@@ -566,14 +589,66 @@
   }
 
   const SC4_SEQUENCE = [
-    { build: screenDashboard, text: 'Une plateforme conçue pour centraliser toute la vie de votre église.', speed: 26, hold: 1800, interact: interactDashboard },
-    { build: screenMembres, text: 'Les membres.', speed: 48, hold: 2600, interact: interactMembres },
-    { build: screenEvenements, text: 'Les événements.', speed: 42, hold: 2600, interact: interactEvenements },
-    { build: screenCommunication, text: 'La communication.', speed: 40, hold: 2600, interact: interactCommunication },
-    { build: screenDons, text: 'Les dons.', speed: 55, hold: 2600, interact: interactDons },
-    { build: screenOrganisation, text: "L'organisation.", speed: 42, hold: 3000, interact: interactOrganisation },
-    { build: screenIA, text: "Et l'intelligence artificielle.", speed: 30, hold: 2800, interact: interactIA },
+    { build: screenDashboard, text: 'Doxha.', speed: 90, hold: 1400, interact: interactDashboard, focus: '.stat-card' },
+    { build: screenMembres, text: 'Membres.', speed: 60, hold: 2200, interact: interactMembres, focus: '.search-bar' },
+    { build: screenEvenements, text: 'Événements.', speed: 55, hold: 2000, interact: interactEvenements, focus: '.event-card' },
+    { build: screenCommunication, text: 'Communication.', speed: 50, hold: 2000, interact: interactCommunication, focus: '.channel-pill.on' },
+    { build: screenDons, text: 'Dons.', speed: 80, hold: 2000, interact: interactDons, focus: '.stat-card' },
+    { build: screenOrganisation, text: 'Organisation.', speed: 55, hold: 2200, interact: interactOrganisation, focus: '.event-card' },
+    { build: screenIA, text: 'Intelligence artificielle.', speed: 45, hold: 2200, interact: interactIA, focus: '.insight-icon' },
   ];
+
+  // ---- zoom-through match-cut: the camera rushes into a focal element until it fills the frame, then the next screen arrives already zoomed and settles ----
+  const SCREEN_FROM = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1)';
+  async function zoomCutTo(content, focusSelector, buildNextFn) {
+    const oldScreen = content.querySelector('.app-screen');
+    if (oldScreen) {
+      const frozen = getComputedStyle(oldScreen).transform;
+      oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
+      oldScreen.style.animation = 'none';
+      const focusEl = focusSelector ? oldScreen.querySelector(focusSelector) : null;
+      if (focusEl) {
+        const sRect = oldScreen.getBoundingClientRect();
+        const fRect = focusEl.getBoundingClientRect();
+        const ox = ((fRect.left + fRect.width / 2 - sRect.left) / sRect.width) * 100;
+        const oy = ((fRect.top + fRect.height / 2 - sRect.top) / sRect.height) * 100;
+        oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
+        const link = document.getElementById('sc4ring');
+        link.style.left = (fRect.left - sRect.left + fRect.width / 2) + 'px';
+        link.style.top = (fRect.top - sRect.top + fRect.height / 2) + 'px';
+      } else {
+        oldScreen.style.transformOrigin = '50% 50%';
+      }
+      void oldScreen.offsetWidth;
+      oldScreen.style.transition = 'transform .48s cubic-bezier(.6,0,.9,1), filter .48s ease, opacity .48s ease .1s';
+      requestAnimationFrame(() => {
+        oldScreen.style.transform = oldScreen.style.transform + ' scale(6.5)';
+        oldScreen.style.filter = 'blur(30px)';
+        oldScreen.style.opacity = '0';
+      });
+      await wait(460);
+    }
+    content.innerHTML = buildNextFn();
+    const fresh = content.querySelector('.app-screen');
+    fresh.style.animation = 'none';
+    fresh.style.transformOrigin = 'center center';
+    fresh.style.transform = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(2.4)';
+    fresh.style.filter = 'blur(22px)';
+    fresh.style.opacity = '0';
+    fresh.style.transition = 'none';
+    void fresh.offsetWidth;
+    fresh.style.transition = 'transform .52s cubic-bezier(.16,1,.3,1), filter .5s ease, opacity .4s ease';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      fresh.style.transform = SCREEN_FROM;
+      fresh.style.filter = 'blur(0)';
+      fresh.style.opacity = '1';
+    }));
+    await wait(540);
+    fresh.style.transition = 'none';
+    fresh.style.animation = 'screenPush 3.5s cubic-bezier(.22,.08,.32,1) forwards';
+    return fresh;
+  }
+
   async function scene4() {
     show('sc4');
     const content = document.getElementById('sc4content');
@@ -589,18 +664,9 @@
         rise.classList.add('in');
         requestAnimationFrame(() => requestAnimationFrame(() => { inner.style.opacity = '1'; }));
       } else {
-        // smooth crossfade in place — the rise-wrapper stays settled, only the panel content swaps
-        const old = content.querySelector('.app-screen');
-        if (old) { old.style.transition = 'opacity .35s ease'; old.style.opacity = '0'; }
-        await new Promise(r => setTimeout(r, 320));
-        content.innerHTML = step.build();
-        const fresh = content.querySelector('.app-screen');
-        fresh.style.opacity = '0'; fresh.style.transition = 'none';
-        void fresh.offsetWidth;
-        fresh.style.transition = 'opacity .45s ease';
-        requestAnimationFrame(() => { fresh.style.opacity = '1'; });
+        await zoomCutTo(content, SC4_SEQUENCE[i - 1].focus, step.build);
       }
-      await new Promise(r => setTimeout(r, 400));
+      await new Promise(r => setTimeout(r, 200));
       clearEl(lineEl);
       await typewrite(lineEl, step.text, step.speed);
       const holdP = new Promise(r => setTimeout(r, step.hold));
