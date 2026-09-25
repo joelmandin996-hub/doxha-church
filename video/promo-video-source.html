@@ -6,7 +6,14 @@
 <link rel="stylesheet" href="../css/devices.css">
 <link rel="stylesheet" href="../css/style.css">
 <style>
-  html, body { margin:0; padding:0; width:1920px; height:1080px; overflow:hidden; background:#000; font-family: -apple-system, "Segoe UI", Roboto, "Liberation Sans", Arial, sans-serif; }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: block;
+    src: url('fonts/Inter-Variable.woff2') format('woff2-variations'), url('fonts/Inter-Variable.woff2') format('woff2');
+  }
+  html, body { margin:0; padding:0; width:1920px; height:1080px; overflow:hidden; background:#000; font-family: 'Inter', -apple-system, "Segoe UI", Roboto, "Liberation Sans", Arial, sans-serif; }
   * { box-sizing: border-box; }
   #stage { position:relative; width:1920px; height:1080px; overflow:hidden; }
 
@@ -562,24 +569,36 @@
     { build: screenCommunication, text: 'Communication.', speed: 48, hold: 1900, interact: interactCommunication, focus: '.channel-pill.on', color: '#0d9488' },
   ];
 
-  // ---- camera-morph transition: rushes into a focal element until it fills the frame, next screen arrives already zoomed and settles ----
+  // ---- camera transition: a restrained, overlapping crossfade — the old screen dissolves away
+  // on its own (as a detached floating clone) while the new one is already building and settling
+  // in underneath it, so the two are briefly visible together like a real cut, never a hard blur-snap ----
   const SCREEN_FROM = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1)';
+  const EASE_PRO = 'cubic-bezier(.4,0,.2,1)';
+  // blend a focal point 45% toward the true focus and 55% toward center, so the camera never
+  // whips to a raw screen corner — it always reads as one continuous, moderated push
+  function moderatedOrigin(sRect, fRect) {
+    const fx = ((fRect.left + fRect.width / 2 - sRect.left) / sRect.width) * 100;
+    const fy = ((fRect.top + fRect.height / 2 - sRect.top) / sRect.height) * 100;
+    const ox = fx * 0.45 + 50 * 0.55;
+    const oy = fy * 0.45 + 50 * 0.55;
+    return [Math.max(26, Math.min(74, ox)), Math.max(26, Math.min(74, oy))];
+  }
   async function enterFresh(content) {
     const fresh = content.querySelector('.app-screen');
     fresh.style.animation = 'none';
     fresh.style.transformOrigin = 'center center';
-    fresh.style.transform = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(2.4)';
-    fresh.style.filter = 'blur(22px)';
+    fresh.style.transform = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1.22)';
+    fresh.style.filter = 'blur(7px)';
     fresh.style.opacity = '0';
     fresh.style.transition = 'none';
     void fresh.offsetWidth;
-    fresh.style.transition = 'transform .55s cubic-bezier(.16,1,.3,1), filter .5s ease, opacity .4s ease';
+    fresh.style.transition = `transform .78s ${EASE_PRO}, filter .68s ${EASE_PRO}, opacity .6s ${EASE_PRO}`;
     requestAnimationFrame(() => requestAnimationFrame(() => {
       fresh.style.transform = SCREEN_FROM;
       fresh.style.filter = 'blur(0)';
       fresh.style.opacity = '1';
     }));
-    await wait(560);
+    await wait(720);
     fresh.style.transition = 'none';
     fresh.style.animation = 'screenPush 3.5s cubic-bezier(.22,.08,.32,1) forwards';
     return fresh;
@@ -589,26 +608,33 @@
     let fromRect = null;
     if (oldScreen) {
       const frozen = getComputedStyle(oldScreen).transform;
-      oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
-      oldScreen.style.animation = 'none';
+      const sRect = oldScreen.getBoundingClientRect();
+      let ox = 50, oy = 50;
       const focusEl = focusSelector ? oldScreen.querySelector(focusSelector) : null;
       if (focusEl) {
         fromRect = focusEl.getBoundingClientRect();
-        const sRect = oldScreen.getBoundingClientRect();
-        const ox = ((fromRect.left + fromRect.width / 2 - sRect.left) / sRect.width) * 100;
-        const oy = ((fromRect.top + fromRect.height / 2 - sRect.top) / sRect.height) * 100;
-        oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
-      } else {
-        oldScreen.style.transformOrigin = '50% 50%';
+        [ox, oy] = moderatedOrigin(sRect, fromRect);
       }
+      // detach the old screen into a floating clone, positioned exactly where it already is,
+      // so it can dissolve away on its own timeline while the new screen builds independently
+      content.removeChild(oldScreen);
+      oldScreen.style.position = 'fixed';
+      oldScreen.style.left = sRect.left + 'px'; oldScreen.style.top = sRect.top + 'px';
+      oldScreen.style.width = sRect.width + 'px'; oldScreen.style.margin = '0';
+      oldScreen.style.zIndex = '3';
+      oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
+      oldScreen.style.animation = 'none';
+      oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
+      document.body.appendChild(oldScreen);
       void oldScreen.offsetWidth;
-      oldScreen.style.transition = 'transform .48s cubic-bezier(.6,0,.9,1), filter .48s ease, opacity .48s ease .1s';
+      oldScreen.style.transition = `transform .6s ${EASE_PRO}, filter .56s ${EASE_PRO}, opacity .5s ${EASE_PRO} .06s`;
       requestAnimationFrame(() => {
-        oldScreen.style.transform = oldScreen.style.transform + ' scale(6.5)';
-        oldScreen.style.filter = 'blur(30px)';
+        oldScreen.style.transform = oldScreen.style.transform + ' scale(1.4)';
+        oldScreen.style.filter = 'blur(6px)';
         oldScreen.style.opacity = '0';
       });
-      await wait(460);
+      setTimeout(() => oldScreen.remove(), 640);
+      await wait(190);
     }
     content.innerHTML = buildNextFn();
     if (fromRect && nextFocusSelector) {
@@ -627,18 +653,17 @@
     if (focusEl) {
       const sRect = oldScreen.getBoundingClientRect();
       const fRect = focusEl.getBoundingClientRect();
-      const ox = ((fRect.left + fRect.width / 2 - sRect.left) / sRect.width) * 100;
-      const oy = ((fRect.top + fRect.height / 2 - sRect.top) / sRect.height) * 100;
+      const [ox, oy] = moderatedOrigin(sRect, fRect);
       oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
     }
     void oldScreen.offsetWidth;
-    oldScreen.style.transition = 'transform .5s cubic-bezier(.6,0,.9,1), filter .5s ease, opacity .5s ease .1s';
+    oldScreen.style.transition = `transform .74s ${EASE_PRO}, filter .68s ${EASE_PRO}, opacity .6s ${EASE_PRO} .08s`;
     requestAnimationFrame(() => {
-      oldScreen.style.transform = oldScreen.style.transform + ' scale(7)';
-      oldScreen.style.filter = 'blur(32px)';
+      oldScreen.style.transform = oldScreen.style.transform + ' scale(1.6)';
+      oldScreen.style.filter = 'blur(9px)';
       oldScreen.style.opacity = '0';
     });
-    await wait(480);
+    await wait(700);
   }
 
   // ---------------- SC3: the connected journey ----------------
@@ -706,10 +731,10 @@
   // ---------------- SC5: the AI layer ----------------
   async function sceneAI(hub) {
     if (hub) {
-      hub.style.transition = 'transform .6s cubic-bezier(.6,0,.9,1), opacity .6s ease .15s';
-      hub.style.transform = 'scale(16)';
+      hub.style.transition = `transform .76s ${EASE_PRO}, opacity .7s ${EASE_PRO} .16s`;
+      hub.style.transform = 'scale(4.5)';
       hub.style.opacity = '0';
-      await wait(560);
+      await wait(720);
     }
     show('sc5');
     const content = document.getElementById('sc5content');
@@ -784,15 +809,15 @@
 
     const seed = await sceneOpen();
     await wait(150);
-    seed.style.transition = 'transform .5s cubic-bezier(.6,0,.9,1), filter .5s ease, opacity .5s ease .1s';
+    seed.style.transition = `transform .76s ${EASE_PRO}, filter .7s ${EASE_PRO}, opacity .64s ${EASE_PRO} .1s`;
     seed.style.transformOrigin = '50% 50%';
     requestAnimationFrame(() => {
-      seed.style.transform = (seed.style.transform || '') + ' scale(9)';
-      seed.style.filter = 'blur(28px)';
+      seed.style.transform = (seed.style.transform || '') + ' scale(3.2)';
+      seed.style.filter = 'blur(9px)';
       seed.style.opacity = '0';
     });
-    const t1doxha = document.getElementById('sc1doxha'); t1doxha.style.transition = 'opacity .3s ease'; t1doxha.style.opacity = '0';
-    await wait(480);
+    const t1doxha = document.getElementById('sc1doxha'); t1doxha.style.transition = 'opacity .35s ease'; t1doxha.style.opacity = '0';
+    await wait(640);
 
     await sceneJourney();
     await exitZoom(document.getElementById('sc3content'), SEQ[SEQ.length - 1].focus);
