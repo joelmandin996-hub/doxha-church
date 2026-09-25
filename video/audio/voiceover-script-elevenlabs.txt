@@ -1,22 +1,100 @@
-[0:00 - 0:08] — SILENCE (texte à l'écran uniquement)
-Membres. Événements. Dons. Bénévoles. Messages. Documents.
-Tout s'accumule.
+DOXHA CHURCH — SCRIPT VOIX OFF (français)
+Pour ElevenLabs — voir notes de génération en bas de fichier.
+Durée vidéo actuelle : ~60 secondes.
 
-[0:08 - 0:15] — SILENCE (texte à l'écran uniquement)
-Quand tout est dispersé, rien n'avance vraiment.
+====================================================================
+BLOC 1 — TEXTE PRÊT À COLLER DANS ELEVENLABS (une seule génération)
+====================================================================
+Copier tel quel, sans les minutages ni les lignes vides doubles :
 
-[0:15 - 0:20]
-Voici Doxha.
+Une église, ce sont des dizaines de choses à faire avancer... en même temps.
 
-[0:20 - 0:45]
-Une plateforme conçue pour centraliser toute la vie de votre église.
-Les membres.
-Les événements.
-La communication.
-Les dons.
-L'organisation.
-Et l'intelligence artificielle.
+Des personnes. Des équipes. Des événements. Une communication constante.
 
-[0:45 - 0:50]
-Essai gratuit, quatorze jours.
-doxhachurch.com
+Doxha les réunit.
+
+Un membre rejoint une équipe.
+
+Une équipe prépare un événement.
+
+Et au-dessus de tout ça... une intelligence qui comprend le contexte, et qui aide.
+
+Moins d'administration.
+
+Plus de temps pour l'essentiel.
+
+Disponible sur mobile.
+
+Un système. Une église alignée.
+
+Doxha. Le système qui fait tourner votre église.
+
+Essai gratuit, sur doxhachurch.com.
+
+====================================================================
+BLOC 2 — VERSION MINUTÉE (référence pour caler l'audio sur la vidéo)
+====================================================================
+
+[0:00–0:03] — SILENCE
+Logo seul à l'écran. Aucune voix.
+
+[0:03–0:10]
+"Une église, ce sont des dizaines de choses à faire avancer... en même temps."
+
+[0:10–0:15]
+"Des personnes. Des équipes. Des événements. Une communication constante.
+Doxha les réunit."
+(dit au moment où le logo se forme à l'écran)
+
+[0:15–0:35] — voix quasi absente, deux phrases courtes seulement
+"Un membre rejoint une équipe."
+... (silence, laisser l'image respirer)
+"Une équipe prépare un événement."
+
+[0:35–0:42]
+"Et au-dessus de tout ça... une intelligence qui comprend le contexte, et qui aide."
+(pendant l'écran Assistant IA)
+
+[0:42–0:48]
+"Moins d'administration."
+... (pause)
+"Plus de temps pour l'essentiel."
+(sur fond quasi vide, très peu de mots à l'écran)
+
+[0:48–0:52]
+"Disponible sur mobile."
+(pendant l'apparition du mockup iPhone)
+
+[0:52–0:57]
+"Un système. Une église alignée."
+(hero shot final — desktop + mobile)
+
+[0:57–1:00]
+"Doxha. Le système qui fait tourner votre église."
+"Essai gratuit, sur doxhachurch.com."
+(retour logo + CTA)
+
+====================================================================
+NOTES DE GÉNÉRATION ELEVENLABS
+====================================================================
+
+Voix : voix française, timbre chaud mais posé, confiant sans être commercial —
+plus proche d'un narrateur de documentaire premium que d'un vendeur.
+Éviter les voix "pub radio" trop énergiques.
+
+Réglages recommandés (Voice Settings) :
+- Stability : 45–55 % (assez stable pour rester posé, pas robotique)
+- Similarity : 75–85 %
+- Style exaggeration : faible (10–20 %) — on veut de la retenue, pas de l'emphase
+- Speaker boost : activé
+
+Rythme :
+- Les "..." dans le texte marquent une respiration courte, pas une pause complète.
+- Si le modèle choisi supporte les balises de pause (SSML), remplacer "..." par
+  <break time="500ms" /> pour un contrôle plus précis.
+- Les lignes marquées "silence" ne doivent PAS être générées — ce sont des
+  indications de montage, pas du texte à lire.
+
+Une fois l'audio généré, le découper selon les minutages du Bloc 2 et caler
+chaque segment sur son repère dans la vidéo — le fichier vidéo actuel
+(promo-video-source.html) n'a pas encore de piste audio intégrée.
