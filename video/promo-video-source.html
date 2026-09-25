@@ -15,8 +15,8 @@
     opacity:0; transition: opacity .5s ease; overflow:hidden;
   }
   .scene.active { opacity:1; z-index:2; }
-  .scene.bg-navy { background: linear-gradient(165deg, #1a2350 0%, #0c1130 55%, #060814 100%); }
-  .scene.bg-white, .scene.bg-alt, .scene.bg-blue-hero { background: #dbe8fb; }
+  .scene.bg-paper { background:#fbfcff; }
+  .scene.bg-sky { background:#dbe8fb; }
 
   .scene-cam { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; }
   .scene.active .scene-cam { animation: camBreathe 6s ease-in-out infinite alternate; }
@@ -30,163 +30,121 @@
   .sparkle { display:inline-block; width:.62em; height:.62em; vertical-align:.02em; }
   .sparkle svg { width:100%; height:100%; }
 
-  .buildup { font-weight: 800; text-align:center; }
-  .bw { display:inline-block; opacity:0; transform: translateY(.3em); filter: blur(6px); }
-  .bw.in { animation: bwIn .5s cubic-bezier(.2,1,.3,1) forwards; }
-  @keyframes bwIn { to { opacity:1; transform:translateY(0); filter:blur(0); } }
-  .bw.accent { background:linear-gradient(135deg,#3457e8,#2fe3c4); -webkit-background-clip:text; background-clip:text; color:transparent; }
-
-  /* ---- typewriter: smooth, continuous, natural — the reference's primary text technique ---- */
+  /* ---- typewriter: smooth, continuous, natural ---- */
   .typewrite { font-weight: 600; text-align:center; }
-  .tw-cursor { display:inline-block; width:3px; margin-left:2px; vertical-align:-.06em; animation: twBlink .9s steps(1) infinite; }
+  .tw-cursor { display:inline-block; width:3px; margin-left:2px; vertical-align:-.06em; animation: twBlink .9s steps(1) infinite; background:#3457e8; }
   @keyframes twBlink { 50% { opacity:0; } }
   .tw-accent { background:linear-gradient(135deg,#3457e8,#2fe3c4); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:700; }
 
-  .line-big { font-size:68px; font-weight:600; letter-spacing:-.02em; line-height:1.35; max-width:1650px; }
-  .line-big.on-dark { color:#fff; }
+  .line-big { font-size:64px; font-weight:600; letter-spacing:-.02em; line-height:1.35; max-width:1500px; }
   .line-big.on-light { color:#14171f; }
-  .line-sub { font-size:30px; font-weight:500; margin-top:6px; }
-  .line-sub.on-dark { color:rgba(255,255,255,.62); }
+  .line-sub { font-size:28px; font-weight:500; margin-top:6px; }
   .line-sub.on-light { color:#5b6274; }
-  .line-mid { font-size:42px; font-weight:600; letter-spacing:-.015em; text-align:center; }
-  .line-mid.on-dark { color:#fff; }
+  .line-mid { font-size:40px; font-weight:600; letter-spacing:-.015em; text-align:center; }
   .line-mid.on-light { color:#14171f; }
 
   .brand-row { display:flex; align-items:center; gap:22px; opacity:0; transform:scale(.85); }
   .brand-row.in { animation: brandIn .6s cubic-bezier(.2,1.4,.3,1) forwards; }
   @keyframes brandIn { to { opacity:1; transform:scale(1); } }
   .brand-mark-lg { width:104px; height:104px; border-radius:28px; background:linear-gradient(135deg,#5c7cf2,#0a0d1c 120%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:52px; box-shadow:0 30px 70px rgba(33,64,201,.45); position:relative; }
-  .brand-mark-lg::after { content:''; position:absolute; inset:-18px; border-radius:38px; background:radial-gradient(circle, rgba(47,227,196,.5), transparent 70%); z-index:-1; opacity:0; }
-  .brand-mark-lg.burst::after { animation: markBurst 1s ease forwards; }
-  @keyframes markBurst { 0%{opacity:.9; transform:scale(.4);} 100%{opacity:0; transform:scale(2.4);} }
-  .brand-mark-lg.pulse { animation: markPulse 2.2s ease-in-out infinite; }
-  @keyframes markPulse { 0%,100% { box-shadow:0 30px 70px rgba(33,64,201,.45); } 50% { box-shadow:0 30px 90px rgba(47,227,196,.55); } }
   .spark-badge { position:absolute; top:-14px; right:-14px; width:34px; height:34px; color:#2fe3c4; filter:drop-shadow(0 4px 10px rgba(47,227,196,.5));
     opacity:0; transform:scale(.3) rotate(-30deg); }
-  .spark-badge.in { animation: sparkIn .5s cubic-bezier(.2,1.6,.3,1) .4s forwards, sparkSpin 5s linear .9s infinite; }
+  .spark-badge.in { animation: sparkIn .5s cubic-bezier(.2,1.6,.3,1) forwards, sparkSpin 5s linear .5s infinite; }
   @keyframes sparkIn { to { opacity:1; transform:scale(1) rotate(0deg); } }
   @keyframes sparkSpin { to { transform:scale(1) rotate(360deg); } }
-  .wordmark { font-size:66px; font-weight:800; letter-spacing:-.02em; color:#fff; }
-  .wordmark.on-light { color:#14171f; }
-  .cta-line { margin-top:26px; font-size:24px; color:rgba(255,255,255,.5); letter-spacing:.02em; opacity:0; }
+  .wordmark { font-size:60px; font-weight:800; letter-spacing:-.02em; color:#14171f; }
+  .cta-line { margin-top:26px; font-size:22px; letter-spacing:.02em; opacity:0; }
   .cta-line.in { animation: fadeUp .6s ease forwards; }
   @keyframes fadeUp { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
-  /* ---- screen-rise: mockup slides up with a settled tilt ---- */
-  .rise-wrap { perspective:1500px; }
-  .rise { transform: translateY(220px) rotateX(22deg) scale(.92); opacity:0; transform-origin:center bottom; }
-  .rise.in { animation: riseIn .9s cubic-bezier(.16,1,.3,1) forwards; }
-  @keyframes riseIn { to { transform: translateY(0) rotateX(7deg) scale(1); opacity:1; } }
-
-  /* small tilted card trio (payoff proof) */
-  .card-trio { display:flex; align-items:flex-end; perspective:1400px; }
-  .card-trio .rise:nth-child(1) { transform: translateY(220px) rotateX(20deg) rotateZ(-7deg) scale(.9); margin-right:-40px; z-index:1; }
-  .card-trio .rise:nth-child(1).in { animation: riseIn1 .9s cubic-bezier(.16,1,.3,1) forwards; }
-  @keyframes riseIn1 { to { transform: translateY(10px) rotateX(6deg) rotateZ(-7deg) scale(.92); opacity:1; } }
-  .card-trio .rise:nth-child(2) { z-index:2; }
-  .card-trio .rise:nth-child(3) { transform: translateY(220px) rotateX(20deg) rotateZ(7deg) scale(.9); margin-left:-40px; z-index:1; }
-  .card-trio .rise:nth-child(3).in { animation: riseIn3 .9s cubic-bezier(.16,1,.3,1) forwards; }
-  @keyframes riseIn3 { to { transform: translateY(10px) rotateX(6deg) rotateZ(7deg) scale(.92); opacity:1; } }
-
   /* ---- shared "real product" UI kit ---- */
-  .app-screen { position:relative; width:1040px; background:rgba(255,255,255,.66); backdrop-filter:blur(28px) saturate(1.7); -webkit-backdrop-filter:blur(28px) saturate(1.7); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.55);
-    box-shadow: 0 70px 130px rgba(20,32,80,.28), 0 30px 70px rgba(52,87,232,.16), inset 0 1px 0 rgba(255,255,255,.6);
+  .app-screen { position:relative; width:1000px; background:rgba(255,255,255,.62); backdrop-filter:blur(24px) saturate(1.7); -webkit-backdrop-filter:blur(24px) saturate(1.7); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.55);
+    box-shadow: 0 70px 130px rgba(20,32,80,.24), 0 30px 70px rgba(52,87,232,.14), inset 0 1px 0 rgba(255,255,255,.6);
     animation: screenPush 4s cubic-bezier(.22,.08,.32,1) forwards; transform-origin:52% 46%; }
   @keyframes screenPush {
     from { transform: perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1); }
     to   { transform: perspective(1700px) rotateX(2deg) rotateY(-1.2deg) scale(1.07); }
   }
 
-  /* fake cursor: a small moving pointer, for the sense of a live demo */
+  /* fake cursor: a small moving pointer, shared across scenes, for the sense of a live demo */
   .fake-cursor { position:absolute; width:16px; height:16px; z-index:5; opacity:0; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); transition: left 1.1s cubic-bezier(.4,0,.2,1), top 1.1s cubic-bezier(.4,0,.2,1), opacity .3s ease; }
   .fake-cursor.show { opacity:1; }
   .fake-cursor svg { width:100%; height:100%; }
   .click-ring { position:absolute; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%; border:2px solid #3457e8; opacity:0; pointer-events:none; z-index:4; }
   .click-ring.ping { animation: clickPing .5s ease-out forwards; }
   @keyframes clickPing { 0%{opacity:.7; transform:scale(.3);} 100%{opacity:0; transform:scale(1.6);} }
-  .app-top { padding:26px 34px 20px; border-bottom:1px solid rgba(255,255,255,.5); display:flex; align-items:center; justify-content:space-between; }
-  .app-title { font-size:26px; font-weight:800; color:#14171f; letter-spacing:-.01em; display:flex; align-items:center; gap:10px; }
-  .app-title .sparkle { color:#2140c9; width:24px; height:24px; }
-  .app-cta { background:linear-gradient(135deg,#3457e8,#2fe3c4); color:#fff; font-size:14px; font-weight:700; padding:11px 20px; border-radius:10px; white-space:nowrap; }
-  .app-tabs { display:flex; gap:24px; font-size:14px; font-weight:600; color:#9aa1b3; }
+  .app-top { padding:24px 32px 18px; border-bottom:1px solid rgba(255,255,255,.5); display:flex; align-items:center; justify-content:space-between; }
+  .app-title { font-size:24px; font-weight:800; color:#14171f; letter-spacing:-.01em; display:flex; align-items:center; gap:10px; }
+  .app-title .sparkle { color:#2140c9; width:22px; height:22px; }
+  .app-cta { background:linear-gradient(135deg,#3457e8,#2fe3c4); color:#fff; font-size:13px; font-weight:700; padding:10px 18px; border-radius:10px; white-space:nowrap; }
+  .app-tabs { display:flex; gap:22px; font-size:13px; font-weight:600; color:#9aa1b3; }
   .app-tabs span.active { color:#14171f; }
-  .app-body { padding:26px 34px 32px; }
+  .app-body { padding:24px 32px 30px; }
 
-  .search-bar { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:10px; padding:10px 14px; margin-bottom:18px; width:280px; }
+  .search-bar { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:10px; padding:10px 14px; margin-bottom:16px; width:270px; }
   .search-bar svg { width:16px; height:16px; color:#9aa1b3; flex:none; }
   .search-bar .sb-text { font-size:14px; color:#14171f; font-weight:600; min-height:1.2em; }
   .search-bar .sb-cursor { display:inline-block; width:2px; height:1em; background:#3457e8; margin-left:1px; vertical-align:-2px; animation: twBlink .9s steps(1) infinite; }
   .row.dim { opacity:.4; }
-  .row.hit { background:#f0f4ff; margin:0 -14px; padding:13px 14px; border-radius:8px; }
+  .row.hit { background:#f0f4ff; margin:0 -14px; padding:12px 14px; border-radius:8px; }
 
-  .avatar { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#fff; flex:none; }
+  .avatar { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#fff; flex:none; }
   .avatar.sm { width:24px; height:24px; border-radius:8px; font-size:11px; }
   .tag { display:inline-block; font-size:11px; font-weight:700; padding:4px 9px; border-radius:6px; }
   .pill-status { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; }
   .pill-status .dot { width:6px; height:6px; border-radius:50%; }
 
-  .stat-row { display:flex; gap:16px; margin-bottom:22px; }
-  .stat-card { flex:1; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; padding:16px 18px; }
-  .stat-num { font-size:26px; font-weight:800; color:#14171f; }
-  .stat-lbl { font-size:13px; color:#8a92a6; font-weight:600; margin-top:3px; }
-  .stat-delta { font-size:12px; font-weight:700; color:#0d9488; margin-top:4px; }
+  .stat-row { display:flex; gap:14px; margin-bottom:20px; }
+  .stat-card { flex:1; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; padding:15px 17px; }
+  .stat-num { font-size:24px; font-weight:800; color:#14171f; }
+  .stat-lbl { font-size:12px; color:#8a92a6; font-weight:600; margin-top:3px; }
+  .stat-delta { font-size:11px; font-weight:700; color:#0d9488; margin-top:4px; }
 
-  .row-list .row { display:flex; align-items:center; gap:14px; padding:13px 0; border-bottom:1px solid rgba(255,255,255,.45); }
+  .row-list .row { display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.45); }
   .row-list .row:last-child { border-bottom:none; }
-  .row-name { font-size:15px; font-weight:700; color:#14171f; flex:1; }
-  .row-sub { font-size:13px; color:#9aa1b3; width:150px; }
+  .row-name { font-size:14px; font-weight:700; color:#14171f; flex:1; }
+  .row-sub { font-size:12px; color:#9aa1b3; width:140px; }
 
-  .event-card { display:flex; gap:16px; align-items:center; padding:14px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; margin-bottom:12px; }
-  .event-date { width:58px; height:58px; border-radius:12px; background:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.6); display:flex; flex-direction:column; align-items:center; justify-content:center; flex:none; }
-  .event-date .d { font-size:20px; font-weight:800; color:#14171f; line-height:1; }
-  .event-date .m { font-size:10px; font-weight:700; color:#8a92a6; text-transform:uppercase; }
-  .event-title { font-size:16px; font-weight:700; color:#14171f; }
-  .event-meta { font-size:13px; color:#9aa1b3; margin-top:3px; }
+  .event-card { display:flex; gap:16px; align-items:center; padding:13px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; margin-bottom:11px; }
+  .event-date { width:54px; height:54px; border-radius:12px; background:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.6); display:flex; flex-direction:column; align-items:center; justify-content:center; flex:none; }
+  .event-date .d { font-size:19px; font-weight:800; color:#14171f; line-height:1; }
+  .event-date .m { font-size:9px; font-weight:700; color:#8a92a6; text-transform:uppercase; }
+  .event-title { font-size:15px; font-weight:700; color:#14171f; }
+  .event-meta { font-size:12px; color:#9aa1b3; margin-top:3px; }
 
-  .chip-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .chip-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:15px; }
   .chip { font-size:12px; font-weight:700; padding:7px 13px; border-radius:999px; background:#eef1fb; color:#2140c9; }
-  .channel-row { display:flex; gap:14px; margin-bottom:20px; }
-  .channel-pill { display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); font-size:13px; font-weight:700; color:#3a4152; }
-  .channel-pill svg { width:16px; height:16px; }
+  .channel-row { display:flex; gap:12px; margin-bottom:18px; }
+  .channel-pill { display:flex; align-items:center; gap:8px; padding:9px 15px; border-radius:10px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); font-size:12px; font-weight:700; color:#3a4152; }
+  .channel-pill svg { width:15px; height:15px; }
   .channel-pill.on { background:#e9f9f5; border-color:#c7f0e6; color:#0d9488; }
-  .compose-box { background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; padding:18px; font-size:14px; color:#5b6274; line-height:1.6; margin-bottom:18px; }
+  .compose-box { background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; padding:17px; font-size:13px; color:#5b6274; line-height:1.6; margin-bottom:16px; }
 
-  .insight-card { display:flex; gap:14px; padding:16px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; margin-bottom:12px; }
-  .insight-icon { width:38px; height:38px; border-radius:11px; background:#eef1fd; color:#2140c9; display:flex; align-items:center; justify-content:center; flex:none; }
-  .insight-icon .sparkle { width:18px; height:18px; }
-  .insight-text { font-size:14px; font-weight:600; color:#14171f; line-height:1.5; }
+  .insight-card { display:flex; gap:14px; padding:15px; background:rgba(255,255,255,.45); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.6); border-radius:14px; margin-bottom:11px; }
+  .insight-icon { width:36px; height:36px; border-radius:11px; background:#eef1fd; color:#2140c9; display:flex; align-items:center; justify-content:center; flex:none; }
+  .insight-icon .sparkle { width:17px; height:17px; }
+  .insight-text { font-size:13px; font-weight:600; color:#14171f; line-height:1.5; }
   .insight-link { font-size:12px; font-weight:700; color:#3457e8; margin-top:4px; }
 
-  .screen-fx { opacity:0; transform:translateY(18px) scale(.985); }
-  .screen-fx.in { animation: screenIn .55s cubic-bezier(.2,1,.3,1) forwards; }
-  @keyframes screenIn { to { opacity:1; transform:translateY(0) scale(1); } }
+  /* ---- emergence cards (opening act) ---- */
+  .info-card { position:absolute; width:250px; background:rgba(255,255,255,.55); backdrop-filter:blur(16px) saturate(1.6); -webkit-backdrop-filter:blur(16px) saturate(1.6); border:1px solid rgba(255,255,255,.65); border-radius:14px; padding:13px 16px; box-shadow:0 24px 50px rgba(20,32,80,.16); opacity:0; filter:blur(10px); }
+  .info-card.in { animation: infoIn .7s cubic-bezier(.2,1,.3,1) forwards; }
+  @keyframes infoIn { to { opacity:.94; filter:blur(0); } }
+  .ic-label { font-size:14px; font-weight:700; color:#14171f; }
+  .ic-sub { font-size:12px; color:#7d8496; font-weight:600; margin-top:2px; }
 
-  /* ---- chaos scene: scattered fake app windows ---- */
-  .chaos-window { position:absolute; width:340px; background:rgba(255,255,255,.5); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); border:1px solid rgba(255,255,255,.6); border-radius:14px; box-shadow:0 40px 70px rgba(10,15,35,.22); overflow:hidden; opacity:0; }
-  .chaos-window.in { animation: chaosIn .55s cubic-bezier(.2,1.3,.3,1) forwards; }
-  .chaos-window.corner { filter:blur(2.5px); box-shadow:0 30px 50px rgba(10,15,35,.10); }
-  .chaos-window.corner.in { animation: cornerIn 1.2s cubic-bezier(.2,1,.3,1) forwards; }
-  @keyframes cornerIn { to { opacity:.55; transform:scale(1) rotate(var(--r,0deg)); } }
+  /* ---- connection map / hero shot: hub + module nodes ---- */
+  .mini-hub { position:absolute; width:68px; height:68px; border-radius:50%; background:radial-gradient(circle,#4c7bff,#2140c9); opacity:0; transform:scale(.5); }
+  .mini-hub.in { animation: hubIn .6s cubic-bezier(.2,1.4,.3,1) forwards, hubPulse 2.4s ease-in-out 1s infinite; }
+  @keyframes hubIn { to { opacity:1; transform:scale(1); } }
+  @keyframes hubPulse { 0%,100% { box-shadow:0 0 0 0 rgba(52,87,232,.35);} 50% { box-shadow:0 0 0 22px rgba(52,87,232,0);} }
+  .mini-module { position:absolute; width:180px; display:flex; align-items:center; gap:10px; padding:12px 16px; background:rgba(255,255,255,.55); backdrop-filter:blur(16px) saturate(1.6); -webkit-backdrop-filter:blur(16px) saturate(1.6); border:1px solid rgba(255,255,255,.65); border-radius:12px; box-shadow:0 20px 40px rgba(20,32,80,.14); opacity:0; transform:translateY(14px) scale(.92); transition: opacity .5s cubic-bezier(.2,1,.3,1), transform .5s cubic-bezier(.2,1,.3,1); }
+  .mini-module.in { opacity:1; transform:translateY(0) scale(1); }
+  .mm-dot { width:10px; height:10px; border-radius:50%; flex:none; }
+  .mm-label { font-size:14px; font-weight:700; color:#14171f; }
 
-  /* ---- hook headline: word-by-word blur-slide reveal (the reference's "Stop Managing tickets" beat) ---- */
-  .blurword { display:inline-block; opacity:0; filter:blur(14px); transform:translateX(18px); }
-  .blurword.in { animation: blurWordIn .6s cubic-bezier(.2,1,.3,1) forwards; }
-  @keyframes blurWordIn { to { opacity:1; filter:blur(0); transform:translateX(0); } }
-
-  .product-tag { position:absolute; top:60px; right:70px; font-size:15px; font-weight:700; color:rgba(255,255,255,.85);
-    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22); padding:9px 16px; border-radius:999px; opacity:0; }
-  .product-tag.in { animation: fadeUp .5s ease forwards; }
-  @keyframes chaosIn { 0%{opacity:0; transform:scale(.7) rotate(var(--r,0deg));} 100%{opacity:1; transform:scale(1) rotate(var(--r,0deg));} }
-  .chaos-bar { height:30px; display:flex; align-items:center; gap:5px; padding:0 12px; background:rgba(255,255,255,.35); border-bottom:1px solid rgba(255,255,255,.5); }
-  .chaos-dot { width:7px; height:7px; border-radius:50%; background:#d8dbe4; }
-  .chaos-body { padding:14px; }
-
-  /* ---- accumulation badges (scene 1) ---- */
-  .accum-badge { display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:14px; padding:14px 22px; opacity:0; transform:scale(.7); }
-  .accum-badge.in { animation: fiIn .45s cubic-bezier(.2,1.4,.4,1) forwards; }
-  @keyframes fiIn { to { opacity:1; transform:scale(1); } }
-  .accum-badge svg { width:24px; height:24px; color:#2fe3c4; }
-  .accum-badge span { font-size:24px; font-weight:700; color:#fff; }
+  #heroPan { position:absolute; inset:0; animation: heroPan 9s ease-in-out infinite alternate; }
+  @keyframes heroPan { from { transform: translateX(-16px) rotate(-.4deg); } to { transform: translateX(16px) rotate(.4deg); } }
 
   /* soft color blobs behind glass panels, so translucency/blur actually reads as glass */
   .glass-blobs { position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
@@ -195,7 +153,7 @@
   @keyframes blobDrift { from { transform: translate(0,0) scale(1); } to { transform: translate(2%, -1.5%) scale(1.06); } }
 
   #vignette { position:absolute; inset:0; z-index:5; pointer-events:none;
-    background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 62%, rgba(6,10,30,.16) 100%); }
+    background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 62%, rgba(6,10,30,.14) 100%); }
   #progress { position:absolute; left:0; bottom:0; height:5px; width:0%; z-index:6; background: linear-gradient(90deg,#3457e8,#2fe3c4); }
   #blackout { position:absolute; inset:0; background:#000; opacity:0; z-index:10; pointer-events:none; transition: opacity .7s ease; }
   #blackout.on { opacity:1; }
@@ -204,40 +162,32 @@
 <body>
 <div id="stage">
 
-  <!-- SCENE 1 (0:00-0:09) — hook: repeated pain, typed & cleared, corner windows lingering -->
-  <section id="sc1" class="scene bg-white active">
+  <!-- SC0 — cold open: logo alone, calm, premium -->
+  <section id="sc0" class="scene bg-paper active">
+    <div class="scene-cam">
+      <div class="brand-row" id="logoIntroBrand" style="margin-top:0;">
+        <div class="brand-mark-lg">D</div>
+        <div class="wordmark">Doxha Church</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SC1 — emergence, convergence, reveal (one continuous shot) -->
+  <section id="sc1" class="scene bg-sky">
     <div class="glass-blobs">
       <span style="width:460px; height:460px; left:-80px; top:-120px; background:#8fb0ff;"></span>
       <span style="width:420px; height:420px; right:-100px; bottom:-100px; background:#2fe3c4;"></span>
     </div>
     <div class="spot"></div>
-    <div id="cornerWrap" style="position:absolute; inset:0;"></div>
+    <div id="emergeWrap" style="position:absolute; inset:0;"></div>
     <div class="scene-cam">
-      <div id="sc1line" class="typewrite line-big on-light" style="min-height:100px;"></div>
-      <div id="sc1big" class="line-big on-light" style="margin-top:6px;"></div>
+      <div id="sc1text" class="typewrite line-big on-light" style="min-height:86px; position:relative; z-index:3;"></div>
     </div>
+    <div id="sc1doxha" class="typewrite line-big on-light" style="position:absolute; z-index:3; left:0; right:0; top:500px; text-align:center;"></div>
   </section>
 
-  <!-- SCENE 2 (0:09-0:18) — brand reveal + tagline + product teaser, one continuous blue backdrop -->
-  <section id="sc2" class="scene bg-blue-hero">
-    <div class="glass-blobs">
-      <span style="width:520px; height:520px; left:-120px; top:-100px; background:#8fb0ff;"></span>
-      <span style="width:460px; height:460px; right:-140px; bottom:-120px; background:#2fe3c4;"></span>
-      <span style="width:380px; height:380px; right:20%; top:-160px; background:#3457e8;"></span>
-    </div>
-    <div class="product-tag" id="sc2tag">Pensé pour les équipes pastorales</div>
-    <div class="scene-cam">
-      <div id="sc2line" class="typewrite line-big on-light" style="min-height:90px;"></div>
-      <div class="brand-row" id="sc2brand" style="margin-top:8px;"><div class="brand-mark-lg pulse" id="sc2mark">D<span class="spark-badge" id="sc2spark"></span></div><div class="wordmark" id="sc2word" style="color:#0c1130;">Doxha Church</div></div>
-      <div id="sc2tagline" class="typewrite line-sub on-light" style="margin-top:18px; color:rgba(12,17,48,.62);"></div>
-      <div class="rise-wrap" style="margin-top:38px;">
-        <div class="rise" id="sc2rise"><div id="sc2host"></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SCENE 4 (0:20-0:45) — rapid screenshots -->
-  <section id="sc4" class="scene bg-alt">
+  <!-- SC3 — the connected journey: dashboard → membres → équipes → événements → communication -->
+  <section id="sc3" class="scene bg-sky">
     <div class="glass-blobs">
       <span style="width:480px; height:480px; left:-100px; bottom:-140px; background:#3457e8;"></span>
       <span style="width:420px; height:420px; right:-120px; top:-100px; background:#2fe3c4;"></span>
@@ -245,25 +195,64 @@
     </div>
     <div class="spot"></div>
     <div class="scene-cam">
-      <div id="sc4line" class="typewrite line-mid on-light" style="margin-bottom:30px; min-height:56px;"></div>
-      <div class="rise-wrap">
-        <div class="rise" id="sc4rise"><div id="sc4host" style="position:relative;">
-          <div id="sc4content"></div>
-          <div class="fake-cursor" id="sc4cursor"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 8-6 1.5L11 19 5 3Z" fill="#14171f" stroke="#fff" stroke-width="1"/></svg></div>
-          <div class="click-ring" id="sc4ring"></div>
-        </div></div>
-      </div>
+      <div id="sc3line" class="typewrite line-mid on-light" style="margin-bottom:28px; min-height:52px;"></div>
+      <div id="sc3content" style="position:relative;"></div>
     </div>
   </section>
 
-  <!-- SCENE 5 (0:45-0:50) — CTA end card -->
-  <section id="sc5" class="scene bg-navy">
-    <div class="spot"></div>
+  <!-- SC4 — connection map: everything is linked -->
+  <section id="sc4" class="scene bg-sky">
+    <div class="glass-blobs">
+      <span style="width:440px; height:440px; left:-100px; top:-100px; background:#8fb0ff;"></span>
+      <span style="width:400px; height:400px; right:-100px; bottom:-100px; background:#2fe3c4;"></span>
+    </div>
+    <svg id="connectSvg" style="position:absolute; inset:0; width:100%; height:100%; z-index:1;" viewBox="0 0 1920 1080"></svg>
+    <div id="connectWrap" style="position:absolute; inset:0; z-index:2;"></div>
+    <div id="sc4line" class="typewrite line-mid on-light" style="position:absolute; z-index:3; left:0; right:0; top:860px; text-align:center;"></div>
+  </section>
+
+  <!-- SC5 — the AI layer -->
+  <section id="sc5" class="scene bg-sky">
+    <div class="glass-blobs">
+      <span style="width:460px; height:460px; left:-90px; top:-110px; background:#3457e8;"></span>
+      <span style="width:400px; height:400px; right:-110px; bottom:-110px; background:#2fe3c4;"></span>
+    </div>
     <div class="scene-cam">
-      <div class="brand-row" id="sc5brand"><div class="brand-mark-lg pulse" style="width:88px; height:88px; border-radius:24px; font-size:44px;">D<span class="spark-badge" id="sc5spark" style="width:28px; height:28px; top:-10px; right:-10px;"></span></div><div class="wordmark">Doxha Church</div></div>
-      <div class="cta-line" id="sc5cta">Essai gratuit — 14 jours · doxhachurch.com</div>
+      <div id="sc5content" style="position:relative;"></div>
     </div>
   </section>
+
+  <!-- SC6 — breathing -->
+  <section id="sc6" class="scene bg-sky">
+    <div class="scene-cam">
+      <div id="sc6text" class="typewrite" style="font-size:54px; font-weight:600; color:#14171f; text-align:center; letter-spacing:-.01em; min-height:70px;"></div>
+    </div>
+  </section>
+
+  <!-- SC7 — hero shot: the whole system, connected -->
+  <section id="sc7" class="scene bg-sky">
+    <div class="glass-blobs">
+      <span style="width:460px; height:460px; left:-100px; top:-100px; background:#8fb0ff;"></span>
+      <span style="width:420px; height:420px; right:-100px; bottom:-100px; background:#2fe3c4;"></span>
+    </div>
+    <div id="heroPan">
+      <svg id="heroSvg" style="position:absolute; inset:0; width:100%; height:100%;" viewBox="0 0 1920 1080"></svg>
+      <div id="heroWrap" style="position:absolute; inset:0;"></div>
+    </div>
+    <div id="sc7line" class="typewrite line-mid on-light" style="position:absolute; z-index:3; left:0; right:0; top:860px; text-align:center;"></div>
+  </section>
+
+  <!-- SC8 — logo return, tagline, CTA -->
+  <section id="sc8" class="scene bg-paper">
+    <div class="scene-cam">
+      <div class="brand-row" id="sc8brand"><div class="brand-mark-lg">D<span class="spark-badge" id="sc8spark"></span></div><div class="wordmark">Doxha Church</div></div>
+      <div class="line-sub on-light" id="sc8tagline" style="margin-top:14px; opacity:0; transition:opacity .6s ease;">Le système qui fait tourner votre église.</div>
+      <div class="cta-line" id="sc8cta" style="color:#8a92a6;">Essai gratuit — doxhachurch.com</div>
+    </div>
+  </section>
+
+  <div class="fake-cursor" id="liveCursor"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 8-6 1.5L11 19 5 3Z" fill="#14171f" stroke="#fff" stroke-width="1"/></svg></div>
+  <div class="click-ring" id="liveRing"></div>
 
   <div id="vignette"></div>
   <div id="progress"></div>
@@ -272,33 +261,27 @@
 
 <script>
   function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; }
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+  function clearEl(elm) { elm.innerHTML = ''; }
+  function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   document.querySelectorAll('.scene .spot').forEach(spot => {
-    const dark = spot.closest('.scene').classList.contains('bg-navy');
-    const c1 = dark ? 'rgba(255,255,255,.07)' : 'rgba(52,87,232,.16)';
-    const c2 = dark ? 'rgba(255,255,255,.05)' : 'rgba(47,227,196,.14)';
     spot.innerHTML = `<svg viewBox="0 0 1920 1080" fill="none">
-      <circle cx="440" cy="540" r="640" stroke="${c1}" stroke-width="1.5"/>
-      <circle cx="1480" cy="540" r="640" stroke="${c2}" stroke-width="1.5"/>
+      <circle cx="440" cy="540" r="640" stroke="rgba(52,87,232,.16)" stroke-width="1.5"/>
+      <circle cx="1480" cy="540" r="640" stroke="rgba(47,227,196,.14)" stroke-width="1.5"/>
     </svg>`;
   });
 
   const SPARKLE = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2c.6 3.6 2.4 5.4 6 6-3.6.6-5.4 2.4-6 6-.6-3.6-2.4-5.4-6-6 3.6-.6 5.4-2.4 6-6Z" fill="currentColor"/></svg>';
   document.querySelectorAll('.spark-badge').forEach(s => s.innerHTML = SPARKLE);
 
-  function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  // typewriter: smooth character-by-character reveal with a blinking cursor — the reference's primary text style
+  // typewriter: smooth character-by-character reveal with a blinking cursor
   function typewrite(container, text, msPerChar, accentWords) {
     const ranges = [];
     (accentWords || []).forEach(w => { const idx = text.indexOf(w); if (idx >= 0) ranges.push([idx, idx + w.length]); });
     ranges.sort((a, b) => a[0] - b[0]);
     container.innerHTML = '<span class="tw-text"></span><span class="tw-cursor"></span>';
     const textSpan = container.querySelector('.tw-text');
-    const cursor = container.querySelector('.tw-cursor');
-    const onDarkScene = !!container.closest('.bg-navy') && !container.classList.contains('on-light');
-    cursor.style.background = onDarkScene ? '#2fe3c4' : '#3457e8';
-    cursor.style.height = '.95em';
     const total = text.length;
     return new Promise(resolve => {
       let i = 0;
@@ -318,28 +301,12 @@
         render();
         i++;
         if (i <= total) setTimeout(tick, msPerChar);
-        else setTimeout(resolve, 380);
+        else setTimeout(resolve, 340);
       })();
     });
   }
 
-  function buildup(container, text, stepMs, accentWords) {
-    accentWords = accentWords || [];
-    const words = text.split(' ');
-    return new Promise(resolve => {
-      words.forEach((w, i) => {
-        setTimeout(() => {
-          const span = el('span', 'bw' + (accentWords.includes(w.replace(/[.,?!]/g,'')) ? ' accent' : ''), w + (i < words.length - 1 ? '&nbsp;' : ''));
-          container.appendChild(span);
-          requestAnimationFrame(() => requestAnimationFrame(() => span.classList.add('in')));
-          if (i === words.length - 1) setTimeout(resolve, 500);
-        }, i * stepMs);
-      });
-    });
-  }
-  function clearEl(elm) { elm.innerHTML = ''; }
-
-  let currentId = 'sc1';
+  let currentId = 'sc0';
   function show(id) {
     const prev = document.getElementById(currentId);
     if (prev && prev.id !== id) prev.classList.remove('active');
@@ -347,96 +314,133 @@
     currentId = id;
   }
 
-  // ---------------- SCENE 1: hook — repeated pain, typed & cleared, blurred corner windows ----------------
-  function paintCornerWindows() {
-    const wrap = document.getElementById('cornerWrap');
-    wrap.innerHTML = '';
-    const wins = [
-      { x: -60, y: -40, r: -6, bar: '#e9edf2', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:8px;">membres.xlsx</div>
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:#e3eaf9;">
-        ${Array.from({length:9}).map(() => `<div style="background:#fff; height:22px;"></div>`).join('')}
-        </div>` },
-      { x: 1640, y: -50, r: 5, bar: '#f3f4f8', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:10px;">Boîte de réception</div>
-        <div style="font-size:12px; color:#3a4152; font-weight:700; margin-bottom:3px;">Re: planning culte dimanche</div>
-        <div style="font-size:11px; color:#aab0bd; margin-bottom:10px;">— il y a 2h</div>
-        <div style="font-size:12px; color:#3a4152; font-weight:700;">Liste des bénévoles ?</div>` },
-      { x: -80, y: 760, r: 4, bar: '#dcf8c6', body: `<div style="font-size:11px; font-weight:700; color:#4a7d3d; margin-bottom:10px;">Groupe Diacres</div>
-        <div style="background:#fff; border-radius:8px; padding:8px 10px; font-size:11px; color:#3a4152; margin-bottom:6px; max-width:80%;">Qui gère les dons ce mois ?</div>
-        <div style="background:#dcf8c6; border-radius:8px; padding:8px 10px; font-size:11px; color:#3a4152; margin-left:20%;">Je regarde le fichier Excel</div>` },
-      { x: 1660, y: 720, r: -5, bar: '#e9edf2', body: `<div style="font-size:11px; font-weight:700; color:#8a92a6; margin-bottom:8px;">Mars</div>
-        <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px;">
-        ${Array.from({length:21}).map((_,i)=>`<div style="height:16px; border-radius:3px; background:${[4,11,18].includes(i)?'#3457e8':'#e8eefb'};"></div>`).join('')}
-        </div>` },
-    ];
-    wins.forEach((w, i) => {
-      const win = el('div', 'chaos-window corner', `<div class="chaos-bar"><span class="chaos-dot"></span><span class="chaos-dot"></span><span class="chaos-dot"></span></div><div class="chaos-body">${w.body}</div>`);
-      win.style.left = w.x + 'px'; win.style.top = w.y + 'px'; win.style.setProperty('--r', w.r + 'deg');
-      win.querySelector('.chaos-bar').style.background = w.bar;
-      wrap.appendChild(win);
-      setTimeout(() => win.classList.add('in'), 150 + i * 180);
-    });
+  // ---------------- shared live-cursor (viewport-absolute, reused across scenes) ----------------
+  function targetXY(elm) { const r = elm.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+  async function cursorMove(x, y, dur) {
+    const cursor = document.getElementById('liveCursor');
+    cursor.style.left = x + 'px'; cursor.style.top = y + 'px';
+    cursor.classList.add('show');
+    await wait(dur || 900);
   }
-  async function typeAndClear(el, text, speed, hold) {
-    await typewrite(el, text, speed);
-    await new Promise(r => setTimeout(r, hold));
-    el.style.transition = 'opacity .25s ease';
-    el.style.opacity = '0';
-    await new Promise(r => setTimeout(r, 260));
-    el.innerHTML = '';
-    el.style.transition = 'none';
-    el.style.opacity = '1';
+  async function cursorClick(x, y) {
+    await cursorMove(x, y);
+    const ring = document.getElementById('liveRing');
+    ring.style.left = x + 'px'; ring.style.top = y + 'px';
+    ring.classList.remove('ping'); void ring.offsetWidth; ring.classList.add('ping');
+    await wait(280);
   }
-  async function blurStatement(container, text) {
-    container.innerHTML = '';
-    const words = text.split(' ');
-    words.forEach((w, i) => {
-      const span = el('span', 'blurword', w + (i < words.length - 1 ? '&nbsp;' : ''));
-      container.appendChild(span);
-      setTimeout(() => span.classList.add('in'), i * 160);
-    });
-    await new Promise(r => setTimeout(r, words.length * 160 + 700));
+  function cursorHide() { document.getElementById('liveCursor').classList.remove('show'); }
+
+  // a small colored chip that flies from one focal point to the next, sold as "a piece of data becomes the next screen"
+  async function flyChip(fromRect, toRect, color) {
+    const chip = document.createElement('div');
+    chip.style.cssText = `position:fixed; width:14px; height:14px; border-radius:50%; background:${color}; box-shadow:0 0 18px ${color}; z-index:8; pointer-events:none; opacity:0;`;
+    document.body.appendChild(chip);
+    const setPos = (r, scale) => {
+      chip.style.left = (r.left + r.width / 2 - 7) + 'px';
+      chip.style.top = (r.top + r.height / 2 - 7) + 'px';
+      chip.style.transform = `scale(${scale})`;
+    };
+    setPos(fromRect, 1.6);
+    void chip.offsetWidth;
+    requestAnimationFrame(() => { chip.style.transition = 'opacity .2s ease'; chip.style.opacity = '1'; });
+    await wait(120);
+    chip.style.transition = 'left .62s cubic-bezier(.4,0,.2,1), top .62s cubic-bezier(.4,0,.2,1), transform .62s cubic-bezier(.4,0,.2,1), opacity .3s ease .35s';
+    requestAnimationFrame(() => { setPos(toRect, .6); chip.style.opacity = '0'; });
+    await wait(650);
+    chip.remove();
   }
-  async function scene1() {
+
+  // ---------------- SC0: cold open — logo alone ----------------
+  async function sceneLogo() {
+    show('sc0');
+    const brand = document.getElementById('logoIntroBrand');
+    brand.style.opacity = '0'; brand.style.transform = 'scale(.92)';
+    await wait(300);
+    brand.style.transition = 'opacity 1.1s cubic-bezier(.16,1,.3,1), transform 1.1s cubic-bezier(.16,1,.3,1)';
+    requestAnimationFrame(() => { brand.style.opacity = '1'; brand.style.transform = 'scale(1)'; });
+    await wait(2000);
+  }
+
+  // ---------------- SC1: emergence → convergence → DOXHA reveal (one continuous shot) ----------------
+  async function sceneOpen() {
     show('sc1');
-    paintCornerWindows();
-    const lineEl = document.getElementById('sc1line');
-    await new Promise(r => setTimeout(r, 600));
-    await typeAndClear(lineEl, 'Le même message.', 60, 650);
-    await typeAndClear(lineEl, 'Trois écrans.', 60, 650);
-    await typeAndClear(lineEl, 'Encore et encore.', 60, 750);
-    await blurStatement(document.getElementById('sc1big'), 'Trop d’outils.');
-    await new Promise(r => setTimeout(r, 500));
-    document.getElementById('sc1big').style.transition = 'opacity .25s ease'; document.getElementById('sc1big').style.opacity = '0';
-    await new Promise(r => setTimeout(r, 280));
-    document.getElementById('sc1big').style.transition = 'none'; document.getElementById('sc1big').style.opacity = '1';
-    await blurStatement(document.getElementById('sc1big'), 'Pas assez de temps.');
-    await new Promise(r => setTimeout(r, 900));
+    const wrap = document.getElementById('emergeWrap');
+    wrap.innerHTML = '';
+    const items = [
+      ['Membre ajouté', 'Paul Kamga'],
+      ['Culte de Pâques', '12 mars · 320 inscrits'],
+      ['Message envoyé', '214 vues'],
+      ['Don reçu', '50 €'],
+      ['Nouvelle équipe', 'Groupe jeunes'],
+      ['3 nouveaux visiteurs', 'Cette semaine'],
+      ['Réunion diacres', 'Rappel envoyé'],
+    ];
+    const positions = [[220,160],[1500,140],[120,760],[1600,780],[820,110],[300,460],[1560,470]];
+    const cards = items.map(([label, sub], i) => {
+      const c = el('div', 'info-card', `<div class="ic-label">${label}</div><div class="ic-sub">${sub}</div>`);
+      c.style.left = positions[i][0] + 'px'; c.style.top = positions[i][1] + 'px';
+      c.style.transform = `scale(${(.85 + Math.random() * .25).toFixed(2)}) rotate(${(Math.random() * 8 - 4).toFixed(1)}deg)`;
+      wrap.appendChild(c);
+      return c;
+    });
+    cards.forEach((c, i) => setTimeout(() => c.classList.add('in'), 200 + i * 170));
+
+    const textEl = document.getElementById('sc1text');
+    await wait(500);
+    await typewrite(textEl, 'Une église, ce sont des dizaines de choses à faire avancer en même temps.', 24);
+    await wait(1100);
+    textEl.style.transition = 'opacity .3s ease'; textEl.style.opacity = '0';
+    await wait(320);
+    textEl.style.transition = 'none'; textEl.innerHTML = ''; textEl.style.opacity = '1';
+
+    // CONVERGE — cards drift toward a point below the headline and shrink; the camera reads as pulling back
+    const cx = 960, cy = 700;
+    const grid = [[-300,-36],[-140,-70],[140,-70],[300,-36],[-220,60],[0,88],[220,60]];
+    cards.forEach((c, i) => {
+      c.style.transition = 'left .9s cubic-bezier(.2,.8,.3,1), top .9s cubic-bezier(.2,.8,.3,1), transform .9s cubic-bezier(.2,.8,.3,1)';
+      c.style.left = (cx + grid[i][0] - 125) + 'px';
+      c.style.top = (cy + grid[i][1] - 30) + 'px';
+      c.style.transform = 'scale(.45)';
+    });
+    await typewrite(textEl, 'Une église. Un seul système.', 32);
+    await wait(1000);
+
+    // REVEAL — every card but one fades away; the last one becomes the Doxha mark
+    const seed = cards[cards.length - 1];
+    cards.slice(0, -1).forEach(c => {
+      c.style.animation = 'none';
+      c.style.transition = 'opacity .5s ease, transform .5s ease';
+      c.style.opacity = '0'; c.style.transform = 'scale(.3)';
+    });
+    textEl.style.transition = 'opacity .3s ease'; textEl.style.opacity = '0';
+    await wait(380);
+    textEl.style.transition = 'none'; textEl.innerHTML = ''; textEl.style.opacity = '1';
+
+    const markX = cx - 52, markY = 348;
+    seed.style.animation = 'none';
+    seed.style.opacity = '1'; seed.style.filter = 'blur(0)';
+    seed.innerHTML = 'D';
+    seed.style.transition = 'left .7s cubic-bezier(.16,1,.3,1), top .7s cubic-bezier(.16,1,.3,1), width .7s cubic-bezier(.16,1,.3,1), height .7s cubic-bezier(.16,1,.3,1), border-radius .7s ease, transform .7s cubic-bezier(.16,1,.3,1), background .7s ease, box-shadow .7s ease';
+    seed.style.width = '104px'; seed.style.height = '104px'; seed.style.borderRadius = '28px';
+    seed.style.left = markX + 'px'; seed.style.top = markY + 'px';
+    seed.style.transform = 'scale(1)';
+    seed.style.background = 'linear-gradient(135deg,#5c7cf2,#0a0d1c 120%)';
+    seed.style.display = 'flex'; seed.style.alignItems = 'center'; seed.style.justifyContent = 'center';
+    seed.style.color = '#fff'; seed.style.fontSize = '52px'; seed.style.fontWeight = '800';
+    seed.style.boxShadow = '0 30px 70px rgba(33,64,201,.45)';
+    seed.style.backdropFilter = 'none'; seed.style.padding = '0'; seed.style.zIndex = '3';
+
+    await wait(550);
+    const spark = el('span', 'spark-badge', SPARKLE);
+    seed.appendChild(spark);
+    requestAnimationFrame(() => spark.classList.add('in'));
+    await typewrite(document.getElementById('sc1doxha'), 'Doxha.', 90);
+    await wait(1200);
+    return seed;
   }
 
-  // ---------------- SCENE 2: brand reveal + tagline + product teaser (one continuous blue backdrop) ----------------
-  async function scene2() {
-    show('sc2');
-    const lineEl = document.getElementById('sc2line');
-    await new Promise(r => setTimeout(r, 400));
-    await typewrite(lineEl, 'Voici', 90);
-    await new Promise(r => setTimeout(r, 500));
-    lineEl.style.transition = 'opacity .3s ease'; lineEl.style.opacity = '0';
-    await new Promise(r => setTimeout(r, 320));
-    const brand = document.getElementById('sc2brand');
-    brand.classList.add('in');
-    document.getElementById('sc2mark').classList.add('burst');
-    document.getElementById('sc2spark').classList.add('in');
-    await new Promise(r => setTimeout(r, 900));
-    await typewrite(document.getElementById('sc2tagline'), 'La plateforme tout-en-un pour votre église.', 34);
-    document.getElementById('sc2tag').classList.add('in');
-    await new Promise(r => setTimeout(r, 500));
-    const host = document.getElementById('sc2host');
-    host.innerHTML = screenDashboard();
-    document.getElementById('sc2rise').classList.add('in');
-    await new Promise(r => setTimeout(r, 2600));
-  }
-
-  // ---------------- SCENE 4: rapid product screens ----------------
+  // ---------------- product screens ----------------
   function screenDashboard() {
     return `<div class="app-screen"><div class="app-top"><div class="app-title">Tableau de bord</div><div class="app-tabs"><span class="active">Cette semaine</span><span>Ce mois</span></div></div>
     <div class="app-body">
@@ -468,6 +472,17 @@
       ${rows.map(([ini,bg,name,status,sc,sbg,when]) => `<div class="row" data-name="${name}"><span class="avatar sm" style="background:${bg};">${ini}</span><span class="row-name">${name}</span><span class="pill-status" style="background:${sbg}; color:${sc};"><span class="dot" style="background:${sc};"></span>${status}</span><span class="row-sub" style="text-align:right;">${when}</span></div>`).join('')}
     </div></div></div>`;
   }
+  function screenEquipes() {
+    const teams = [
+      ['GJ','#3457e8','Groupe jeunes','24 membres'],
+      ['EA','#0d9488','Équipe accueil','12 membres'],
+      ['DI','#5c7cf2','Diacres','8 membres'],
+    ];
+    return `<div class="app-screen"><div class="app-top"><div class="app-title">Équipes</div><div class="app-cta">+ Créer une équipe</div></div>
+    <div class="app-body"><div class="row-list">
+    ${teams.map(([ini,bg,name,count]) => `<div class="row"><span class="avatar sm" style="background:${bg};">${ini}</span><span class="row-name">${name}</span><span class="row-sub" style="text-align:right;">${count}</span></div>`).join('')}
+    </div></div></div>`;
+  }
   function screenEvenements() {
     const evs = [
       ['12','MARS','Culte du dimanche','10h00 · 320 inscrits'],
@@ -491,30 +506,6 @@
       <div style="font-size:12px; color:#9aa1b3; font-weight:600;">Publié automatiquement sur Facebook et Instagram dès validation.</div>
     </div></div>`;
   }
-  function screenDons() {
-    const rows = [
-      ['Jean Petit','50 €','Carte bancaire','Aujourd’hui'],
-      ['Sarah Kouassi','120 €','Virement','Hier'],
-      ['Thomas Petit','30 €','Carte bancaire','Hier'],
-      ['Anne Lefevre','200 €','Chèque','Il y a 2 j'],
-    ];
-    return `<div class="app-screen"><div class="app-top"><div class="app-title">Dons & Dîmes</div><div class="app-cta">+ Enregistrer un don</div></div>
-    <div class="app-body">
-      <div class="stat-row"><div class="stat-card" style="flex:1;"><div class="stat-num">12 480 €</div><div class="stat-lbl">Total ce mois</div><div class="stat-delta">+14% vs mois dernier</div></div></div>
-      <div class="row-list">${rows.map(([n,a,m,d]) => `<div class="row"><span class="row-name">${n}</span><span class="row-sub">${m}</span><span class="row-sub" style="text-align:right; font-weight:800; color:#14171f;">${a}</span></div>`).join('')}</div>
-    </div></div>`;
-  }
-  function screenOrganisation() {
-    return `<div class="app-screen"><div class="app-top"><div class="app-title">Suivi pastoral</div><div class="app-cta">+ Nouveau contact</div></div>
-    <div class="app-body" style="display:flex; gap:20px; padding-top:4px;">
-      <div style="flex:1;"><div style="font-size:13px; font-weight:700; color:#3457e8; margin-bottom:12px;">● Nouveaux visiteurs</div>
-        <div class="event-card" style="display:block;"><div class="row-name" style="margin-bottom:8px;"><span class="avatar sm" style="background:#3457e8; margin-right:8px;">MD</span>Marie Dubois</div><span class="tag" style="background:#eef1fd; color:#3457e8;">Invitée par Sarah</span></div></div>
-      <div style="flex:1;"><div style="font-size:13px; font-weight:700; color:#5c7cf2; margin-bottom:12px;">● En intégration</div>
-        <div class="event-card" style="display:block;"><div class="row-name" style="margin-bottom:8px;"><span class="avatar sm" style="background:#2140c9; margin-right:8px;">LM</span>Léa Martin</div><span class="tag" style="background:#eef1fd; color:#2140c9;">Groupe jeunes</span></div></div>
-      <div style="flex:1;"><div style="font-size:13px; font-weight:700; color:#0d9488; margin-bottom:12px;">● Membres engagés</div>
-        <div class="event-card" style="display:block;"><div class="row-name" style="margin-bottom:8px;"><span class="avatar sm" style="background:#3457e8; margin-right:8px;">CR</span>Camille Rousseau</div><span class="tag" style="background:#e6faf5; color:#0d9488;">Bénévole accueil</span></div></div>
-    </div></div>`;
-  }
   function screenIA() {
     return `<div class="app-screen"><div class="app-top"><div class="app-title"><span class="sparkle">${SPARKLE}</span>Assistant IA</div></div>
     <div class="app-body">
@@ -524,98 +515,89 @@
     </div></div>`;
   }
 
-  // ---------------- fake live-cursor interactions (moves, clicks, types) ----------------
-  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
-  function targetXY(el, content) {
-    const cRect = content.getBoundingClientRect();
-    const r = el.getBoundingClientRect();
-    return [r.left - cRect.left + r.width / 2, r.top - cRect.top + r.height / 2];
-  }
-  async function cursorMove(x, y, dur) {
-    const cursor = document.getElementById('sc4cursor');
-    cursor.style.left = x + 'px'; cursor.style.top = y + 'px';
-    cursor.classList.add('show');
-    await wait(dur || 900);
-  }
-  async function cursorClick(x, y) {
-    await cursorMove(x, y);
-    const ring = document.getElementById('sc4ring');
-    ring.style.left = x + 'px'; ring.style.top = y + 'px';
-    ring.classList.remove('ping'); void ring.offsetWidth; ring.classList.add('ping');
-    await wait(280);
-  }
-  function cursorHide() { document.getElementById('sc4cursor').classList.remove('show'); }
-
+  // ---------------- micro-interactions per screen ----------------
   async function interactDashboard(content) {
     const card = content.querySelector('.stat-card');
-    if (card) { const [x, y] = targetXY(card, content); await cursorClick(x, y); }
+    if (card) { const [x, y] = targetXY(card); await cursorClick(x, y); }
     const row = content.querySelectorAll('.row')[1];
-    if (row) { const [x, y] = targetXY(row, content); await cursorMove(x, y); }
+    if (row) { const [x, y] = targetXY(row); await cursorMove(x, y); }
   }
   async function interactMembres(content) {
     const search = content.querySelector('.search-bar');
-    const [sx, sy] = targetXY(search, content);
+    const [sx, sy] = targetXY(search);
     await cursorClick(sx - 80, sy);
     const textEl = content.querySelector('#membresSearchText');
     await typewrite(textEl, 'Marie', 95);
     content.querySelectorAll('.row').forEach(row => {
       if (row.dataset.name.includes('Marie')) row.classList.add('hit'); else row.classList.add('dim');
     });
-    await wait(450);
+    await wait(400);
     const hit = content.querySelector('.row.hit');
-    if (hit) { const [x, y] = targetXY(hit, content); await cursorMove(x, y); }
+    if (hit) { const [x, y] = targetXY(hit); await cursorMove(x, y); }
+  }
+  async function interactEquipes(content) {
+    const row = content.querySelector('.row');
+    if (row) { const [x, y] = targetXY(row); await cursorClick(x, y); }
   }
   async function interactEvenements(content) {
     const btn = content.querySelector('.app-cta');
-    if (btn) { const [x, y] = targetXY(btn, content); await cursorClick(x, y); }
+    if (btn) { const [x, y] = targetXY(btn); await cursorClick(x, y); }
   }
   async function interactCommunication(content) {
     const pill = content.querySelectorAll('.channel-pill')[2];
-    if (pill) { const [x, y] = targetXY(pill, content); await cursorClick(x, y); }
+    if (pill) { const [x, y] = targetXY(pill); await cursorClick(x, y); }
     const btn = content.querySelector('.app-cta');
-    if (btn) { const [x, y] = targetXY(btn, content); await cursorClick(x, y); }
-  }
-  async function interactDons(content) {
-    const rows = Array.from(content.querySelectorAll('.row')).slice(0, 3);
-    for (const row of rows) { const [x, y] = targetXY(row, content); await cursorMove(x, y, 620); }
-  }
-  async function interactOrganisation(content) {
-    const card = content.querySelector('.event-card');
-    if (card) { const [x, y] = targetXY(card, content); await cursorClick(x, y); }
+    if (btn) { const [x, y] = targetXY(btn); await cursorClick(x, y); }
   }
   async function interactIA(content) {
     const link = content.querySelector('.insight-link');
-    if (link) { const [x, y] = targetXY(link, content); await cursorClick(x, y); }
+    if (link) { const [x, y] = targetXY(link); await cursorClick(x, y); }
   }
 
-  const SC4_SEQUENCE = [
-    { build: screenDashboard, text: 'Doxha.', speed: 90, hold: 1400, interact: interactDashboard, focus: '.stat-card' },
-    { build: screenMembres, text: 'Membres.', speed: 60, hold: 2200, interact: interactMembres, focus: '.search-bar' },
-    { build: screenEvenements, text: 'Événements.', speed: 55, hold: 2000, interact: interactEvenements, focus: '.event-card' },
-    { build: screenCommunication, text: 'Communication.', speed: 50, hold: 2000, interact: interactCommunication, focus: '.channel-pill.on' },
-    { build: screenDons, text: 'Dons.', speed: 80, hold: 2000, interact: interactDons, focus: '.stat-card' },
-    { build: screenOrganisation, text: 'Organisation.', speed: 55, hold: 2200, interact: interactOrganisation, focus: '.event-card' },
-    { build: screenIA, text: 'Intelligence artificielle.', speed: 45, hold: 2200, interact: interactIA, focus: '.insight-icon' },
+  const SEQ = [
+    { build: screenDashboard, text: 'Doxha.', speed: 80, hold: 1100, interact: interactDashboard, focus: '.stat-card', color: '#3457e8' },
+    { build: screenMembres, text: 'Membres.', speed: 60, hold: 1900, interact: interactMembres, focus: '.avatar', color: '#3457e8' },
+    { build: screenEquipes, text: 'Équipes.', speed: 55, hold: 1700, interact: interactEquipes, focus: '.avatar', color: '#0d9488' },
+    { build: screenEvenements, text: 'Événements.', speed: 55, hold: 1700, interact: interactEvenements, focus: '.event-date', color: '#2140c9' },
+    { build: screenCommunication, text: 'Communication.', speed: 48, hold: 1900, interact: interactCommunication, focus: '.channel-pill.on', color: '#0d9488' },
   ];
 
-  // ---- zoom-through match-cut: the camera rushes into a focal element until it fills the frame, then the next screen arrives already zoomed and settles ----
+  // ---- camera-morph transition: rushes into a focal element until it fills the frame, next screen arrives already zoomed and settles ----
   const SCREEN_FROM = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1)';
-  async function zoomCutTo(content, focusSelector, buildNextFn) {
+  async function enterFresh(content) {
+    const fresh = content.querySelector('.app-screen');
+    fresh.style.animation = 'none';
+    fresh.style.transformOrigin = 'center center';
+    fresh.style.transform = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(2.4)';
+    fresh.style.filter = 'blur(22px)';
+    fresh.style.opacity = '0';
+    fresh.style.transition = 'none';
+    void fresh.offsetWidth;
+    fresh.style.transition = 'transform .55s cubic-bezier(.16,1,.3,1), filter .5s ease, opacity .4s ease';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      fresh.style.transform = SCREEN_FROM;
+      fresh.style.filter = 'blur(0)';
+      fresh.style.opacity = '1';
+    }));
+    await wait(560);
+    fresh.style.transition = 'none';
+    fresh.style.animation = 'screenPush 3.5s cubic-bezier(.22,.08,.32,1) forwards';
+    return fresh;
+  }
+  async function zoomCutTo(content, focusSelector, buildNextFn, nextFocusSelector, chipColor) {
     const oldScreen = content.querySelector('.app-screen');
+    let fromRect = null;
     if (oldScreen) {
       const frozen = getComputedStyle(oldScreen).transform;
       oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
       oldScreen.style.animation = 'none';
       const focusEl = focusSelector ? oldScreen.querySelector(focusSelector) : null;
       if (focusEl) {
+        fromRect = focusEl.getBoundingClientRect();
         const sRect = oldScreen.getBoundingClientRect();
-        const fRect = focusEl.getBoundingClientRect();
-        const ox = ((fRect.left + fRect.width / 2 - sRect.left) / sRect.width) * 100;
-        const oy = ((fRect.top + fRect.height / 2 - sRect.top) / sRect.height) * 100;
+        const ox = ((fromRect.left + fromRect.width / 2 - sRect.left) / sRect.width) * 100;
+        const oy = ((fromRect.top + fromRect.height / 2 - sRect.top) / sRect.height) * 100;
         oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
-        const link = document.getElementById('sc4ring');
-        link.style.left = (fRect.left - sRect.left + fRect.width / 2) + 'px';
-        link.style.top = (fRect.top - sRect.top + fRect.height / 2) + 'px';
       } else {
         oldScreen.style.transformOrigin = '50% 50%';
       }
@@ -629,72 +611,198 @@
       await wait(460);
     }
     content.innerHTML = buildNextFn();
-    const fresh = content.querySelector('.app-screen');
-    fresh.style.animation = 'none';
-    fresh.style.transformOrigin = 'center center';
-    fresh.style.transform = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(2.4)';
-    fresh.style.filter = 'blur(22px)';
-    fresh.style.opacity = '0';
-    fresh.style.transition = 'none';
-    void fresh.offsetWidth;
-    fresh.style.transition = 'transform .52s cubic-bezier(.16,1,.3,1), filter .5s ease, opacity .4s ease';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      fresh.style.transform = SCREEN_FROM;
-      fresh.style.filter = 'blur(0)';
-      fresh.style.opacity = '1';
-    }));
-    await wait(540);
-    fresh.style.transition = 'none';
-    fresh.style.animation = 'screenPush 3.5s cubic-bezier(.22,.08,.32,1) forwards';
-    return fresh;
+    if (fromRect && nextFocusSelector) {
+      const toEl = content.querySelector(nextFocusSelector);
+      if (toEl) flyChip(fromRect, toEl.getBoundingClientRect(), chipColor || '#3457e8');
+    }
+    await enterFresh(content);
+  }
+  async function exitZoom(content, focusSelector) {
+    const oldScreen = content.querySelector('.app-screen');
+    if (!oldScreen) return;
+    const frozen = getComputedStyle(oldScreen).transform;
+    oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
+    oldScreen.style.animation = 'none';
+    const focusEl = focusSelector ? oldScreen.querySelector(focusSelector) : null;
+    if (focusEl) {
+      const sRect = oldScreen.getBoundingClientRect();
+      const fRect = focusEl.getBoundingClientRect();
+      const ox = ((fRect.left + fRect.width / 2 - sRect.left) / sRect.width) * 100;
+      const oy = ((fRect.top + fRect.height / 2 - sRect.top) / sRect.height) * 100;
+      oldScreen.style.transformOrigin = `${ox}% ${oy}%`;
+    }
+    void oldScreen.offsetWidth;
+    oldScreen.style.transition = 'transform .5s cubic-bezier(.6,0,.9,1), filter .5s ease, opacity .5s ease .1s';
+    requestAnimationFrame(() => {
+      oldScreen.style.transform = oldScreen.style.transform + ' scale(7)';
+      oldScreen.style.filter = 'blur(32px)';
+      oldScreen.style.opacity = '0';
+    });
+    await wait(480);
   }
 
-  async function scene4() {
-    show('sc4');
-    const content = document.getElementById('sc4content');
-    const rise = document.getElementById('sc4rise');
-    const lineEl = document.getElementById('sc4line');
-    for (let i = 0; i < SC4_SEQUENCE.length; i++) {
-      const step = SC4_SEQUENCE[i];
+  // ---------------- SC3: the connected journey ----------------
+  async function sceneJourney() {
+    show('sc3');
+    const content = document.getElementById('sc3content');
+    const lineEl = document.getElementById('sc3line');
+    content.innerHTML = SEQ[0].build();
+    await enterFresh(content);
+    for (let i = 0; i < SEQ.length; i++) {
+      const step = SEQ[i];
       cursorHide();
-      if (i === 0) {
-        content.innerHTML = step.build();
-        const inner = content.querySelector('.app-screen');
-        inner.style.opacity = '0'; inner.style.transition = 'opacity .5s ease';
-        rise.classList.add('in');
-        requestAnimationFrame(() => requestAnimationFrame(() => { inner.style.opacity = '1'; }));
-      } else {
-        await zoomCutTo(content, SC4_SEQUENCE[i - 1].focus, step.build);
-      }
-      await new Promise(r => setTimeout(r, 200));
+      if (i > 0) await zoomCutTo(content, SEQ[i - 1].focus, step.build, step.focus, step.color);
       clearEl(lineEl);
       await typewrite(lineEl, step.text, step.speed);
-      const holdP = new Promise(r => setTimeout(r, step.hold));
+      const holdP = wait(step.hold);
       const interactP = step.interact ? step.interact(content) : Promise.resolve();
       await Promise.all([holdP, interactP]);
     }
     cursorHide();
   }
 
-  function scene5() {
-    show('sc5');
-    setTimeout(() => document.getElementById('sc5brand').classList.add('in'), 150);
-    setTimeout(() => document.getElementById('sc5spark').classList.add('in'), 500);
-    setTimeout(() => document.getElementById('sc5cta').classList.add('in'), 700);
+  // ---------------- SC4: connection map ----------------
+  const MODULES = (cx, cy) => [
+    ['Membres', '#3457e8', cx - 420, cy - 160],
+    ['Équipes', '#5c7cf2', cx + 380, cy - 200],
+    ['Événements', '#2140c9', cx + 440, cy + 140],
+    ['Communication', '#0d9488', cx + 40, cy + 320],
+    ['Suivi pastoral', '#2fe3c4', cx - 440, cy + 180],
+  ];
+  async function sceneConnect() {
+    show('sc4');
+    const wrap = document.getElementById('connectWrap');
+    const svg = document.getElementById('connectSvg');
+    wrap.innerHTML = ''; svg.innerHTML = '';
+    const cx = 960, cy = 460;
+    const modules = MODULES(cx, cy);
+    const hub = el('div', 'mini-hub');
+    hub.style.left = (cx - 34) + 'px'; hub.style.top = (cy - 34) + 'px';
+    wrap.appendChild(hub);
+    modules.forEach(([name, color, x, y], i) => {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x); line.setAttribute('y1', y);
+      line.setAttribute('x2', cx); line.setAttribute('y2', cy);
+      line.setAttribute('stroke', color + '55'); line.setAttribute('stroke-width', '2');
+      const len = Math.hypot(cx - x, cy - y);
+      line.setAttribute('stroke-dasharray', len);
+      line.setAttribute('stroke-dashoffset', len);
+      line.style.transition = `stroke-dashoffset 1s cubic-bezier(.4,0,.2,1) ${i * 0.15}s`;
+      svg.appendChild(line);
+      requestAnimationFrame(() => requestAnimationFrame(() => line.setAttribute('stroke-dashoffset', '0')));
+      const node = el('div', 'mini-module', `<span class="mm-dot" style="background:${color};"></span><span class="mm-label">${name}</span>`);
+      node.style.left = (x - 90) + 'px'; node.style.top = (y - 28) + 'px';
+      wrap.appendChild(node);
+      setTimeout(() => node.classList.add('in'), 300 + i * 150);
+    });
+    setTimeout(() => hub.classList.add('in'), 200);
+    const lineEl = document.getElementById('sc4line');
+    await wait(1200);
+    await typewrite(lineEl, 'Rien n’est isolé. Tout se répond.', 32);
+    await wait(2000);
+    return hub;
   }
 
-  const TOTAL_MS = 50000;
+  // ---------------- SC5: the AI layer ----------------
+  async function sceneAI(hub) {
+    if (hub) {
+      hub.style.transition = 'transform .6s cubic-bezier(.6,0,.9,1), opacity .6s ease .15s';
+      hub.style.transform = 'scale(16)';
+      hub.style.opacity = '0';
+      await wait(560);
+    }
+    show('sc5');
+    const content = document.getElementById('sc5content');
+    content.innerHTML = screenIA();
+    await enterFresh(content);
+    await interactIA(content);
+    await wait(2400);
+    cursorHide();
+  }
+
+  // ---------------- SC6: breathing ----------------
+  async function sceneBreathe() {
+    show('sc6');
+    const t = document.getElementById('sc6text');
+    await wait(500);
+    await typewrite(t, 'Moins d’administration.', 45);
+    await wait(1300);
+    t.style.transition = 'opacity .35s ease'; t.style.opacity = '0';
+    await wait(380);
+    t.style.transition = 'none'; t.innerHTML = ''; t.style.opacity = '1';
+    await typewrite(t, 'Plus de temps pour l’essentiel.', 40);
+    await wait(1700);
+  }
+
+  // ---------------- SC7: hero shot ----------------
+  async function sceneHero() {
+    show('sc7');
+    const wrap = document.getElementById('heroWrap');
+    const svg = document.getElementById('heroSvg');
+    wrap.innerHTML = ''; svg.innerHTML = '';
+    const cx = 960, cy = 460;
+    const modules = MODULES(cx, cy);
+    const hub = el('div', 'mini-hub');
+    hub.style.left = (cx - 34) + 'px'; hub.style.top = (cy - 34) + 'px';
+    wrap.appendChild(hub);
+    modules.forEach(([name, color, x, y]) => {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x); line.setAttribute('y1', y);
+      line.setAttribute('x2', cx); line.setAttribute('y2', cy);
+      line.setAttribute('stroke', color + '55'); line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+      const node = el('div', 'mini-module', `<span class="mm-dot" style="background:${color};"></span><span class="mm-label">${name}</span>`);
+      node.style.left = (x - 90) + 'px'; node.style.top = (y - 28) + 'px';
+      wrap.appendChild(node);
+    });
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      hub.classList.add('in');
+      wrap.querySelectorAll('.mini-module').forEach((n, i) => setTimeout(() => n.classList.add('in'), i * 90));
+    }));
+    const lineEl = document.getElementById('sc7line');
+    await wait(900);
+    await typewrite(lineEl, 'Un système. Une église alignée.', 34);
+    await wait(2300);
+  }
+
+  // ---------------- SC8: logo return, tagline, CTA ----------------
+  function sceneCTA() {
+    show('sc8');
+    const brand = document.getElementById('sc8brand');
+    setTimeout(() => brand.classList.add('in'), 150);
+    setTimeout(() => document.getElementById('sc8spark').classList.add('in'), 500);
+    setTimeout(() => { document.getElementById('sc8tagline').style.opacity = '1'; }, 600);
+    setTimeout(() => document.getElementById('sc8cta').classList.add('in'), 950);
+  }
+
+  const TOTAL_MS = 62000;
   (async () => {
-    await scene1();
-    await new Promise(r => setTimeout(r, 500));
-    await scene2();
+    await sceneLogo();
     document.getElementById('blackout').classList.add('on');
-    await new Promise(r => setTimeout(r, 600));
+    await wait(280);
     document.getElementById('blackout').classList.remove('on');
-    await scene4();
-    await new Promise(r => setTimeout(r, 300));
-    scene5();
-    setTimeout(() => document.getElementById('blackout').classList.add('on'), 4500);
+
+    const seed = await sceneOpen();
+    await wait(150);
+    seed.style.transition = 'transform .5s cubic-bezier(.6,0,.9,1), filter .5s ease, opacity .5s ease .1s';
+    seed.style.transformOrigin = '50% 50%';
+    requestAnimationFrame(() => {
+      seed.style.transform = (seed.style.transform || '') + ' scale(9)';
+      seed.style.filter = 'blur(28px)';
+      seed.style.opacity = '0';
+    });
+    const t1doxha = document.getElementById('sc1doxha'); t1doxha.style.transition = 'opacity .3s ease'; t1doxha.style.opacity = '0';
+    await wait(480);
+
+    await sceneJourney();
+    await exitZoom(document.getElementById('sc3content'), SEQ[SEQ.length - 1].focus);
+    const hub = await sceneConnect();
+    await sceneAI(hub);
+    await sceneBreathe();
+    await sceneHero();
+    await wait(300);
+    sceneCTA();
+    setTimeout(() => document.getElementById('blackout').classList.add('on'), 4600);
   })();
 
   const progressEl = document.getElementById('progress');
