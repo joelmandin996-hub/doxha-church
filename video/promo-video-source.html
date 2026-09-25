@@ -575,22 +575,31 @@
 
   const SEQ = [
     { build: screenDashboard, text: 'Doxha.', speed: 80, hold: 1100, interact: interactDashboard },
-    { build: screenMembres, text: 'Membres.', speed: 60, hold: 1900, interact: interactMembres },
-    { build: screenEquipes, text: 'Équipes.', speed: 55, hold: 1700, interact: interactEquipes },
-    { build: screenEvenements, text: 'Événements.', speed: 55, hold: 1700, interact: interactEvenements },
-    { build: screenCommunication, text: 'Communication.', speed: 48, hold: 1900, interact: interactCommunication },
+    { build: screenMembres, text: 'Membres.', speed: 60, hold: 1900, interact: interactMembres, variant: 'right' },
+    { build: screenEquipes, text: 'Équipes.', speed: 55, hold: 1700, interact: interactEquipes, variant: 'up' },
+    { build: screenEvenements, text: 'Événements.', speed: 55, hold: 1700, interact: interactEvenements, variant: 'left' },
+    { build: screenCommunication, text: 'Communication.', speed: 48, hold: 1900, interact: interactCommunication, variant: 'scale' },
   ];
 
-  // ---- screen transition: a plain, reliable cross-dissolve — old and new both live inside
-  // #content at once (old in normal flow, new absolutely pinned on top of it, same rect), their
-  // opacity crossing over the same window. No scale, no blur, nothing that can look like a glitch. ----
+  // ---- screen transition: a reliable cross-dissolve with directional variety — old and new both
+  // live inside #content at once (both grid-area:1/1, so they overlap pixel-for-pixel, nothing to
+  // measure or drift), crossing opacity over the same window. Each cut gets its own small, subtle
+  // push direction (up/down/left/right/scale) so consecutive screens don't all arrive identically. ----
   const SCREEN_FROM = 'perspective(1700px) rotateX(4deg) rotateY(-3.2deg) scale(1)';
   const EASE_PRO = 'cubic-bezier(.4,0,.2,1)';
+  const VARIANTS = {
+    up:    { enter: 'translateY(34px)',  exit: 'translateY(-16px)' },
+    down:  { enter: 'translateY(-34px)', exit: 'translateY(16px)' },
+    left:  { enter: 'translateX(42px)',  exit: 'translateX(-18px)' },
+    right: { enter: 'translateX(-42px)', exit: 'translateX(18px)' },
+    scale: { enter: 'scale(1.05)',       exit: 'scale(.98)' },
+  };
   async function settleIn(fresh) {
     fresh.style.transition = 'none';
     fresh.style.animation = 'screenPush 3.5s cubic-bezier(.22,.08,.32,1) forwards';
   }
-  async function crossfadeTo(content, buildNextFn) {
+  async function crossfadeTo(content, buildNextFn, variantName) {
+    const variant = VARIANTS[variantName] || null;
     const oldScreen = content.querySelector('.app-screen');
     if (!oldScreen) {
       content.innerHTML = buildNextFn();
@@ -609,25 +618,28 @@
     // #content is a CSS grid and every .app-screen has grid-area:1/1, so old and new simply
     // occupy the same cell and overlap pixel-for-pixel — no manual rects, no resize, nothing to drift.
     const frozen = getComputedStyle(oldScreen).transform;
+    const oldBase = frozen === 'none' ? SCREEN_FROM : frozen;
     oldScreen.style.animation = 'none';
-    oldScreen.style.transform = frozen === 'none' ? SCREEN_FROM : frozen;
+    oldScreen.style.transform = oldBase;
     oldScreen.style.zIndex = '1';
 
     const wrap = document.createElement('div');
     wrap.innerHTML = buildNextFn();
     const fresh = wrap.firstElementChild;
     fresh.style.animation = 'none';
-    fresh.style.transform = SCREEN_FROM;
+    fresh.style.transform = variant ? `${variant.enter} ${SCREEN_FROM}` : SCREEN_FROM;
     fresh.style.zIndex = '2';
     fresh.style.opacity = '0';
     content.appendChild(fresh);
 
     void oldScreen.offsetWidth;
-    oldScreen.style.transition = `opacity .6s ${EASE_PRO}`;
-    fresh.style.transition = `opacity .6s ${EASE_PRO}`;
+    oldScreen.style.transition = `opacity .6s ${EASE_PRO}, transform .6s ${EASE_PRO}`;
+    fresh.style.transition = `opacity .6s ${EASE_PRO}, transform .68s ${EASE_PRO}`;
     requestAnimationFrame(() => {
       oldScreen.style.opacity = '0';
+      if (variant) oldScreen.style.transform = `${oldBase} ${variant.exit}`;
       fresh.style.opacity = '1';
+      fresh.style.transform = SCREEN_FROM;
     });
     await wait(580);
     oldScreen.remove();
@@ -672,7 +684,7 @@
     for (let i = 0; i < SEQ.length; i++) {
       const step = SEQ[i];
       cursorHide();
-      if (i > 0) await crossfadeTo(content, step.build);
+      if (i > 0) await crossfadeTo(content, step.build, step.variant);
       clearEl(lineEl);
       await typewrite(lineEl, step.text, step.speed);
       const holdP = wait(step.hold);
