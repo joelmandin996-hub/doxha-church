@@ -1,39 +1,22 @@
-[0:00]
-Votre église grandit.
-Mais votre temps, lui, n'a pas changé.
+[0:00 - 0:08] — SILENCE (texte à l'écran uniquement)
+Membres. Événements. Dons. Bénévoles. Messages. Documents.
+Tout s'accumule.
 
-[0:07]
-Entre les fichiers éparpillés, les dons notés à la main,
-et les messages qui se perdent...
-la gestion prend le pas sur votre mission.
+[0:08 - 0:15] — SILENCE (texte à l'écran uniquement)
+Quand tout est dispersé, rien n'avance vraiment.
 
-[0:16]
-Et si un seul outil changeait tout ?
+[0:15 - 0:20]
+Voici Doxha.
 
-[0:20]
-Doxha Church.
+[0:20 - 0:45]
+Une plateforme conçue pour centraliser toute la vie de votre église.
+Les membres.
+Les événements.
+La communication.
+Les dons.
+L'organisation.
+Et l'intelligence artificielle.
 
-[0:23]
-Le suivi de chaque membre, automatique,
-de son arrivée jusqu'à son engagement.
-
-[0:29]
-Les dons et les dîmes en ligne,
-avec reçus fiscaux générés en un instant.
-
-[0:35]
-La billetterie de vos événements,
-avec un check-in scanné en un geste.
-
-[0:41]
-Vos publications, partagées automatiquement
-sur Facebook et Instagram.
-
-[0:47]
-Moins de gestion.
-Plus de temps pour votre communauté.
-
-[0:52]
-Essayez Doxha Church gratuitement, pendant quatorze jours.
-Sans carte bancaire.
+[0:45 - 0:50]
+Essai gratuit, quatorze jours.
 doxhachurch.com
