@@ -10,130 +10,118 @@
   * { box-sizing: border-box; }
   #stage { position:relative; width:1920px; height:1080px; overflow:hidden; }
 
-  /* ---- scene transitions: cross-dissolve + push/zoom, faster & punchier than a flat crossfade ---- */
   .scene {
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;
-    opacity:0; transform: scale(1.06); filter: blur(10px);
-    transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .55s cubic-bezier(.4,0,.2,1), filter .45s ease;
-    overflow:hidden;
+    opacity:0; transition: opacity .5s ease; overflow:hidden;
   }
-  .scene.active { opacity:1; transform: scale(1); filter: blur(0); z-index:2; }
-  .scene.leaving { opacity:0; transform: scale(0.94); filter: blur(6px); transition: opacity .32s ease, transform .32s ease, filter .32s ease; z-index:1; }
-  .scene.bg-navy { background: radial-gradient(120% 140% at 20% 0%, #131a3d 0%, #080b14 55%, #05070d 100%); }
+  .scene.active { opacity:1; z-index:2; }
+  .scene.bg-navy { background: radial-gradient(140% 120% at 15% 0%, #141b40 0%, #0a0d1c 55%, #05070d 100%); }
   .scene.bg-white { background: #ffffff; }
-  .scene.bg-alt { background: #f6f7f9; }
+  .scene.bg-alt { background: #f6f7fb; }
 
-  /* ---- ambient drifting glow orbs (blue/teal/gold, screen-blended) ---- */
-  .orbs { position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-  .orb { position:absolute; border-radius:50%; filter:blur(60px); mix-blend-mode:screen; opacity:.55; }
-  .orb.o1 { width:640px; height:640px; left:-160px; top:-120px; background:radial-gradient(circle, #3457e8, transparent 70%); animation: drift1 14s ease-in-out infinite alternate; }
-  .orb.o2 { width:520px; height:520px; right:-120px; top:280px; background:radial-gradient(circle, #2fe3c4, transparent 70%); animation: drift2 17s ease-in-out infinite alternate; }
-  .orb.o3 { width:460px; height:460px; left:38%; bottom:-160px; background:radial-gradient(circle, #c9a227, transparent 70%); opacity:.3; animation: drift3 20s ease-in-out infinite alternate; }
-  @keyframes drift1 { to { transform: translate(90px, 60px) scale(1.12); } }
-  @keyframes drift2 { to { transform: translate(-70px, -50px) scale(1.08); } }
-  @keyframes drift3 { to { transform: translate(60px, -40px) scale(1.15); } }
+  /* ---- corner spotlight glow, like the reference's soft top-left light ---- */
+  .spot { position:absolute; inset:0; z-index:0; pointer-events:none; }
+  .scene.bg-navy .spot { background: radial-gradient(760px 620px at 14% 8%, rgba(52,87,232,.30), transparent 62%), radial-gradient(680px 560px at 88% 86%, rgba(47,227,196,.16), transparent 60%); }
 
-  /* ---- neon glow text accent (used sparingly on hero lines) ---- */
-  .glow-text { text-shadow: 0 0 18px rgba(52,87,232,.55), 0 0 46px rgba(47,227,196,.35); }
+  /* ---- word build-up: words appear in sequence and STAY, sentence accumulates ---- */
+  .buildup { font-weight: 800; text-align:center; }
+  .bw { display:inline-block; opacity:0; transform: translateY(.3em); filter: blur(6px); }
+  .bw.in { animation: bwIn .5s cubic-bezier(.2,1,.3,1) forwards; }
+  @keyframes bwIn { to { opacity:1; transform:translateY(0); filter:blur(0); } }
+  .bw.accent { background:linear-gradient(135deg,#3457e8,#2fe3c4); -webkit-background-clip:text; background-clip:text; color:transparent; }
 
-  /* ---- typewriter reveal with blinking cursor ---- */
-  .tw-cursor { display:inline-block; width:6px; height:.85em; background:#2fe3c4; margin-left:6px; vertical-align:-.08em; animation: twBlink .8s steps(1) infinite; }
-  @keyframes twBlink { 50% { opacity:0; } }
+  .line-big { font-size:76px; letter-spacing:-.03em; line-height:1.3; max-width:1600px; }
+  .line-big.on-dark { color:#fff; }
+  .line-big.on-light { color:#14171f; }
+  .line-sub { font-size:34px; font-weight:700; margin-top:6px; }
+  .line-sub.on-dark { color:rgba(255,255,255,.62); }
+  .line-sub.on-light { color:#5b6274; }
 
-  /* ---- kinetic typography: punchier pop-in with slight overshoot ---- */
-  .fx { opacity:0; transform: translateY(46px) scale(.88); }
-  .scene.active .fx { animation: fxIn .7s cubic-bezier(.2,1.4,.4,1) forwards; }
-  @keyframes fxIn { 60% { opacity:1; transform: translateY(-4px) scale(1.03); } to { opacity:1; transform:translateY(0) scale(1); } }
-  .scene.active .fx.d1 { animation-delay:.03s; }
-  .scene.active .fx.d2 { animation-delay:.16s; }
-  .scene.active .fx.d3 { animation-delay:.29s; }
-  .scene.active .fx.d4 { animation-delay:.42s; }
-  .scene.active .fx.d5 { animation-delay:.55s; }
+  /* ---- floating keyword cloud (decorative texture behind main text) ---- */
+  .cloud { position:absolute; inset:0; z-index:0; pointer-events:none; }
+  .kw { position:absolute; font-weight:700; opacity:0; white-space:nowrap; }
+  .scene.bg-navy .kw { color:rgba(255,255,255,.16); }
+  .scene.bg-white .kw, .scene.bg-alt .kw { color:rgba(20,23,31,.10); }
+  .kw.show { animation: kwFade 3.2s ease forwards; }
+  @keyframes kwFade { 0%{opacity:0; transform:translateY(10px);} 18%{opacity:1; transform:translateY(0);} 78%{opacity:1;} 100%{opacity:0; transform:translateY(-8px);} }
 
-  /* per-word stagger for headlines */
-  .word { display:inline-block; opacity:0; transform: translateY(38px) scale(.85); }
-  .scene.active .word { animation: fxIn .6s cubic-bezier(.2,1.4,.4,1) forwards; }
-  .scene.active .word:nth-child(1){animation-delay:.05s;} .scene.active .word:nth-child(2){animation-delay:.13s;}
-  .scene.active .word:nth-child(3){animation-delay:.21s;} .scene.active .word:nth-child(4){animation-delay:.29s;}
-  .scene.active .word:nth-child(5){animation-delay:.37s;} .scene.active .word:nth-child(6){animation-delay:.45s;}
+  /* ---- big single accent word (rhythm break) ---- */
+  .mega { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%) scale(.7); font-size:190px; font-weight:800; letter-spacing:-.04em; text-align:center;
+    background:linear-gradient(135deg,#5c7cf2,#2fe3c4); -webkit-background-clip:text; background-clip:text; color:transparent;
+    opacity:0; z-index:1; }
+  .mega.in { animation: megaIn .7s cubic-bezier(.2,1.5,.3,1) forwards; }
+  @keyframes megaIn { to { opacity:1; transform:translateY(-50%) scale(1); } }
+  .mega.out { animation: megaOut .5s ease forwards; }
+  @keyframes megaOut { from { opacity:1; transform:translateY(-50%) scale(1); } to { opacity:0; transform:translateY(-50%) scale(1.08); } }
 
-  /* ---- slow continuous Ken Burns drift on key visual wrappers ---- */
-  .kb { transform-origin:center center; animation: kenburns 7s linear forwards; }
-  @keyframes kenburns { from { transform: scale(1) translate3d(0,0,0); } to { transform: scale(1.09) translate3d(-1.4%,-1.2%,0); } }
-  .kb-final { transform-origin:center center; animation: kenburnsFinal 8s linear forwards; }
-  @keyframes kenburnsFinal { from { transform: scale(.44) translate3d(0,0,0); } to { transform: scale(.47) translate3d(-1%,-1%,0); } }
+  /* ---- brand lockup ---- */
+  .brand-row { display:flex; align-items:center; gap:22px; opacity:0; transform:scale(.85); }
+  .brand-row.in { animation: brandIn .6s cubic-bezier(.2,1.4,.3,1) forwards; }
+  @keyframes brandIn { to { opacity:1; transform:scale(1); } }
+  .brand-mark-lg { width:104px; height:104px; border-radius:28px; background:linear-gradient(135deg,#5c7cf2,#0a0d1c 120%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:52px; box-shadow:0 30px 70px rgba(33,64,201,.45); position:relative; }
+  .brand-mark-lg::after { content:''; position:absolute; inset:-18px; border-radius:38px; background:radial-gradient(circle, rgba(47,227,196,.5), transparent 70%); z-index:-1; opacity:0; }
+  .brand-mark-lg.burst::after { animation: markBurst 1s ease forwards; }
+  @keyframes markBurst { 0%{opacity:.9; transform:scale(.4);} 100%{opacity:0; transform:scale(2.4);} }
+  .wordmark { font-size:66px; font-weight:800; letter-spacing:-.02em; color:#fff; }
+  .wordmark.on-light { color:#14171f; }
+  .cta-line { margin-top:26px; font-size:24px; color:rgba(255,255,255,.5); letter-spacing:.02em; opacity:0; }
+  .cta-line.in { animation: fadeUp .6s ease forwards; }
+  @keyframes fadeUp { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
-  .eyebrow-lg { display:inline-flex; align-items:center; gap:10px; font-size:20px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#2fe3c4; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); padding:12px 28px; border-radius:999px; }
-  .brand-row { display:flex; align-items:center; gap:22px; }
-  .brand-mark-lg { width:110px; height:110px; border-radius:30px; background:linear-gradient(135deg,#5c7cf2,#080b14 120%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:56px; box-shadow:0 30px 70px rgba(33,64,201,.45); }
-  .wordmark { font-size:74px; font-weight:800; letter-spacing:-.02em; color:#fff; }
-  .tagline-lg { margin-top:34px; font-size:34px; color:rgba(255,255,255,.7); text-align:center; max-width:1100px; line-height:1.5; }
+  /* ---- screen-rise: mockup slides up from below with a settled tilt (reference's laptop reveal) ---- */
+  .rise-wrap { perspective:1500px; }
+  .rise { transform: translateY(220px) rotateX(22deg) scale(.92); opacity:0; transform-origin:center bottom; }
+  .rise.in { animation: riseIn .9s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes riseIn { to { transform: translateY(0) rotateX(7deg) scale(1); opacity:1; } }
+  .rise .mockup-window { max-width:880px; }
 
-  .headline-big { font-size:80px; font-weight:800; letter-spacing:-.03em; text-align:center; line-height:1.22; max-width:1500px; }
-  .headline-big.on-dark { color:#fff; }
-  .headline-big.on-light { color:#14171f; }
-  .headline-big .accent { background:linear-gradient(135deg,#3457e8,#2fe3c4); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .headline-sub { margin-top:22px; font-size:30px; color:rgba(255,255,255,.55); text-align:center; max-width:1150px; line-height:1.5; }
-  .headline-sub.on-light { color:#5b6274; }
+  /* small tilted card trio (payoff proof) */
+  .card-trio { display:flex; align-items:flex-end; gap:-10px; perspective:1400px; }
+  .card-trio .rise { width:300px; }
+  .card-trio .rise:nth-child(1) { transform: translateY(220px) rotateX(20deg) rotateZ(-7deg) scale(.9); margin-right:-40px; z-index:1; }
+  .card-trio .rise:nth-child(1).in { animation: riseIn1 .9s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes riseIn1 { to { transform: translateY(10px) rotateX(6deg) rotateZ(-7deg) scale(.92); opacity:1; } }
+  .card-trio .rise:nth-child(2) { z-index:2; }
+  .card-trio .rise:nth-child(3) { transform: translateY(220px) rotateX(20deg) rotateZ(7deg) scale(.9); margin-left:-40px; z-index:1; }
+  .card-trio .rise:nth-child(3).in { animation: riseIn3 .9s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes riseIn3 { to { transform: translateY(10px) rotateX(6deg) rotateZ(7deg) scale(.92); opacity:1; } }
+  .mini-card { width:300px; height:210px; border-radius:16px; background:#12162a; border:1px solid rgba(255,255,255,.08); padding:18px; box-shadow:0 40px 60px rgba(10,15,35,.35); }
+  .mini-card .mc-bar { height:20px; width:60%; border-radius:6px; background:linear-gradient(90deg,#3457e8,#2fe3c4); margin-bottom:14px; }
+  .mini-card .mc-line { height:10px; border-radius:5px; background:rgba(255,255,255,.12); margin-bottom:8px; }
+  .mini-card .mc-line.w60 { width:60%; }
+  .mini-card .mc-line.w80 { width:80%; }
+  .mini-card .mc-line.w40 { width:40%; }
 
-  .cap-top { position:absolute; top:110px; left:0; right:0; text-align:center; font-size:28px; font-weight:700; color:#545c6e; z-index:3; }
+  /* ---- disconnected tool icons (problem beat) ---- */
+  .p-icon { position:absolute; width:112px; height:112px; border-radius:26px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); display:flex; align-items:center; justify-content:center; opacity:0; }
+  .p-icon svg { width:52px; height:52px; }
+  .p-icon.in { animation: pIconIn .55s cubic-bezier(.2,1.4,.4,1) forwards; }
+  @keyframes pIconIn { 0%{opacity:0; transform:scale(.5) rotate(var(--r,0deg));} 100%{opacity:1; transform:scale(1) rotate(var(--r,0deg));} }
 
-  .feat-wrap { display:flex; flex-direction:column; align-items:center; gap:40px; }
-  .feat-icon { width:190px; height:190px; border-radius:48px; display:flex; align-items:center; justify-content:center; }
-  .feat-icon svg { width:96px; height:96px; }
-  .feat-label { font-size:54px; font-weight:800; color:#fff; text-align:center; max-width:1200px; }
-  .feat-sub { font-size:28px; color:rgba(255,255,255,.55); text-align:center; max-width:1050px; line-height:1.5; }
+  /* ---- feature icon micro-beat ---- */
+  .feat-icon-sm { width:120px; height:120px; border-radius:30px; display:flex; align-items:center; justify-content:center; opacity:0; transform:scale(.6); margin:0 auto 30px; }
+  .feat-icon-sm svg { width:60px; height:60px; }
+  .feat-icon-sm.in { animation: fiIn .5s cubic-bezier(.2,1.4,.4,1) forwards; }
+  @keyframes fiIn { to { opacity:1; transform:scale(1); } }
 
-  .device-demo { transform-origin: center; }
-  .device-demo .mockup-window { max-width:900px; }
-  .device-demo.kb-tilt { animation: kenburnsTilt 7s linear forwards; }
-  @keyframes kenburnsTilt {
-    from { transform: perspective(1400px) rotateX(8deg) rotateY(-10deg) scale(1.34); }
-    to   { transform: perspective(1400px) rotateX(6deg) rotateY(-6deg) scale(1.46); }
-  }
+  /* ---- avatar constellation (community / social) ---- */
+  .constellation { position:relative; width:820px; height:520px; }
+  .hub { position:absolute; left:50%; top:50%; width:130px; height:130px; margin:-65px 0 0 -65px; border-radius:36px;
+    background:linear-gradient(135deg,#5c7cf2,#0a0d1c 120%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:58px;
+    box-shadow:0 30px 70px rgba(33,64,201,.5); opacity:0; transform:scale(.5); z-index:3; }
+  .hub.in { animation: hubIn .6s cubic-bezier(.2,1.4,.3,1) forwards; }
+  @keyframes hubIn { to { opacity:1; transform:scale(1); } }
+  .node { position:absolute; width:92px; height:92px; border-radius:24px; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 20px 40px rgba(10,15,35,.3); opacity:0; transform:scale(.4); }
+  .node svg { width:44px; height:44px; }
+  .node.in { animation: nodeIn .5s cubic-bezier(.2,1.4,.4,1) forwards, nodeFloat 3.4s ease-in-out .5s infinite alternate; }
+  @keyframes nodeIn { to { opacity:1; transform:scale(1); } }
+  @keyframes nodeFloat { to { transform: translateY(-10px); } }
+  .link-line { stroke:rgba(255,255,255,.16); stroke-width:2; fill:none; stroke-dasharray:6 6; }
 
-  .cta-pill { display:inline-flex; align-items:center; gap:14px; background:linear-gradient(135deg,#e0bc4d,#c9a227); color:#241c00; font-weight:800; font-size:32px; padding:22px 48px; border-radius:999px; box-shadow:0 26px 60px rgba(201,162,39,.35); }
-  .url-lg { margin-top:22px; font-size:26px; color:rgba(255,255,255,.55); letter-spacing:.02em; }
-  .no-card { margin-top:14px; font-size:22px; color:rgba(255,255,255,.4); letter-spacing:.02em; }
-
-  /* ---- problem scene: scattered disconnected tool icons ---- */
-  .problem-icons { position:relative; width:680px; height:220px; }
-  .p-icon { position:absolute; width:120px; height:120px; border-radius:28px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); display:flex; align-items:center; justify-content:center; }
-  .p-icon svg { width:56px; height:56px; }
-  .p-icon.p1 { left:0; top:40px; transform:rotate(-9deg); }
-  .p-icon.p2 { left:190px; top:0; transform:rotate(6deg); }
-  .p-icon.p3 { left:380px; top:50px; transform:rotate(-5deg); }
-  .p-icon.p4 { left:560px; top:10px; transform:rotate(8deg); }
-  .p-slash { position:absolute; inset:0; }
-
-  /* ---- quick montage burst (rapid icon flashes) ---- */
-  .burst-icon { width:200px; height:200px; border-radius:52px; display:flex; align-items:center; justify-content:center; position:absolute; opacity:0; transform:scale(.6); }
-  .burst-icon svg { width:100px; height:100px; }
-  .burst-icon.show { animation: burstPop .32s cubic-bezier(.2,1.4,.4,1) forwards; }
-  @keyframes burstPop { 0%{opacity:0; transform:scale(.5) rotate(-6deg);} 55%{opacity:1; transform:scale(1.12) rotate(2deg);} 100%{opacity:1; transform:scale(1) rotate(0);} }
-
-  /* ---- floating parallax on the multi-device scene ---- */
-  .dv-laptop, .dv-tablet, .dv-phone { animation-iteration-count: infinite; animation-timing-function: ease-in-out; animation-direction: alternate; }
-  .scene.active .dv-laptop { animation-name: floatY; animation-duration: 3.6s; }
-  .scene.active .dv-tablet { animation-name: floatY; animation-duration: 3.0s; animation-delay:.15s; }
-  .scene.active .dv-phone { animation-name: floatY; animation-duration: 2.4s; animation-delay:.3s; }
-  @keyframes floatY { from { transform: translateY(0); } to { transform: translateY(-10px); } }
-
-  /* animated bar-chart growth */
-  .mockup-chart span, .d-chart span { transition: height .8s cubic-bezier(.2,1,.3,1); }
-
-  /* preview dashboard fading into focus behind the "turn" question */
-  .preview-dash { position:absolute; top:56%; left:50%; transform:translate(-50%,-50%) scale(1.3); opacity:0; filter:blur(3px); z-index:0; transition: opacity 1.4s ease .3s, filter 1.4s ease .3s; }
-  .scene.active .preview-dash { opacity:.16; filter:blur(1px); }
-
-  /* ---- cinematic vignette overlay, always on top ---- */
   #vignette { position:absolute; inset:0; z-index:5; pointer-events:none;
-    background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.28) 100%); }
-
-  /* ---- progress bar: subtle sense of forward motion ---- */
-  #progress { position:absolute; left:0; bottom:0; height:5px; width:0%; z-index:6;
-    background: linear-gradient(90deg,#3457e8,#2fe3c4); }
-
+    background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.26) 100%); }
+  #progress { position:absolute; left:0; bottom:0; height:5px; width:0%; z-index:6; background: linear-gradient(90deg,#3457e8,#2fe3c4); }
   #blackout { position:absolute; inset:0; background:#000; opacity:0; z-index:10; pointer-events:none; transition: opacity .9s ease; }
   #blackout.on { opacity:1; }
 </style>
@@ -141,160 +129,87 @@
 <body>
 <div id="stage">
 
-  <!-- 0:00 – hook -->
-  <section id="s1" class="scene bg-navy active">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <h1 class="headline-big on-dark glow-text" id="twTarget"><span id="twText"></span><span class="tw-cursor"></span></h1>
-    <p class="headline-sub" style="opacity:0; transition:opacity .6s ease;" id="s1Sub">Mais votre temps, lui, n'a pas changé.</p>
+  <!-- MOVEMENT 1 — hook (0:00–0:07) -->
+  <section id="m1" class="scene bg-navy active">
+    <div class="spot"></div>
+    <div class="cloud" id="cloud1"></div>
+    <div id="m1line1" class="buildup line-big on-dark"></div>
+    <div id="m1line2" class="buildup line-sub on-dark" style="margin-top:18px;"></div>
   </section>
 
-  <!-- 0:07 – problem -->
-  <section id="sproblem" class="scene bg-navy">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <div class="problem-icons fx d1">
-      <div class="p-icon p1"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/><path d="M7 10h6M7 14h4" stroke="rgba(255,255,255,.5)" stroke-width="1.4" stroke-linecap="round"/></svg></div>
-      <div class="p-icon p2"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/><path d="M4 9h16" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/></svg></div>
-      <div class="p-icon p3"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/></svg></div>
-      <div class="p-icon p4"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="rgba(255,255,255,.5)" stroke-width="1.4" stroke-linecap="round"/></svg></div>
-      <svg class="p-slash" viewBox="0 0 680 220"><path d="M40 190 L640 30" stroke="#d1476b" stroke-width="3" stroke-linecap="round"/></svg>
+  <!-- MOVEMENT 2 — logo sting (0:07–0:09) -->
+  <section id="m2" class="scene bg-navy">
+    <div class="spot"></div>
+    <div class="brand-row" id="m2brand"><div class="brand-mark-lg" id="m2mark">D</div><div class="wordmark">Doxha Church</div></div>
+  </section>
+
+  <!-- MOVEMENT 3 — problem (0:09–0:16) -->
+  <section id="m3" class="scene bg-alt">
+    <div class="cloud" id="cloud3"></div>
+    <div style="position:relative; width:760px; height:130px;" id="pIcons">
+      <div class="p-icon" style="left:0; top:10px; --r:-8deg;"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="#8b93a8" stroke-width="1.4"/><path d="M7 10h6M7 14h4" stroke="#8b93a8" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+      <div class="p-icon" style="left:216px; top:0; --r:6deg;"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="#8b93a8" stroke-width="1.4"/><path d="M4 9h16" stroke="#8b93a8" stroke-width="1.4"/></svg></div>
+      <div class="p-icon" style="left:432px; top:14px; --r:-5deg;"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="#8b93a8" stroke-width="1.4"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6" stroke="#8b93a8" stroke-width="1.4"/></svg></div>
+      <div class="p-icon" style="left:648px; top:4px; --r:8deg;"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="#8b93a8" stroke-width="1.4" stroke-linecap="round"/></svg></div>
     </div>
-    <div class="feat-label fx d3" style="margin-top:40px;">Fichiers éparpillés. Dons notés à la main.</div>
-    <div class="feat-sub fx d4">Des messages qui se perdent, des outils qui ne se parlent pas — la gestion prend le pas sur votre mission.</div>
+    <div id="m3line1" class="buildup line-big on-light" style="margin-top:46px;"></div>
+    <div id="m3line2" class="buildup line-sub on-light" style="margin-top:14px;"></div>
   </section>
 
-  <!-- 0:16 – the turn -->
-  <section id="sturn" class="scene bg-alt">
-    <div class="device-demo kb-tilt preview-dash">
-      <div class="mockup-window" style="transform:none;">
-        <div class="mockup-bar"><div class="mockup-dots"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span></div><div class="mockup-url">app.doxhachurch.com</div></div>
-        <div class="mockup-screen">
-          <div class="mockup-side"><div class="mockup-pill active"></div><div class="mockup-pill"></div><div class="mockup-pill short"></div><div class="mockup-pill"></div></div>
-          <div class="mockup-main">
-            <div class="mockup-row"><div class="mockup-card"><div class="num">3 482</div><div class="lbl">Membres</div></div><div class="mockup-card"><div class="num">128 K€</div><div class="lbl">Dons</div></div><div class="mockup-card"><div class="num">96%</div><div class="lbl">Satisfaction</div></div></div>
-            <div class="mockup-chart"><span style="height:40%"></span><span style="height:65%"></span><span style="height:50%"></span><span style="height:80%"></span><span style="height:55%"></span><span style="height:90%"></span></div>
+  <!-- MOVEMENT 4 — the turn + product reveal (0:16–0:24) -->
+  <section id="m4" class="scene bg-white">
+    <div id="m4line1" class="buildup line-big on-light"></div>
+    <div class="rise-wrap" style="margin-top:34px;">
+      <div class="rise" id="m4rise">
+        <div class="mockup-window" style="transform:none;">
+          <div class="mockup-bar"><div class="mockup-dots"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span></div><div class="mockup-url">app.doxhachurch.com</div></div>
+          <div class="mockup-screen">
+            <div class="mockup-side"><div class="mockup-pill active"></div><div class="mockup-pill"></div><div class="mockup-pill short"></div><div class="mockup-pill"></div></div>
+            <div class="mockup-main">
+              <div class="mockup-row"><div class="mockup-card"><div class="num">3 482</div><div class="lbl">Membres</div></div><div class="mockup-card"><div class="num">128 K€</div><div class="lbl">Dons</div></div><div class="mockup-card"><div class="num">96%</div><div class="lbl">Satisfaction</div></div></div>
+              <div class="mockup-chart"><span style="height:40%"></span><span style="height:65%"></span><span style="height:50%"></span><span style="height:80%"></span><span style="height:55%"></span><span style="height:90%"></span></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <h1 class="headline-big on-light fx d2" style="position:relative; z-index:1;">Et si un seul outil<br>changeait tout ?</h1>
   </section>
 
-  <!-- 0:20 – brand reveal -->
-  <section id="sbrand" class="scene bg-navy">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <div class="brand-row fx d1">
-      <div class="brand-mark-lg">D</div>
-      <div class="wordmark">Doxha Church</div>
+  <!-- MOVEMENT 5 — feature run (0:24–0:36) -->
+  <section id="m5" class="scene bg-navy">
+    <div class="spot"></div>
+    <div class="cloud" id="cloud5"></div>
+    <div class="feat-icon-sm" id="m5icon" style="background:#e9edfd;"><svg viewBox="0 0 24 24" fill="none"><path d="M16 11a4 4 0 1 0-4-4M9 21v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2M3 21v-1a5 5 0 0 1 5-5M6 12a3 3 0 1 0 0-6" stroke="#2140c9" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+    <div id="m5line1" class="buildup line-big on-dark"></div>
+  </section>
+
+  <!-- MOVEMENT 6 — mega word + community constellation (0:36–0:47) -->
+  <section id="m6" class="scene bg-navy">
+    <div class="spot"></div>
+    <div id="m6mega" class="mega">Connectée.</div>
+    <div class="constellation" id="constellation" style="display:none;">
+      <svg id="linkSvg" style="position:absolute; inset:0; width:100%; height:100%;"></svg>
+      <div class="hub" id="hubEl">D</div>
+    </div>
+    <div id="m6line1" class="buildup line-sub on-dark" style="margin-top:26px; font-size:32px;"></div>
+  </section>
+
+  <!-- MOVEMENT 7 — payoff (0:47–0:53) -->
+  <section id="m7" class="scene bg-white">
+    <div id="m7line1" class="buildup line-big on-light"></div>
+    <div id="m7line2" class="buildup line-big" style="margin-top:6px;"></div>
+    <div class="card-trio" style="margin-top:44px;">
+      <div class="rise-wrap"><div class="rise"><div class="mini-card"><div class="mc-bar"></div><div class="mc-line w60"></div><div class="mc-line w80"></div><div class="mc-line w40"></div></div></div></div>
+      <div class="rise-wrap"><div class="rise"><div class="mini-card"><div class="mc-bar" style="background:linear-gradient(90deg,#c9a227,#e0bc4d);"></div><div class="mc-line w80"></div><div class="mc-line w60"></div><div class="mc-line w60"></div></div></div></div>
+      <div class="rise-wrap"><div class="rise"><div class="mini-card"><div class="mc-bar" style="background:linear-gradient(90deg,#0d9488,#2fe3c4);"></div><div class="mc-line w40"></div><div class="mc-line w80"></div><div class="mc-line w60"></div></div></div></div>
     </div>
   </section>
 
-  <!-- 0:23 – feature: membres -->
-  <section id="s4a" class="scene bg-navy">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <div class="feat-wrap">
-      <div class="feat-icon fx d1" style="background:#e9edfd;"><svg viewBox="0 0 24 24" fill="none"><path d="M16 11a4 4 0 1 0-4-4M9 21v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2M3 21v-1a5 5 0 0 1 5-5M6 12a3 3 0 1 0 0-6" stroke="#2140c9" stroke-width="1.4" stroke-linecap="round"/></svg></div>
-      <div class="feat-label fx d2">Le suivi de chaque membre</div>
-      <div class="feat-sub fx d3">Automatique, de son arrivée jusqu'à son engagement</div>
-    </div>
-  </section>
-
-  <!-- 0:29 – feature: dons -->
-  <section id="s4b" class="scene bg-navy">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <div class="feat-wrap">
-      <div class="feat-icon fx d1" style="background:#fbf3da;"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18M7 15h2m4 0h4M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="#92720f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="feat-label fx d2">Les dons et les dîmes en ligne</div>
-      <div class="feat-sub fx d3">Reçus fiscaux générés en un instant</div>
-    </div>
-  </section>
-
-  <!-- 0:35 – feature: billetterie -->
-  <section id="s4c" class="scene bg-navy">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <div class="feat-wrap">
-      <div class="feat-icon fx d1" style="background:#e6faf5;"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4v7h7V4ZM11 13H4v7h7v-7ZM20 4h-7v7h7V4ZM20 15.5h-2M20 19.5h-2M15.5 15.5v4M13 17.5h5" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
-      <div class="feat-label fx d2">La billetterie de vos événements</div>
-      <div class="feat-sub fx d3">Un check-in scanné en un geste</div>
-    </div>
-  </section>
-
-  <!-- 0:41 – feature: réseaux sociaux -->
-  <section id="s4e" class="scene bg-navy">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <div class="feat-wrap">
-      <div class="feat-icon fx d1" style="background:#fdedf1;"><svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="2.6" stroke="#d1476b" stroke-width="1.4"/><circle cx="18" cy="6" r="2.6" stroke="#d1476b" stroke-width="1.4"/><circle cx="18" cy="18" r="2.6" stroke="#d1476b" stroke-width="1.4"/><path d="M8.3 10.7 15.7 7.3M8.3 13.3l7.4 3.4" stroke="#d1476b" stroke-width="1.4" stroke-linecap="round"/></svg></div>
-      <div class="feat-label fx d2">Vos publications, partagées automatiquement</div>
-      <div class="feat-sub fx d3">Sur Facebook et sur Instagram</div>
-    </div>
-  </section>
-
-  <!-- quick recap flash -->
-  <section id="sburst" class="scene bg-navy">
-    <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-    <div id="burstWrap" style="position:relative; width:200px; height:200px;">
-      <div class="burst-icon" style="background:#e9edfd;"><svg viewBox="0 0 24 24" fill="none"><path d="M16 11a4 4 0 1 0-4-4M9 21v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2M3 21v-1a5 5 0 0 1 5-5M6 12a3 3 0 1 0 0-6" stroke="#2140c9" stroke-width="1.4" stroke-linecap="round"/></svg></div>
-      <div class="burst-icon" style="background:#fbf3da;"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18M7 15h2m4 0h4M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="#92720f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="burst-icon" style="background:#e6faf5;"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4v7h7V4ZM11 13H4v7h7v-7ZM20 4h-7v7h7V4ZM20 15.5h-2M20 19.5h-2M15.5 15.5v4M13 17.5h5" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
-      <div class="burst-icon" style="background:#fdedf1;"><svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="2.6" stroke="#d1476b" stroke-width="1.4"/><circle cx="18" cy="6" r="2.6" stroke="#d1476b" stroke-width="1.4"/><circle cx="18" cy="18" r="2.6" stroke="#d1476b" stroke-width="1.4"/><path d="M8.3 10.7 15.7 7.3M8.3 13.3l7.4 3.4" stroke="#d1476b" stroke-width="1.4" stroke-linecap="round"/></svg></div>
-    </div>
-  </section>
-
-  <!-- 0:47 – emotional payoff -->
-  <section id="spayoff" class="scene bg-white">
-    <h1 class="headline-big on-light fx d1">Moins de gestion.</h1>
-    <h1 class="headline-big accent fx d3" style="margin-top:6px;">Plus de temps pour votre communauté.</h1>
-  </section>
-
-  <!-- 0:52 – CTA + multi-device proof -->
-  <section id="sfinal" class="scene bg-white">
-    <div class="kb-final">
-      <div class="device-stack-v2" style="height:400px;">
-        <div class="dv-ground"></div>
-        <div class="dv-tablet">
-          <div class="device device-ipad-pro">
-            <div class="device-frame"><div class="device-screen">
-              <div class="d-pill active"></div>
-              <div class="d-card"><div class="num">86</div><div class="lbl">inscrits · culte</div></div>
-              <div class="d-pill"></div><div class="d-pill"></div>
-            </div></div>
-            <div class="device-btns"></div><div class="device-sensors"></div>
-          </div>
-        </div>
-        <div class="dv-laptop">
-          <div class="device device-macbook-pro">
-            <div class="device-frame"><div class="device-screen">
-              <div class="mockup-bar"><div class="mockup-dots"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span></div><div class="mockup-url">app.doxhachurch.com</div></div>
-              <div class="mockup-screen">
-                <div class="mockup-side"><div class="mockup-pill active"></div><div class="mockup-pill"></div><div class="mockup-pill short"></div><div class="mockup-pill"></div></div>
-                <div class="mockup-main">
-                  <div class="mockup-row"><div class="mockup-card"><div class="num">3 482</div><div class="lbl">Membres</div></div><div class="mockup-card"><div class="num">128 K€</div><div class="lbl">Dons</div></div><div class="mockup-card"><div class="num">96%</div><div class="lbl">Satisfaction</div></div></div>
-                  <div class="mockup-chart"><span style="height:40%"></span><span style="height:65%"></span><span style="height:50%"></span><span style="height:80%"></span><span style="height:55%"></span><span style="height:90%"></span></div>
-                </div>
-              </div>
-            </div></div>
-            <div class="device-header"></div><div class="device-power"></div>
-          </div>
-        </div>
-        <div class="dv-phone">
-          <div class="device device-iphone-14-pro device-silver">
-            <div class="device-frame"><div class="device-screen">
-              <div class="d-notch"></div>
-              <div class="d-pill active"></div>
-              <div class="d-card"><div class="num">320</div><div class="lbl">inscrits · dimanche</div></div>
-              <div class="d-chart" data-bars="35,60,45,80,55"><span style="height:0%"></span><span style="height:0%"></span><span style="height:0%"></span><span style="height:0%"></span><span style="height:0%"></span></div>
-            </div></div>
-            <div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div>
-            <div class="device-btns"></div><div class="device-power"></div><div class="device-home"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="brand-row fx d3" style="margin-top:44px;">
-      <div class="brand-mark-lg" style="width:70px; height:70px; border-radius:18px; font-size:34px;">D</div>
-      <div class="wordmark" style="font-size:46px; color:#14171f;">Doxha Church</div>
-    </div>
-    <div class="fx d4" style="margin-top:22px;"><span class="cta-pill" style="font-size:28px; padding:18px 40px;">Essai gratuit — 14 jours</span></div>
-    <div class="no-card fx d5" style="color:#8a92a6; margin-top:12px;">Sans carte bancaire · doxhachurch.com</div>
+  <!-- MOVEMENT 8 — end card (0:53–0:59) -->
+  <section id="m8" class="scene bg-navy">
+    <div class="spot"></div>
+    <div class="brand-row" id="m8brand"><div class="brand-mark-lg" style="width:88px; height:88px; border-radius:24px; font-size:44px;">D</div><div class="wordmark">Doxha Church</div></div>
+    <div class="cta-line" id="m8cta">Essai gratuit — 14 jours · doxhachurch.com</div>
   </section>
 
   <div id="vignette"></div>
@@ -303,85 +218,172 @@
 </div>
 
 <script>
-  function growBars(scope) {
-    scope.querySelectorAll('[data-bars]').forEach(chart => {
-      const targets = chart.dataset.bars.split(',');
-      const spans = chart.querySelectorAll('span');
-      requestAnimationFrame(() => { spans.forEach((s, i) => { s.style.height = (targets[i] || 0) + '%'; }); });
+  function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; }
+
+  // word build-up: appends words one by one, staying on screen
+  function buildup(container, text, stepMs, accentWords) {
+    accentWords = accentWords || [];
+    const words = text.split(' ');
+    return new Promise(resolve => {
+      words.forEach((w, i) => {
+        setTimeout(() => {
+          const span = el('span', 'bw' + (accentWords.includes(w.replace(/[.,?!]/g,'')) ? ' accent' : ''), w + (i < words.length - 1 ? '&nbsp;' : ''));
+          container.appendChild(span);
+          requestAnimationFrame(() => requestAnimationFrame(() => span.classList.add('in')));
+          if (i === words.length - 1) setTimeout(resolve, 550);
+        }, i * stepMs);
+      });
     });
   }
-  function countUp(scope) {
-    scope.querySelectorAll('[data-count]').forEach(el => {
-      const target = parseInt(el.dataset.count, 10);
-      const suffix = el.dataset.suffix || '';
-      const dur = 900, start = performance.now();
-      function tick(now) {
-        const p = Math.min(1, (now - start) / dur);
-        const eased = 1 - Math.pow(1 - p, 3);
-        const val = Math.round(target * eased);
-        el.textContent = (target >= 1000 ? val.toLocaleString('fr-FR') : val) + suffix;
-        if (p < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
+  function clearEl(elm) { elm.innerHTML = ''; }
+
+  const CLOUD_WORDS = {
+    cloud1: [['Membres',8,20],['Dîmes',72,58],['Cultes',14,74],['Billetterie',66,14],['QR code',80,80]],
+    cloud3: [['Excel',10,18],['Post-it',75,20],['Messages perdus',12,78],['Carnets',70,74]],
+    cloud5: [['Automatique',10,16],['Reçus fiscaux',72,18],['Check-in',14,78],['Temps réel',68,76]],
+  };
+  function paintCloud(id) {
+    const host = document.getElementById(id);
+    if (!host || host.dataset.painted) return;
+    host.dataset.painted = '1';
+    (CLOUD_WORDS[id] || []).forEach(([word, x, y], i) => {
+      const span = el('span', 'kw', word);
+      span.style.left = x + '%'; span.style.top = y + '%';
+      span.style.fontSize = (26 + (i % 3) * 8) + 'px';
+      host.appendChild(span);
+      setTimeout(() => span.classList.add('show'), 300 + i * 550);
     });
   }
 
-  let currentId = 's1';
+  function buildConstellation() {
+    const wrap = document.getElementById('constellation');
+    const svg = document.getElementById('linkSvg');
+    const hub = document.getElementById('hubEl');
+    const W = 820, H = 520, cx = W/2, cy = H/2, R = 210;
+    const nodes = [
+      { icon: '<svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3" stroke="#2140c9" stroke-width="1.5"/><circle cx="16" cy="16" r="3" stroke="#2140c9" stroke-width="1.5"/><path d="M10.2 9.6 13.8 14.4" stroke="#2140c9" stroke-width="1.5"/></svg>', bg:'#e9edfd' },
+      { icon: '<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="#92720f" stroke-width="1.5"/><path d="M3 8l9 6 9-6" stroke="#92720f" stroke-width="1.5"/></svg>', bg:'#fbf3da' },
+      { icon: '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="3" stroke="#0d9488" stroke-width="1.5"/><path d="M2 9h20" stroke="#0d9488" stroke-width="1.5"/></svg>', bg:'#e6faf5' },
+      { icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Z" stroke="#d1476b" stroke-width="1.5"/><circle cx="12" cy="18" r="1" fill="#d1476b"/></svg>', bg:'#fdedf1' },
+      { icon: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="#6d4fe0" stroke-width="1.5"/><path d="M5 21c0-4 3.1-6.4 7-6.4s7 2.4 7 6.4" stroke="#6d4fe0" stroke-width="1.5"/></svg>', bg:'#f0ecfe' },
+      { icon: '<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="2.4" stroke="#2140c9" stroke-width="1.5"/><circle cx="18" cy="6" r="2.4" stroke="#2140c9" stroke-width="1.5"/><circle cx="18" cy="18" r="2.4" stroke="#2140c9" stroke-width="1.5"/><path d="M8.2 10.8 15.8 7.4M8.2 13.2l7.6 3.4" stroke="#2140c9" stroke-width="1.5"/></svg>', bg:'#e9edfd' },
+    ];
+    nodes.forEach((n, i) => {
+      const angle = (Math.PI * 2 * i) / nodes.length - Math.PI / 2;
+      const x = cx + R * Math.cos(angle), y = cy + R * Math.sin(angle);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      line.setAttribute('d', `M${cx},${cy} L${x},${y}`);
+      line.setAttribute('class', 'link-line');
+      svg.appendChild(line);
+      const node = el('div', 'node', n.icon);
+      node.style.left = (x - 46) + 'px'; node.style.top = (y - 46) + 'px'; node.style.background = n.bg;
+      wrap.appendChild(node);
+    });
+  }
+  buildConstellation();
+  function playConstellation() {
+    const wrap = document.getElementById('constellation');
+    wrap.style.display = 'block';
+    document.getElementById('hubEl').classList.add('in');
+    wrap.querySelectorAll('.node').forEach((n, i) => setTimeout(() => n.classList.add('in'), 260 + i * 140));
+  }
+
+  let currentId = 'm1';
   function show(id) {
     const prev = document.getElementById(currentId);
-    if (prev && prev.id !== id) {
-      prev.classList.remove('active');
-      prev.classList.add('leaving');
-      setTimeout(() => prev.classList.remove('leaving'), 400);
-    }
-    const next = document.getElementById(id);
-    next.classList.add('active');
+    if (prev && prev.id !== id) prev.classList.remove('active');
+    document.getElementById(id).classList.add('active');
     currentId = id;
-    next.querySelectorAll('.kb, .kb-tilt, .kb-final').forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
-    if (id === 'sfinal') growBars(next);
   }
 
-  function typewrite(text, el, cb, speed) {
-    speed = speed || 42;
-    let i = 0;
-    (function tick() {
-      el.textContent = text.slice(0, i);
-      i++;
-      if (i <= text.length) setTimeout(tick, speed);
-      else if (cb) cb();
-    })();
-  }
-  typewrite('Votre église grandit.', document.getElementById('twText'), () => {
-    document.getElementById('s1Sub').style.opacity = '1';
-  });
-
-  function runBurst() {
-    const icons = document.querySelectorAll('#burstWrap .burst-icon');
-    icons.forEach((el, i) => {
-      setTimeout(() => {
-        icons.forEach(e => e.classList.remove('show'));
-        el.classList.add('show');
-      }, i * 150);
-    });
+  async function movement1() {
+    show('m1');
+    paintCloud('cloud1');
+    await buildup(document.getElementById('m1line1'), 'Votre église grandit.', 210);
+    await buildup(document.getElementById('m1line2'), "Mais votre temps, lui, n'a pas changé.", 130);
   }
 
-  const timeline = [
-    ['s1', 0],
-    ['sproblem', 7.0],
-    ['sturn', 16.0],
-    ['sbrand', 20.0],
-    ['s4a', 23.0],
-    ['s4b', 29.0],
-    ['s4c', 35.0],
-    ['s4e', 41.0],
-    ['sburst', 46.4],
-    ['spayoff', 47.0],
-    ['sfinal', 52.0],
-  ];
-  const TOTAL_MS = 60000;
-  timeline.forEach(([id, at]) => setTimeout(() => show(id), at * 1000));
-  setTimeout(runBurst, 46.4 * 1000);
-  setTimeout(() => document.getElementById('blackout').classList.add('on'), 59.1 * 1000);
+  function movement2() {
+    show('m2');
+    const brand = document.getElementById('m2brand');
+    setTimeout(() => { brand.classList.add('in'); document.getElementById('m2mark').classList.add('burst'); }, 120);
+  }
+
+  async function movement3() {
+    show('m3');
+    paintCloud('cloud3');
+    document.querySelectorAll('#pIcons .p-icon').forEach((ic, i) => setTimeout(() => ic.classList.add('in'), 120 + i * 130));
+    await buildup(document.getElementById('m3line1'), 'Fichiers éparpillés. Dons notés à la main.', 150);
+    await buildup(document.getElementById('m3line2'), 'Des messages qui se perdent — la gestion prend le pas sur votre mission.', 100);
+  }
+
+  async function movement4() {
+    show('m4');
+    await buildup(document.getElementById('m4line1'), 'Et si un seul outil changeait tout ?', 160, ['tout']);
+    setTimeout(() => document.getElementById('m4rise').classList.add('in'), 250);
+  }
+
+  async function movement5() {
+    show('m5');
+    paintCloud('cloud5');
+    const beats = [
+      { bg:'#e9edfd', icon:'<svg viewBox="0 0 24 24" fill="none"><path d="M16 11a4 4 0 1 0-4-4M9 21v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2M3 21v-1a5 5 0 0 1 5-5M6 12a3 3 0 1 0 0-6" stroke="#2140c9" stroke-width="1.4" stroke-linecap="round"/></svg>', text:'Le suivi de chaque membre, automatique.' },
+      { bg:'#fbf3da', icon:'<svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18M7 15h2m4 0h4M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="#92720f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>', text:'Les dons en ligne, reçus fiscaux instantanés.' },
+      { bg:'#e6faf5', icon:'<svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4v7h7V4ZM11 13H4v7h7v-7ZM20 4h-7v7h7V4ZM20 15.5h-2M20 19.5h-2M15.5 15.5v4M13 17.5h5" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/></svg>', text:'La billetterie, avec check-in par QR code.' },
+    ];
+    const iconEl = document.getElementById('m5icon');
+    const lineEl = document.getElementById('m5line1');
+    for (const beat of beats) {
+      iconEl.style.background = beat.bg; iconEl.innerHTML = beat.icon;
+      iconEl.classList.remove('in'); void iconEl.offsetWidth; iconEl.classList.add('in');
+      clearEl(lineEl);
+      await buildup(lineEl, beat.text, 95);
+      await new Promise(r => setTimeout(r, 2800));
+      clearEl(lineEl);
+    }
+  }
+
+  async function movement6() {
+    show('m6');
+    const mega = document.getElementById('m6mega');
+    mega.classList.add('in');
+    await new Promise(r => setTimeout(r, 1500));
+    mega.classList.add('out');
+    playConstellation();
+    await buildup(document.getElementById('m6line1'), 'Toute votre communauté — jusqu\'à Facebook et Instagram.', 110);
+  }
+
+  async function movement7() {
+    show('m7');
+    await buildup(document.getElementById('m7line1'), 'Moins de gestion.', 160);
+    await buildup(document.getElementById('m7line2'), 'Plus de temps pour votre communauté.', 120, ['communauté.']);
+    document.querySelectorAll('#m7 .rise').forEach((r, i) => setTimeout(() => r.classList.add('in'), 200 + i * 140));
+  }
+
+  function movement8() {
+    show('m8');
+    setTimeout(() => document.getElementById('m8brand').classList.add('in'), 150);
+    setTimeout(() => document.getElementById('m8cta').classList.add('in'), 700);
+  }
+
+  const TOTAL_MS = 58000;
+  (async () => {
+    await movement1();
+    await new Promise(r => setTimeout(r, 3000));
+    movement2();
+    await new Promise(r => setTimeout(r, 3000));
+    await movement3();
+    await new Promise(r => setTimeout(r, 3200));
+    await movement4();
+    await new Promise(r => setTimeout(r, 4200));
+    await movement5();
+    await movement6();
+    await new Promise(r => setTimeout(r, 3600));
+    await movement7();
+    await new Promise(r => setTimeout(r, 5500));
+    movement8();
+    setTimeout(() => document.getElementById('blackout').classList.add('on'), 9500);
+  })();
 
   const progressEl = document.getElementById('progress');
   const t0 = performance.now();
